@@ -1,5 +1,36 @@
 [
   {
+    "slug": "historical-protocol-digitizer",
+    "name": {
+      "en": "Historical Protocol Digitizer",
+      "zh": "历史 Protocol 结构化引擎",
+      "de": "Historical Protocol Digitizer"
+    },
+    "description": {
+      "en": "Digitize unstructured historical protocol text into structured Inclusion/Exclusion criteria and SoA schema.",
+      "zh": "将历史 protocol 非结构化文本结构化为 Inclusion/Exclusion 与 SoA 数据模型。",
+      "de": "Unstrukturierte historische Protocol-Texte in strukturierte Inclusion/Exclusion- und SoA-Schemata ueberfuehren."
+    },
+    "tags": [
+      "Protocol",
+      "Digitization",
+      "Clinical Data"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/historical-protocol-digitizer",
+    "screenshot": "https://images.unsplash.com/photo-1582719478185-6c01f8f42f2c?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "NLP Parsing",
+      "Schema Extraction",
+      "JSON Output"
+    ],
+    "designIntent": {
+      "en": "Convert legacy protocol archives into machine-readable assets for downstream automation.",
+      "zh": "把历史协议资产转为机器可读结构，为后续自动化打基础。",
+      "de": "Legacy-Protocol-Archive in maschinenlesbare Assets fuer nachgelagerte Automatisierung umwandeln."
+    }
+  },
+  {
     "slug": "data-agent-catalog",
     "name": {
       "en": "Data Agent Catalog",

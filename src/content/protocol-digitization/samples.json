@@ -1,0 +1,18 @@
+[
+  {
+    "id": "hist-proto-onc-2019",
+    "title": "Historical Oncology Protocol 2019",
+    "therapeuticArea": "Oncology",
+    "indication": "NSCLC",
+    "phase": "Phase 3",
+    "rawText": "Inclusion Criteria:\n1) Age 18-75 years.\n2) Histologically confirmed NSCLC.\n3) ECOG 0-1.\n4) ANC >= 1.5 x10^9/L; Platelets >= 100 x10^9/L.\n\nExclusion Criteria:\n1) Active CNS metastases.\n2) Severe uncontrolled infection within 14 days.\n3) Prior treatment with PD-1 inhibitor.\n\nSchedule of Activities (SoA):\nScreening | Day -28 to -1 | informed consent; eligibility labs; CT scan\nCycle 1 Day 1 | Day 1 | randomization; dosing; PK blood draw\nCycle 2 Day 1 | Day 22 +/-2 | safety labs; adverse event review\nEnd of Treatment | within 7 days | final assessment; medication reconciliation\nFollow-up | every 8 weeks | survival follow-up"
+  },
+  {
+    "id": "hist-proto-imm-2020",
+    "title": "Historical Immunology Protocol 2020",
+    "therapeuticArea": "Immunology",
+    "indication": "Rheumatoid Arthritis",
+    "phase": "Phase 2",
+    "rawText": "纳入标准：\n- 年龄 18-70 岁。\n- 符合 RA 诊断标准，病程 >= 6 个月。\n- 基线 CRP 升高。\n\n排除标准：\n- 近 3 个月严重感染。\n- 活动性结核或乙肝。\n- 妊娠或哺乳期。\n\nSOA：\n筛选期 | -21 到 -1 天 | 签署知情同意；实验室检查；病史收集\n基线访视 | 第 1 天 | 随机；给药；症状评分\n第 4 周访视 | 第 29 天 ±3 天 | 疗效评分；安全性实验室\n第 12 周访视 | 第 85 天 ±5 天 | 主要终点评估；AE 汇总\n随访 | 末次给药后 30 天 | 安全随访"
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.1.0",
+    "title": {
+      "en": "Historical Protocol Digitization Prototype Added",
+      "zh": "新增历史 Protocol 结构化原型",
+      "de": "Prototype fuer historische Protocol-Digitalisierung hinzugefuegt"
+    },
+    "changes": {
+      "en": [
+        "Added unstructured-to-structured parser for Inclusion/Exclusion criteria.",
+        "Added SoA extraction into structured visit-window-activity schema.",
+        "Added JSON output panel with digitization quality and copy action."
+      ],
+      "zh": [
+        "新增 Inclusion/Exclusion 的非结构化到结构化解析。",
+        "新增 SoA 的访视-窗口-活动结构化抽取。",
+        "新增 JSON 输出面板、结构化质量评分与一键复制。"
+      ],
+      "de": [
+        "Parser fuer unstrukturierte Inclusion/Exclusion-Kriterien hinzugefuegt.",
+        "SoA-Extraktion in strukturierte Visit-Window-Activity-Schemata integriert.",
+        "JSON-Output mit Qualitaetsindikator und Copy-Funktion hinzugefuegt."
+      ]
+    }
+  }
+]

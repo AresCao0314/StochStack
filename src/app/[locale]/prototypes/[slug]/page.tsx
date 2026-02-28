@@ -8,6 +8,7 @@ import { AgentOrchestrationPrototype } from '@/components/agent-orchestration-pr
 import { DataAgentPrototype } from '@/components/data-agent-prototype';
 import { DigitalTwinPrototype } from '@/components/digital-twin-prototype';
 import { EnrollmentForecastPrototype } from '@/components/enrollment-forecast-prototype';
+import { ProtocolDigitizationPrototype } from '@/components/protocol-digitization-prototype';
 import { SiteFeasibilityFeedbackPrototype } from '@/components/site-feasibility-feedback-prototype';
 import { SiteFeasibilityPrototype } from '@/components/site-feasibility-prototype';
 import { getDictionary, locales, type Locale } from '@/lib/i18n';
@@ -21,6 +22,7 @@ import orchestrationInitiatives from '@/content/agent-orchestration/initiatives.
 import dataAgentDatasets from '@/content/data-agent/datasets.json';
 import enrollmentTrials from '@/content/enrollment-forecast/trials.json';
 import digitalTwinScenarios from '@/content/digital-twin/scenarios.json';
+import protocolDigitizationSamples from '@/content/protocol-digitization/samples.json';
 import marketChangelog from '@/content/changelogs/market-intelligence-highscore.json';
 import siteScoringChangelog from '@/content/changelogs/site-feasibility-scoring.json';
 import siteFeedbackChangelog from '@/content/changelogs/site-feasibility-human-feedback.json';
@@ -29,6 +31,7 @@ import orchestrationChangelog from '@/content/changelogs/agent-orchestration-hig
 import dataAgentChangelog from '@/content/changelogs/data-agent-catalog.json';
 import enrollmentChangelog from '@/content/changelogs/enrollment-forecast-monte-carlo.json';
 import digitalTwinChangelog from '@/content/changelogs/digital-twin-synthetic-control.json';
+import protocolDigitizationChangelog from '@/content/changelogs/historical-protocol-digitizer.json';
 
 export function generateStaticParams() {
   const ports = getPorts();
@@ -122,6 +125,15 @@ export default function PrototypeDetailPage({ params }: { params: { locale: Loca
       <>
         <DigitalTwinPrototype locale={params.locale} scenarios={digitalTwinScenarios} />
         <PrototypeChangelog locale={params.locale} entries={digitalTwinChangelog as unknown as LogEntry[]} />
+      </>
+    );
+  }
+
+  if (params.slug === 'historical-protocol-digitizer') {
+    return (
+      <>
+        <ProtocolDigitizationPrototype locale={params.locale} samples={protocolDigitizationSamples} />
+        <PrototypeChangelog locale={params.locale} entries={protocolDigitizationChangelog as unknown as LogEntry[]} />
       </>
     );
   }
