@@ -1,5 +1,222 @@
 [
   {
+    "slug": "site-feasibility-scoring-ctgov",
+    "name": {
+      "en": "Site Feasibility Scoring",
+      "zh": "站点可行性评分",
+      "de": "Site-Feasibility Scoring"
+    },
+    "description": {
+      "en": "ClinicalTrials.gov-based candidate site filtering and explainable scoring for rapid CTM decisions.",
+      "zh": "基于 ClinicalTrials.gov 的候选站点筛选与可解释评分，支持 CTM 快速决策。",
+      "de": "Kandidaten-Sites auf Basis von ClinicalTrials.gov filtern und mit erklaerbaren Scores priorisieren."
+    },
+    "tags": [
+      "Clinical",
+      "Feasibility",
+      "Site Selection"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/site-feasibility-scoring-ctgov",
+    "screenshot": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "ClinicalTrials.gov",
+      "Scoring Model",
+      "Ranking UI"
+    ],
+    "designIntent": {
+      "en": "Turn sparse public trial history into an auditable site ranking surface.",
+      "zh": "把公开试验历史转换为可审计、可解释的站点评分面板。",
+      "de": "Oeffentliche Trial-Historie in eine nachvollziehbare Site-Rangliste ueberfuehren."
+    }
+  },
+  {
+    "slug": "site-feasibility-human-feedback",
+    "name": {
+      "en": "Site Feasibility with Human Feedback",
+      "zh": "站点可行性（人类反馈版）",
+      "de": "Site-Feasibility mit Human Feedback"
+    },
+    "description": {
+      "en": "Human-in-the-loop ranking that learns from CTM preference feedback and updates weights transparently.",
+      "zh": "引入 CTM 反馈回路，动态学习偏好并透明更新权重的站点排序系统。",
+      "de": "Human-in-the-loop Ranking mit nachvollziehbarer Gewichtsanpassung aus Nutzerfeedback."
+    },
+    "tags": [
+      "Clinical",
+      "RLHF",
+      "Preference Learning"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/site-feasibility-human-feedback",
+    "screenshot": "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "Feedback Loop",
+      "Bandit/RL",
+      "Audit Log"
+    ],
+    "designIntent": {
+      "en": "Encode tacit operator judgment into stable, explainable recommendation behavior.",
+      "zh": "把隐性经验编码进推荐策略，同时保持可解释与可审计。",
+      "de": "Implizites Expertenwissen in erklaerbares Ranking-Verhalten ueberfuehren."
+    }
+  },
+  {
+    "slug": "trial-survey-insight-explorer",
+    "name": {
+      "en": "Trial Survey Insight Explorer",
+      "zh": "试验调研洞察探索器",
+      "de": "Trial Survey Insight Explorer"
+    },
+    "description": {
+      "en": "Transforms site/investigator Likert survey datasets into actionable engagement insight dashboards.",
+      "zh": "将 site/investigator 的 Likert 调研数据转化为可执行的参与度洞察面板。",
+      "de": "Likert-Surveydaten von Sites/Investigators in handlungsfaehige Insight-Dashboards ueberfuehren."
+    },
+    "tags": [
+      "Clinical",
+      "Survey",
+      "Insights"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/trial-survey-insight-explorer",
+    "screenshot": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "Likert Analytics",
+      "Heatmap",
+      "Narrative Gen"
+    ],
+    "designIntent": {
+      "en": "Move from survey score tables to intervention-ready insight narratives.",
+      "zh": "从调研分数表迈向“可直接行动”的洞察叙事。",
+      "de": "Von statischen Survey-Tabellen zu interventionstauglichen Narrativen gelangen."
+    }
+  },
+  {
+    "slug": "protocol-qa-logic-engine",
+    "name": {
+      "en": "Protocol Q&A & Logic Engine",
+      "zh": "Protocol 问答与逻辑引擎",
+      "de": "Protocol Q&A und Logic Engine"
+    },
+    "description": {
+      "en": "Protocol querying, eligibility checks, and medication restriction decisions with clause-level evidence.",
+      "zh": "面向 protocol 的问答检索、入排判断与用药限制校验，并提供条款级证据。",
+      "de": "Protocol-Abfrage, Eligibility-Pruefung und Medikations-Checks mit klauselgenauer Evidenz."
+    },
+    "tags": [
+      "Protocol",
+      "Eligibility",
+      "Clinical Ops"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/protocol-qa-logic-engine",
+    "screenshot": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "Document Parsing",
+      "Rule Engine",
+      "Evidence Trace"
+    ],
+    "designIntent": {
+      "en": "Replace ambiguous interpretation loops with traceable protocol decisions.",
+      "zh": "减少 protocol 解释歧义，输出可追溯的决策链路。",
+      "de": "Interpretationsschleifen durch nachvollziehbare Protocol-Entscheidungen ersetzen."
+    }
+  },
+  {
+    "slug": "digital-twin-synthetic-control",
+    "name": {
+      "en": "Digital Twin Synthetic Control",
+      "zh": "数字孪生合成对照",
+      "de": "Digital Twin Synthetic Control"
+    },
+    "description": {
+      "en": "Synthetic control and sample-size reduction simulation with power/bias risk assessment.",
+      "zh": "围绕 synthetic control 与样本量缩减进行仿真，并评估 power 与偏差风险。",
+      "de": "Simulation von Synthetic Control und Sample-Size-Reduktion mit Power-/Bias-Risikoanalyse."
+    },
+    "tags": [
+      "Digital Twin",
+      "Statistics",
+      "Simulation"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/digital-twin-synthetic-control",
+    "screenshot": "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "Synthetic Control",
+      "Power Curve",
+      "Sensitivity Analysis"
+    ],
+    "designIntent": {
+      "en": "Stress-test control-arm reduction hypotheses before protocol commitment.",
+      "zh": "在方案确定前先压力测试“对照组缩减”假设。",
+      "de": "Hypothesen zur Kontrollarm-Reduktion vor Protokollfestlegung robust pruefen."
+    }
+  },
+  {
+    "slug": "patient-recruitment-feasibility-ehr-claims",
+    "name": {
+      "en": "Patient Recruitment Feasibility",
+      "zh": "患者招募可行性预测",
+      "de": "Patient Recruitment Feasibility"
+    },
+    "description": {
+      "en": "Structured cohort search over EHR/claims to estimate recruitable patients and enrollment velocity.",
+      "zh": "将入排标准结构化并检索 EHR/claims，预测可招募患者与入组速度。",
+      "de": "Strukturierte Cohort-Suche ueber EHR/Claims zur Schaetzung von Rekrutierbarkeit und Enrollment-Tempo."
+    },
+    "tags": [
+      "Recruitment",
+      "EHR",
+      "Feasibility"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/patient-recruitment-feasibility-ehr-claims",
+    "screenshot": "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "Cohort Definition",
+      "Claims Search",
+      "Bottleneck Analysis"
+    ],
+    "designIntent": {
+      "en": "Bridge protocol criteria and real-world patient availability with operationally useful projections.",
+      "zh": "连接 protocol 条件与真实患者供给，输出可执行的招募预测。",
+      "de": "Protocol-Kriterien mit realer Patientenverfuegbarkeit in operative Prognosen ueberfuehren."
+    }
+  },
+  {
+    "slug": "enrollment-forecast-monte-carlo",
+    "name": {
+      "en": "Enrollment Forecast Monte Carlo",
+      "zh": "入组随机预测（Monte Carlo）",
+      "de": "Enrollment Forecast per Monte Carlo"
+    },
+    "description": {
+      "en": "Stochastic site-level enrollment forecasting with probability-to-target and milestone risk alerts.",
+      "zh": "基于站点级随机建模的入组预测，输出达标概率与里程碑风险预警。",
+      "de": "Stochastische Site-basierte Enrollment-Prognose mit Zielwahrscheinlichkeit und Milestone-Risiko."
+    },
+    "tags": [
+      "Stochastic",
+      "Forecast",
+      "Enrollment"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/enrollment-forecast-monte-carlo",
+    "screenshot": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "Monte Carlo",
+      "Scenario Analysis",
+      "Risk Alerts"
+    ],
+    "designIntent": {
+      "en": "Quantify enrollment uncertainty early enough to trigger tactical intervention.",
+      "zh": "尽早量化入组不确定性，以便提前触发干预动作。",
+      "de": "Enrollment-Unsicherheit frueh quantifizieren, um taktische Eingriffe rechtzeitig auszulösen."
+    }
+  },
+  {
     "slug": "market-intelligence-highscore",
     "name": {
       "en": "Market Intelligence Hub",
