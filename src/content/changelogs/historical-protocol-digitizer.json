@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.2.0",
+    "title": {
+      "en": "PDF/Text Extraction + Schema Validation + USDM Mapping",
+      "zh": "新增 PDF/文本抽取、Schema 校验与 USDM 映射",
+      "de": "PDF/Text-Extraktion mit Schema-Validierung und USDM-Mapping"
+    },
+    "changes": {
+      "en": [
+        "Added input mode for either protocol PDF upload or raw unstructured text.",
+        "Added structured extraction with JSON schema validation and coverage checks.",
+        "Added field-level confidence scoring and USDM digital data-flow mapping output."
+      ],
+      "zh": [
+        "新增协议 PDF 上传与非结构化文本两种输入模式。",
+        "新增结构化抽取后的 JSON schema 校验与覆盖率检查。",
+        "新增字段级置信度评分与 USDM digital data flow 映射输出。"
+      ],
+      "de": [
+        "Eingabe per Protocol-PDF oder unstrukturiertem Text hinzugefuegt.",
+        "Strukturierte Extraktion mit JSON-Schema-Validierung und Coverage-Checks integriert.",
+        "Feld-Konfidenz und USDM Digital-Data-Flow Mapping als Output hinzugefuegt."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.1.0",
     "title": {
       "en": "Historical Protocol Digitization Prototype Added",
