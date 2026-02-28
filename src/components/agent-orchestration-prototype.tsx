@@ -21,6 +21,23 @@ type SkillStep = {
 
 type RoutePayload = {
   initiative: Initiative | null;
+  skillPack: {
+    initiativeId: string;
+    inputSchema: Array<{
+      name: string;
+      type: string;
+      required: boolean;
+      description: string;
+      example?: unknown;
+    }>;
+    tools: Array<{ name: string; purpose: string; mode: string }>;
+    approvalGates: Array<{ gate: string; owner: string; criteria: string }>;
+    outputTemplates: {
+      email: { subject: string; bodyOutline: string[] };
+      report: { sections: string[] };
+      jira: { summaryTemplate: string; descriptionChecklist: string[] };
+    };
+  } | null;
   confidence: number;
   backlog: boolean;
   rationale: string;
@@ -47,6 +64,10 @@ const labels: Record<Locale, any> = {
     submit: 'Route Request',
     initiatives: 'Initiative Skill Packs',
     workflow: 'Skill Workflow',
+    schema: 'Input Schema',
+    tools: 'Tool List',
+    gates: 'Approval Gates',
+    templates: 'Output Templates',
     backlog: 'Backlog Intake',
     matched: 'Matched initiative',
     unmatched: 'No strong match, sent to backlog',
@@ -62,6 +83,10 @@ const labels: Record<Locale, any> = {
     submit: '开始路由',
     initiatives: 'Initiative Skill 包',
     workflow: 'Skill 工作流',
+    schema: '输入 Schema',
+    tools: '工具列表',
+    gates: '审批 Gate',
+    templates: '输出模板',
     backlog: 'Backlog 收集',
     matched: '已命中 initiative',
     unmatched: '未稳定命中，已进入 backlog',
@@ -78,6 +103,10 @@ const labels: Record<Locale, any> = {
     submit: 'Routing starten',
     initiatives: 'Initiative-Skill-Packs',
     workflow: 'Skill-Workflow',
+    schema: 'Input-Schema',
+    tools: 'Tool-Liste',
+    gates: 'Freigabe-Gates',
+    templates: 'Output-Templates',
     backlog: 'Backlog Intake',
     matched: 'Initiative erkannt',
     unmatched: 'Keine klare Zuordnung, im Backlog gespeichert',
@@ -255,6 +284,69 @@ export function AgentOrchestrationPrototype({
           </div>
         </article>
       </section>
+
+      {route?.initiative && route.skillPack ? (
+        <section className="grid gap-4 xl:grid-cols-2">
+          <article className="noise-border rounded-lg p-4">
+            <h2 className="mb-2 text-lg font-semibold">{t.schema}</h2>
+            <div className="space-y-2 text-sm">
+              {route.skillPack.inputSchema.map((field) => (
+                <div key={field.name} className="rounded border border-ink/15 p-2">
+                  <p className="font-medium">
+                    {field.name} <span className="font-mono text-xs text-ink/60">({field.type})</span>
+                  </p>
+                  <p className="text-xs text-ink/70">{field.description}</p>
+                  <p className="text-xs text-ink/60">required: {field.required ? 'yes' : 'no'}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="noise-border rounded-lg p-4">
+            <h2 className="mb-2 text-lg font-semibold">{t.tools}</h2>
+            <div className="space-y-2 text-sm">
+              {route.skillPack.tools.map((tool) => (
+                <div key={tool.name} className="rounded border border-ink/15 p-2">
+                  <p className="font-medium">{tool.name}</p>
+                  <p className="text-xs text-ink/70">{tool.purpose}</p>
+                  <p className="text-xs text-ink/60">mode: {tool.mode}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="noise-border rounded-lg p-4">
+            <h2 className="mb-2 text-lg font-semibold">{t.gates}</h2>
+            <div className="space-y-2 text-sm">
+              {route.skillPack.approvalGates.map((gate) => (
+                <div key={gate.gate} className="rounded border border-ink/15 p-2">
+                  <p className="font-medium">{gate.gate}</p>
+                  <p className="text-xs text-ink/70">owner: {gate.owner}</p>
+                  <p className="text-xs text-ink/60">{gate.criteria}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="noise-border rounded-lg p-4">
+            <h2 className="mb-2 text-lg font-semibold">{t.templates}</h2>
+            <div className="space-y-3 text-sm">
+              <div className="rounded border border-ink/15 p-2">
+                <p className="font-medium">Email</p>
+                <p className="text-xs text-ink/70">{route.skillPack.outputTemplates.email.subject}</p>
+              </div>
+              <div className="rounded border border-ink/15 p-2">
+                <p className="font-medium">Report</p>
+                <p className="text-xs text-ink/70">{route.skillPack.outputTemplates.report.sections.join(' · ')}</p>
+              </div>
+              <div className="rounded border border-ink/15 p-2">
+                <p className="font-medium">Jira</p>
+                <p className="text-xs text-ink/70">{route.skillPack.outputTemplates.jira.summaryTemplate}</p>
+              </div>
+            </div>
+          </article>
+        </section>
+      ) : null}
 
       <section className="noise-border rounded-lg p-4">
         <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">

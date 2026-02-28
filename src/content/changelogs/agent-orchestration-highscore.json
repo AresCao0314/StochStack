@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.2.0",
+    "title": {
+      "en": "Structured Skill Pack Spec Added",
+      "zh": "新增结构化 Skill Pack 规范",
+      "de": "Strukturierte Skill-Pack-Spezifikation hinzugefuegt"
+    },
+    "changes": {
+      "en": [
+        "Added per-initiative input schema for predictable intake quality.",
+        "Added tool list, approval gates, and output templates (email/report/Jira).",
+        "Extended orchestration route response to return selected skill pack details."
+      ],
+      "zh": [
+        "为每个 initiative 新增输入 schema，提升 intake 质量一致性。",
+        "新增工具清单、审批 gate、输出模板（邮件/报告/Jira）。",
+        "扩展路由返回结构，命中后直接返回 skill pack 详情。"
+      ],
+      "de": [
+        "Input-Schema pro Initiative fuer konsistente Intake-Qualitaet hinzugefuegt.",
+        "Tool-Liste, Freigabe-Gates und Output-Templates (E-Mail/Report/Jira) integriert.",
+        "Routing-Response erweitert, um Skill-Pack-Details direkt bereitzustellen."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.1.0",
     "title": {
       "en": "Initial Agent Orchestration Prototype",

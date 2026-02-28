@@ -1,0 +1,455 @@
+[
+  {
+    "initiativeId": "initiative-01-portfolio-mgmt",
+    "inputSchema": [
+      { "name": "portfolioScope", "type": "string", "required": true, "description": "Program/study scope to include", "example": "Oncology phase 2-3 portfolio 2026" },
+      { "name": "milestones", "type": "string[]", "required": true, "description": "Key milestones and due dates", "example": ["FPI", "LPI", "DBL", "CSR"] },
+      { "name": "budgetBaseline", "type": "number", "required": true, "description": "Approved baseline budget in USD", "example": 24000000 },
+      { "name": "resourcePlan", "type": "object", "required": true, "description": "FTE/capacity plan by function", "example": { "clinicalOps": 12, "dataMgmt": 8 } },
+      { "name": "riskTolerance", "type": "string", "required": false, "description": "Risk appetite for schedule and cost variance", "example": "medium" }
+    ],
+    "tools": [
+      { "name": "Milestone Variance Analyzer", "purpose": "Detect milestone slippage and critical path pressure", "mode": "analytics" },
+      { "name": "Budget Burn Tracker", "purpose": "Track plan-vs-actual budget variance", "mode": "analytics" },
+      { "name": "Resource Rebalancer", "purpose": "Recommend cross-study staffing shifts", "mode": "optimization" }
+    ],
+    "approvalGates": [
+      { "gate": "Gate A: Data readiness", "owner": "Portfolio Lead", "criteria": "Milestone and budget baseline validated" },
+      { "gate": "Gate B: Recommendation review", "owner": "Clinical Ops Head", "criteria": "Proposed trade-offs accepted by functions" },
+      { "gate": "Gate C: Action sign-off", "owner": "Program Governance Board", "criteria": "Execution plan and owners committed" }
+    ],
+    "outputTemplates": {
+      "email": {
+        "subject": "[Portfolio Alert] {{portfolioScope}} variance update and actions",
+        "bodyOutline": [
+          "Current variance snapshot (milestone, budget, resource)",
+          "Top 3 risks and likely downstream impact",
+          "Recommended actions with owner and due date"
+        ]
+      },
+      "report": {
+        "sections": [
+          "Executive summary",
+          "Milestone variance analysis",
+          "Budget and capacity dashboard",
+          "Scenario options and decision log"
+        ]
+      },
+      "jira": {
+        "summaryTemplate": "[Portfolio] {{riskType}} mitigation for {{studyId}}",
+        "descriptionChecklist": [
+          "Problem statement and impact",
+          "Root-cause hypothesis",
+          "Action owner and ETA",
+          "Success metric and monitoring point"
+        ]
+      }
+    }
+  },
+  {
+    "initiativeId": "initiative-02-trial-simulator",
+    "inputSchema": [
+      { "name": "trialDesign", "type": "object", "required": true, "description": "Design assumptions and endpoints", "example": { "phase": "3", "primaryEndpoint": "PFS" } },
+      { "name": "effectAssumptions", "type": "object", "required": true, "description": "Effect size and variance assumptions", "example": { "hazardRatio": 0.78 } },
+      { "name": "operationalConstraints", "type": "object", "required": false, "description": "Site, region, startup and enrollment constraints", "example": { "maxSites": 120 } },
+      { "name": "simulationRuns", "type": "number", "required": true, "description": "Monte Carlo run count", "example": 1000 }
+    ],
+    "tools": [
+      { "name": "Trial Path Simulator", "purpose": "Simulate enrollment and operational timelines", "mode": "simulation" },
+      { "name": "Power Sensitivity Engine", "purpose": "Stress-test assumptions and power stability", "mode": "statistics" },
+      { "name": "Scenario Comparator", "purpose": "Compare design options under constraints", "mode": "decision-support" }
+    ],
+    "approvalGates": [
+      { "gate": "Gate A: Assumption lock", "owner": "Biostat Lead", "criteria": "Core assumptions accepted and documented" },
+      { "gate": "Gate B: Scenario review", "owner": "Clinical Team", "criteria": "Preferred scenario selected with rationale" },
+      { "gate": "Gate C: Go/No-go", "owner": "Development Governance", "criteria": "Decision and fallback plan approved" }
+    ],
+    "outputTemplates": {
+      "email": {
+        "subject": "[Simulation Readout] {{programName}} scenario decision",
+        "bodyOutline": [
+          "Assumption set used in simulation",
+          "Top scenario outcomes and risk envelope",
+          "Recommended option and contingency"
+        ]
+      },
+      "report": {
+        "sections": [
+          "Model setup and assumptions",
+          "Scenario outcomes",
+          "Sensitivity and uncertainty analysis",
+          "Recommendation with trade-offs"
+        ]
+      },
+      "jira": {
+        "summaryTemplate": "[Simulation] Validate {{assumptionName}} impact",
+        "descriptionChecklist": [
+          "Assumption definition",
+          "Expected impact metric",
+          "Validation owner",
+          "Decision checkpoint"
+        ]
+      }
+    }
+  },
+  {
+    "initiativeId": "initiative-03-site-startup",
+    "inputSchema": [
+      { "name": "countryList", "type": "string[]", "required": true, "description": "Target countries/sites for startup", "example": ["US", "DE", "CN"] },
+      { "name": "startupMilestones", "type": "string[]", "required": true, "description": "Startup milestones and SLA targets", "example": ["CA signed", "EC approved", "SIV complete"] },
+      { "name": "regulatoryPath", "type": "object", "required": false, "description": "Country-specific regulatory assumptions", "example": { "DE": "BfArM + EC" } }
+    ],
+    "tools": [
+      { "name": "Startup Bottleneck Detector", "purpose": "Find recurring delay points by country/site", "mode": "analytics" },
+      { "name": "Activation Planner", "purpose": "Sequence activation tasks and owners", "mode": "workflow" },
+      { "name": "Cycle Time Benchmark", "purpose": "Benchmark startup cycle vs historical peers", "mode": "benchmarking" }
+    ],
+    "approvalGates": [
+      { "gate": "Gate A: Critical path alignment", "owner": "Startup Lead", "criteria": "Critical path confirmed for all priority countries" },
+      { "gate": "Gate B: Mitigation commitment", "owner": "Country Managers", "criteria": "Delay mitigation owners accepted actions" }
+    ],
+    "outputTemplates": {
+      "email": {
+        "subject": "[Site Startup] {{studyId}} activation risk and mitigation",
+        "bodyOutline": [
+          "Current startup status and blockers",
+          "Country/site risk ranking",
+          "Mitigation actions and due dates"
+        ]
+      },
+      "report": {
+        "sections": [
+          "Startup funnel overview",
+          "Country-by-country bottleneck analysis",
+          "Mitigation playbook",
+          "Execution tracker"
+        ]
+      },
+      "jira": {
+        "summaryTemplate": "[Startup] Resolve {{blockerType}} at {{siteId}}",
+        "descriptionChecklist": [
+          "Blocker description and evidence",
+          "Responsible owner",
+          "Due date",
+          "Escalation path"
+        ]
+      }
+    }
+  },
+  {
+    "initiativeId": "initiative-04-footprint-selection",
+    "inputSchema": [
+      { "name": "therapeuticArea", "type": "string", "required": true, "description": "Target therapeutic area", "example": "Oncology" },
+      { "name": "indication", "type": "string", "required": true, "description": "Target indication", "example": "NSCLC" },
+      { "name": "phase", "type": "string", "required": true, "description": "Trial phase", "example": "Phase 3" },
+      { "name": "targetEnrollment", "type": "number", "required": true, "description": "Enrollment target", "example": 620 }
+    ],
+    "tools": [
+      { "name": "Footprint Optimizer", "purpose": "Propose country and site mix under constraints", "mode": "optimization" },
+      { "name": "Site Feasibility Scorer", "purpose": "Score candidate sites with explainable factors", "mode": "scoring" },
+      { "name": "Recruitment Risk Forecaster", "purpose": "Estimate timeline risk by footprint scenario", "mode": "forecasting" }
+    ],
+    "approvalGates": [
+      { "gate": "Gate A: Candidate shortlist", "owner": "Feasibility Lead", "criteria": "Top footprint scenarios validated" },
+      { "gate": "Gate B: Country alignment", "owner": "Regional Ops Leads", "criteria": "Country execution feasibility confirmed" },
+      { "gate": "Gate C: Final footprint lock", "owner": "Study Team", "criteria": "Final site/country mix approved" }
+    ],
+    "outputTemplates": {
+      "email": {
+        "subject": "[Footprint Decision] {{studyId}} recommended country-site mix",
+        "bodyOutline": [
+          "Top scenario and rationale",
+          "Expected enrollment timeline",
+          "Risk hotspots and fallback options"
+        ]
+      },
+      "report": {
+        "sections": [
+          "Input constraints",
+          "Scenario comparison",
+          "Recommended footprint",
+          "Sensitivity and risk analysis"
+        ]
+      },
+      "jira": {
+        "summaryTemplate": "[Footprint] Validate {{country}} startup assumptions",
+        "descriptionChecklist": [
+          "Assumption and source",
+          "Dependency and risk",
+          "Owner and deadline",
+          "Decision status"
+        ]
+      }
+    }
+  },
+  {
+    "initiativeId": "initiative-05-partner-of-choice",
+    "inputSchema": [
+      { "name": "partnerCandidates", "type": "string[]", "required": true, "description": "Candidate CRO/partner list", "example": ["CRO-A", "CRO-B"] },
+      { "name": "performanceKPIs", "type": "string[]", "required": true, "description": "Evaluation KPIs", "example": ["startup cycle", "query aging", "cost variance"] },
+      { "name": "contractModel", "type": "string", "required": false, "description": "Preferred contract/governance model", "example": "hybrid strategic alliance" }
+    ],
+    "tools": [
+      { "name": "Partner Scorecard Engine", "purpose": "Score partners across quality, speed, and value", "mode": "scoring" },
+      { "name": "Governance Risk Mapper", "purpose": "Identify governance failure points and controls", "mode": "risk" },
+      { "name": "Negotiation Brief Generator", "purpose": "Generate evidence-backed negotiation points", "mode": "authoring" }
+    ],
+    "approvalGates": [
+      { "gate": "Gate A: KPI baseline", "owner": "Vendor Management Lead", "criteria": "KPI definitions and baselines agreed" },
+      { "gate": "Gate B: Partner shortlist", "owner": "Clinical Leadership", "criteria": "Shortlist approved with rationale" },
+      { "gate": "Gate C: Deal sign-off", "owner": "Procurement + Legal", "criteria": "Contract terms finalized" }
+    ],
+    "outputTemplates": {
+      "email": {
+        "subject": "[Partner Strategy] {{portfolio}} shortlist and recommendation",
+        "bodyOutline": [
+          "Evaluation method and KPI weighting",
+          "Partner ranking and trade-offs",
+          "Recommended next negotiation steps"
+        ]
+      },
+      "report": {
+        "sections": [
+          "Partner landscape",
+          "Scorecard methodology",
+          "Risk and governance model",
+          "Recommendation and negotiation strategy"
+        ]
+      },
+      "jira": {
+        "summaryTemplate": "[Partner] Resolve {{partnerName}} KPI gap",
+        "descriptionChecklist": [
+          "Gap statement",
+          "Expected correction action",
+          "Owner and timeline",
+          "Verification criteria"
+        ]
+      }
+    }
+  },
+  {
+    "initiativeId": "initiative-06-submission-closeout",
+    "inputSchema": [
+      { "name": "studyId", "type": "string", "required": true, "description": "Target study identifier", "example": "ST-ONC-301" },
+      { "name": "submissionType", "type": "string", "required": true, "description": "Submission or close-out package type", "example": "CSR + eCTD package" },
+      { "name": "documentStatus", "type": "object", "required": true, "description": "Current status by document", "example": { "CSR": "draft", "TLF": "in progress" } }
+    ],
+    "tools": [
+      { "name": "Submission Critical Path Tracker", "purpose": "Track dependencies and slippage in submission package", "mode": "workflow" },
+      { "name": "Close-out Checklist Auditor", "purpose": "Verify completion of close-out requirements", "mode": "compliance" },
+      { "name": "Regulatory Narrative Assistant", "purpose": "Draft concise submission narratives", "mode": "authoring" }
+    ],
+    "approvalGates": [
+      { "gate": "Gate A: Readiness review", "owner": "Regulatory Lead", "criteria": "All critical docs and dependencies mapped" },
+      { "gate": "Gate B: Quality review", "owner": "Medical Writing + QA", "criteria": "Quality thresholds met" },
+      { "gate": "Gate C: Final submit", "owner": "Regulatory Operations", "criteria": "Package approved and submission scheduled" }
+    ],
+    "outputTemplates": {
+      "email": {
+        "subject": "[Submission Readiness] {{studyId}} status and blockers",
+        "bodyOutline": [
+          "Readiness score and critical blockers",
+          "Impact on target submission date",
+          "Actions required for green status"
+        ]
+      },
+      "report": {
+        "sections": [
+          "Submission package status",
+          "Dependency and blocker map",
+          "Close-out quality checks",
+          "Readiness plan"
+        ]
+      },
+      "jira": {
+        "summaryTemplate": "[Submission] Complete {{documentName}} for {{studyId}}",
+        "descriptionChecklist": [
+          "Definition of done",
+          "Dependencies",
+          "Owner and due date",
+          "Review sign-off"
+        ]
+      }
+    }
+  },
+  {
+    "initiativeId": "initiative-07-rbqm",
+    "inputSchema": [
+      { "name": "studyRiskPlan", "type": "object", "required": true, "description": "Predefined risk indicators and thresholds", "example": { "queryAgingDays": 14 } },
+      { "name": "dataFeeds", "type": "string[]", "required": true, "description": "Connected data feeds", "example": ["EDC", "CTMS", "ePRO"] },
+      { "name": "monitoringScope", "type": "string", "required": false, "description": "Scope of centralized/risk-based monitoring", "example": "global phase 3 studies" }
+    ],
+    "tools": [
+      { "name": "Risk Signal Engine", "purpose": "Detect quality and compliance signals in near real-time", "mode": "monitoring" },
+      { "name": "Deviation Pattern Miner", "purpose": "Identify recurrent protocol deviation patterns", "mode": "analytics" },
+      { "name": "Action Prioritizer", "purpose": "Prioritize interventions by risk severity and impact", "mode": "triage" }
+    ],
+    "approvalGates": [
+      { "gate": "Gate A: Indicator definition", "owner": "RBQM Lead", "criteria": "KRI/KPI definitions approved" },
+      { "gate": "Gate B: Alert governance", "owner": "Study Management", "criteria": "Escalation and ownership matrix defined" },
+      { "gate": "Gate C: CAPA closure", "owner": "Quality Team", "criteria": "Corrective actions verified and closed" }
+    ],
+    "outputTemplates": {
+      "email": {
+        "subject": "[RBQM Alert] {{studyId}} priority quality signal",
+        "bodyOutline": [
+          "Signal detected and threshold breach",
+          "Potential impact and affected sites",
+          "Immediate action and escalation owner"
+        ]
+      },
+      "report": {
+        "sections": [
+          "KRI/KPI overview",
+          "Signal trend and root-cause analysis",
+          "Intervention status",
+          "Residual risk assessment"
+        ]
+      },
+      "jira": {
+        "summaryTemplate": "[RBQM] Investigate {{signalType}} in {{studyId}}",
+        "descriptionChecklist": [
+          "Signal evidence",
+          "Site/region scope",
+          "Corrective action",
+          "Closure criteria"
+        ]
+      }
+    }
+  },
+  {
+    "initiativeId": "initiative-08-delivery-sourcing",
+    "inputSchema": [
+      { "name": "currentModel", "type": "string", "required": true, "description": "Current delivery/sourcing model", "example": "mixed FSP + CRO" },
+      { "name": "costDrivers", "type": "string[]", "required": true, "description": "Top cost drivers", "example": ["monitoring", "startup", "change orders"] },
+      { "name": "targetSavings", "type": "number", "required": false, "description": "Target savings percent", "example": 12 }
+    ],
+    "tools": [
+      { "name": "Delivery Model Evaluator", "purpose": "Compare delivery models by cost/speed/quality", "mode": "evaluation" },
+      { "name": "Sourcing Mix Optimizer", "purpose": "Optimize FSP/CRO allocation by capability", "mode": "optimization" },
+      { "name": "Cost Leak Detector", "purpose": "Identify recurring avoidable costs", "mode": "analytics" }
+    ],
+    "approvalGates": [
+      { "gate": "Gate A: Baseline agreement", "owner": "Finance + Clinical Ops", "criteria": "Cost baseline and assumptions approved" },
+      { "gate": "Gate B: Model selection", "owner": "Sourcing Board", "criteria": "Preferred model selected with scenario evidence" },
+      { "gate": "Gate C: Rollout approval", "owner": "Leadership Team", "criteria": "Rollout plan and KPI tracking approved" }
+    ],
+    "outputTemplates": {
+      "email": {
+        "subject": "[Delivery Model] {{portfolio}} optimization recommendation",
+        "bodyOutline": [
+          "Current-state cost leakage",
+          "Target model recommendation",
+          "Expected savings and transition risks"
+        ]
+      },
+      "report": {
+        "sections": [
+          "Current operating model baseline",
+          "Scenario comparison",
+          "Recommended sourcing model",
+          "Transition and governance plan"
+        ]
+      },
+      "jira": {
+        "summaryTemplate": "[Sourcing] Execute {{workstream}} transition",
+        "descriptionChecklist": [
+          "Workstream scope",
+          "Dependency map",
+          "Owner and ETA",
+          "Success KPI"
+        ]
+      }
+    }
+  },
+  {
+    "initiativeId": "initiative-09-data-tech-foundation",
+    "inputSchema": [
+      { "name": "systemLandscape", "type": "object", "required": true, "description": "Current systems and interfaces", "example": { "EDC": "X", "CTMS": "Y" } },
+      { "name": "priorityUseCases", "type": "string[]", "required": true, "description": "Use cases to enable first", "example": ["RBQM", "enrollment forecast"] },
+      { "name": "dataStandards", "type": "string[]", "required": false, "description": "Target standards", "example": ["CDISC", "FHIR"] }
+    ],
+    "tools": [
+      { "name": "Interoperability Mapper", "purpose": "Map system interfaces and gaps", "mode": "architecture" },
+      { "name": "Data Product Planner", "purpose": "Define reusable clinical data products", "mode": "product" },
+      { "name": "Tech Debt Prioritizer", "purpose": "Prioritize foundation improvements by value/risk", "mode": "prioritization" }
+    ],
+    "approvalGates": [
+      { "gate": "Gate A: Architecture target", "owner": "Enterprise Architect", "criteria": "Target state and principles approved" },
+      { "gate": "Gate B: MVP scope", "owner": "Data Platform Lead", "criteria": "MVP data products and integrations locked" },
+      { "gate": "Gate C: Release governance", "owner": "IT Governance", "criteria": "Security/compliance and release readiness approved" }
+    ],
+    "outputTemplates": {
+      "email": {
+        "subject": "[Data Foundation] {{releaseName}} architecture decision note",
+        "bodyOutline": [
+          "Current pain points and constraints",
+          "Target architecture and phased plan",
+          "Dependencies and decision requests"
+        ]
+      },
+      "report": {
+        "sections": [
+          "Current landscape assessment",
+          "Target architecture blueprint",
+          "Roadmap and milestones",
+          "Risk and mitigation"
+        ]
+      },
+      "jira": {
+        "summaryTemplate": "[Data Platform] Deliver {{integrationName}}",
+        "descriptionChecklist": [
+          "Interface contract",
+          "Data quality checks",
+          "Owner and release target",
+          "Validation evidence"
+        ]
+      }
+    }
+  },
+  {
+    "initiativeId": "initiative-10-ai-authoring",
+    "inputSchema": [
+      { "name": "documentType", "type": "string", "required": true, "description": "Target document type", "example": "Protocol synopsis" },
+      { "name": "sourcePackage", "type": "object", "required": true, "description": "Source references and constraints", "example": { "protocol": "v1.2", "styleGuide": "MW-STD-2026" } },
+      { "name": "qualityRequirements", "type": "string[]", "required": true, "description": "Quality and compliance requirements", "example": ["traceable citations", "medical review required"] }
+    ],
+    "tools": [
+      { "name": "Authoring Draft Agent", "purpose": "Generate first draft from approved context", "mode": "generation" },
+      { "name": "Citation Verifier", "purpose": "Check traceability against source package", "mode": "validation" },
+      { "name": "Quality Style Checker", "purpose": "Enforce template, tone, and consistency rules", "mode": "quality" }
+    ],
+    "approvalGates": [
+      { "gate": "Gate A: Source lock", "owner": "Medical Writing Lead", "criteria": "Source package complete and frozen" },
+      { "gate": "Gate B: Scientific review", "owner": "Clinical Scientist", "criteria": "Scientific content validated" },
+      { "gate": "Gate C: Final quality approval", "owner": "MW QA", "criteria": "Compliance and style checks passed" }
+    ],
+    "outputTemplates": {
+      "email": {
+        "subject": "[AI Authoring] {{documentType}} draft ready for review",
+        "bodyOutline": [
+          "Draft scope and source package used",
+          "Open issues requiring reviewer input",
+          "Review deadline and owner"
+        ]
+      },
+      "report": {
+        "sections": [
+          "Input source traceability",
+          "Draft output summary",
+          "Quality findings",
+          "Review decision log"
+        ]
+      },
+      "jira": {
+        "summaryTemplate": "[Authoring] Review {{documentType}} draft {{version}}",
+        "descriptionChecklist": [
+          "Scope and objectives",
+          "Citation and evidence checks",
+          "Reviewer comments",
+          "Approval outcome"
+        ]
+      }
+    }
+  }
+]

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import initiatives from '@/content/agent-orchestration/initiatives.json';
+import skillPacks from '@/content/agent-orchestration/skill-packs.json';
 import { appendIntake, getIntakeDashboard, type IntakeEntry } from '@/lib/server/orchestration-store';
 
 export const runtime = 'nodejs';
@@ -14,6 +15,7 @@ type RouteRequest = {
 };
 
 type Initiative = (typeof initiatives)[number];
+type SkillPack = (typeof skillPacks)[number];
 
 type SkillStep = {
   step: string;
@@ -178,6 +180,10 @@ function pickInitiative(id: string | null) {
   return id ? initiatives.find((x) => x.id === id) ?? null : null;
 }
 
+function pickSkillPack(initiativeId: string | null): SkillPack | null {
+  return initiativeId ? skillPacks.find((x) => x.initiativeId === initiativeId) ?? null : null;
+}
+
 export async function GET() {
   const dashboard = await getIntakeDashboard();
   return NextResponse.json({ ok: true, ...dashboard });
@@ -208,6 +214,7 @@ export async function POST(request: Request) {
     }
 
     const initiative = pickInitiative(routed.initiativeId);
+    const skillPack = pickSkillPack(initiative?.id ?? null);
     const backlog = !initiative || routed.confidence < 0.46;
     const entry: IntakeEntry = {
       id: crypto.randomUUID(),
@@ -229,6 +236,7 @@ export async function POST(request: Request) {
       ok: true,
       route: {
         initiative,
+        skillPack,
         confidence: routed.confidence,
         backlog,
         rationale: routed.rationale,
