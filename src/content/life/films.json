@@ -1,0 +1,54 @@
+{
+  "cards": [
+    {
+      "title": { "en": "Stalker", "zh": "潜行者", "de": "Stalker" },
+      "note": {
+        "en": "Slow tempo as a tool for cognitive depth.",
+        "zh": "慢节奏作为认知深度工具。",
+        "de": "Langsames Tempo als Mittel kognitiver Tiefe."
+      }
+    },
+    {
+      "title": { "en": "Her", "zh": "她", "de": "Her" },
+      "note": {
+        "en": "Interface intimacy and emotional ergonomics.",
+        "zh": "界面亲密感与情绪工学。",
+        "de": "Interface-Intimität und emotionale Ergonomie."
+      }
+    },
+    {
+      "title": { "en": "Playtime", "zh": "玩乐时间", "de": "Playtime" },
+      "note": {
+        "en": "Spatial comedy as systems critique.",
+        "zh": "以空间喜剧完成系统批评。",
+        "de": "Raumkomik als Systemkritik."
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "year": "2022",
+      "text": {
+        "en": "Started film log focused on framing language.",
+        "zh": "开始以构图语言为核心记录观影日志。",
+        "de": "Film-Log mit Fokus auf Framing-Sprache gestartet."
+      }
+    },
+    {
+      "year": "2024",
+      "text": {
+        "en": "Shifted from ratings to scene-level annotation.",
+        "zh": "从打分转向场景级注解。",
+        "de": "Von Bewertungen zu Szenenannotation gewechselt."
+      }
+    },
+    {
+      "year": "2025",
+      "text": {
+        "en": "Mapped film pacing patterns into UX studies.",
+        "zh": "将电影节奏模式映射到 UX 研究。",
+        "de": "Pacing-Muster aus Filmen in UX-Studien übertragen."
+      }
+    }
+  ]
+}

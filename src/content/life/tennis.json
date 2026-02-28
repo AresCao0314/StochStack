@@ -1,0 +1,54 @@
+{
+  "cards": [
+    {
+      "title": { "en": "Serve Consistency Drill", "zh": "发球一致性训练", "de": "Aufschlag-Konsistenz" },
+      "note": {
+        "en": "Target: 65% first-serve placement in deuce court.",
+        "zh": "目标：平分区一发落点命中率 65%。",
+        "de": "Ziel: 65% Platzierung im Einstandfeld."
+      }
+    },
+    {
+      "title": { "en": "Split-Step Timing", "zh": "分腿垫步时机", "de": "Split-Step Timing" },
+      "note": {
+        "en": "Use video delay to detect late loading before wide balls.",
+        "zh": "用视频回看识别处理外角球前的迟加载问题。",
+        "de": "Video-Delay zur Erkennung verspäteter Vorbereitung bei weiten Bällen."
+      }
+    },
+    {
+      "title": { "en": "Backhand Contact Height", "zh": "反手击球高度", "de": "Rückhand-Kontakthöhe" },
+      "note": {
+        "en": "Tracking shoulder-line stability under pressure rallies.",
+        "zh": "记录对抗回合中肩线稳定性。",
+        "de": "Schulterlinien-Stabilität unter Druckrallyes messen."
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "year": "2024 Q1",
+      "text": {
+        "en": "Started weekly telemetry log with serve zones.",
+        "zh": "开始每周记录发球落点遥测日志。",
+        "de": "Wöchentliches Telemetry-Log mit Aufschlagzonen gestartet."
+      }
+    },
+    {
+      "year": "2024 Q4",
+      "text": {
+        "en": "Improved tie-break composure with breath protocol.",
+        "zh": "通过呼吸协议提升抢七稳定性。",
+        "de": "Tie-Break-Stabilität über Atemprotokoll verbessert."
+      }
+    },
+    {
+      "year": "2025 Q3",
+      "text": {
+        "en": "Added footwork cadence tracking using short clips.",
+        "zh": "加入短视频步伐节奏跟踪。",
+        "de": "Fußarbeits-Kadenz via Kurzclips integriert."
+      }
+    }
+  ]
+}

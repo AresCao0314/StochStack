@@ -1,0 +1,284 @@
+[
+  {
+    "slug": "latent-workflow-maps",
+    "topic": "AI",
+    "date": "2026-02-05",
+    "title": {
+      "en": "Latent Workflow Maps",
+      "zh": "潜在工作流地图",
+      "de": "Latente Workflow-Maps"
+    },
+    "excerpt": {
+      "en": "Why operators need map-like interfaces instead of chat-only surfaces.",
+      "zh": "为什么操作型系统需要地图式界面，而不仅是聊天窗口。",
+      "de": "Warum operative Systeme Kartenoberflächen statt reiner Chats brauchen."
+    },
+    "sections": {
+      "en": [
+        "Most AI tools still expose single-turn interfaces. Real work, however, is multi-state and path dependent.",
+        "A latent workflow map externalizes decision points, confidence levels, and reversible branches.",
+        "When uncertainty is visible, collaboration quality rises because teams reason over shared state instead of memory."
+      ],
+      "zh": [
+        "大多数 AI 工具仍是单轮交互界面，但真实工作是多状态、路径依赖的。",
+        "潜在工作流地图把决策节点、置信度和可回滚分支外显出来。",
+        "当不确定性可见时，协作质量会提升，因为团队基于共享状态而不是记忆做判断。"
+      ],
+      "de": [
+        "Viele AI-Tools bleiben bei Single-Turn-Interaktion, obwohl Arbeit mehrstufig und pfadabhängig ist.",
+        "Eine latente Workflow-Map macht Entscheidungspunkte, Konfidenz und reversible Pfade explizit.",
+        "Sichtbare Unsicherheit erhöht Teamqualität, weil auf gemeinsamem Zustand statt Erinnerung gearbeitet wird."
+      ]
+    },
+    "highlight": {
+      "en": "State is the real interface.",
+      "zh": "状态，才是真正的界面。",
+      "de": "Zustand ist die eigentliche Oberfläche."
+    },
+    "quote": {
+      "en": "Interface minimalism without state visibility is hidden complexity.",
+      "zh": "没有状态可见性的极简界面，往往只是复杂性的隐藏。",
+      "de": "Minimalismus ohne Sichtbarkeit von Zustand ist versteckte Komplexität."
+    },
+    "sidenotes": {
+      "en": ["Map-like UI improves operator onboarding speed by giving topology.", "Reversible branches reduce fear of experimentation."],
+      "zh": ["地图式 UI 通过提供拓扑结构降低上手成本。", "可回滚分支显著降低试错心理负担。"],
+      "de": ["Kartenlogik verbessert Onboarding durch sichtbare Topologie.", "Reversible Pfade senken die Hemmschwelle für Experimente."]
+    }
+  },
+  {
+    "slug": "clinical-feedback-latency",
+    "topic": "Clinical",
+    "date": "2026-01-20",
+    "title": {
+      "en": "Clinical Feedback Latency",
+      "zh": "临床反馈延迟",
+      "de": "Klinische Feedback-Latenz"
+    },
+    "excerpt": {
+      "en": "Operational lag hides inside reporting cadence, not only in execution.",
+      "zh": "临床项目的滞后常隐藏在报告节奏里，而不只在执行里。",
+      "de": "Operative Verzögerung entsteht oft im Reporting-Takt, nicht nur in der Ausführung."
+    },
+    "sections": {
+      "en": [
+        "In trial execution, teams optimize for delivery milestones and miss signal delay in escalation channels.",
+        "A useful dashboard should capture not only risk but also time-to-awareness.",
+        "Latency metrics turn qualitative concern into measurable governance constraints."
+      ],
+      "zh": [
+        "在试验执行中，团队常优化交付节点，却忽略升级链路中的信号延迟。",
+        "一个有效仪表盘不仅追踪风险，也应追踪风险被感知所需的时间。",
+        "延迟指标可把定性担忧转化为可治理约束。"
+      ],
+      "de": [
+        "Teams optimieren häufig Meilensteine und übersehen Verzögerungen in Eskalationskanälen.",
+        "Ein gutes Dashboard erfasst Risiko plus Time-to-Awareness.",
+        "Latenzmetriken machen qualitative Sorgen zu steuerbaren Governance-Faktoren."
+      ]
+    },
+    "highlight": {
+      "en": "Delay in perception is delay in control.",
+      "zh": "感知延迟，就是控制延迟。",
+      "de": "Verzögerte Wahrnehmung ist verzögerte Steuerung."
+    },
+    "quote": {
+      "en": "Metrics should expose where risk signal slows down.",
+      "zh": "指标的价值，在于揭示风险信号在哪里变慢。",
+      "de": "Kennzahlen müssen zeigen, wo Risikosignale an Geschwindigkeit verlieren."
+    },
+    "sidenotes": {
+      "en": ["A short escalation path can outperform a sophisticated dashboard.", "SLA for insight delivery matters."],
+      "zh": ["短升级路径有时比复杂仪表盘更有效。", "洞察交付 SLA 需要被显式定义。"],
+      "de": ["Kurze Eskalationswege schlagen oft komplexe Dashboards.", "SLA für Erkenntnislieferung ist zentral."]
+    }
+  },
+  {
+    "slug": "books-as-model-weights",
+    "topic": "Books",
+    "date": "2026-01-03",
+    "title": {
+      "en": "Books as Model Weights",
+      "zh": "把阅读当成模型权重",
+      "de": "Bücher als Modellgewichte"
+    },
+    "excerpt": {
+      "en": "Reading does not add facts only, it reshapes decision priors.",
+      "zh": "阅读不仅增加信息，更在重写你的决策先验。",
+      "de": "Lesen liefert nicht nur Fakten, sondern verschiebt Entscheidungs-Priors."
+    },
+    "sections": {
+      "en": [
+        "A useful reading system should preserve contradictions rather than flattening everything into summaries.",
+        "I now index books by decision impact: what changed in my behavior after reading.",
+        "This makes note-taking a calibration loop, not a memory archive."
+      ],
+      "zh": [
+        "好的阅读系统应保留矛盾，而不是把一切压平为摘要。",
+        "我现在按“决策影响”给书做索引：读完后我行为发生了什么变化。",
+        "这样，做笔记变成校准回路，而非记忆仓库。"
+      ],
+      "de": [
+        "Ein gutes Lesesystem bewahrt Widersprüche statt alles in Summarys zu glätten.",
+        "Ich indexiere Bücher nach Entscheidungswirkung: Was hat sich im Verhalten geändert?",
+        "Notizen werden so zur Kalibrierungsschleife statt zum Archiv."
+      ]
+    },
+    "highlight": {
+      "en": "Reading is model tuning for judgment.",
+      "zh": "阅读，是判断系统的模型微调。",
+      "de": "Lesen ist Modell-Tuning für Urteilskraft."
+    },
+    "quote": {
+      "en": "The best note is a changed action.",
+      "zh": "最好的笔记，是被改变的行动。",
+      "de": "Die beste Notiz ist verändertes Handeln."
+    },
+    "sidenotes": {
+      "en": ["Contradictions are useful edge cases.", "Behavioral deltas are better than quote collections."],
+      "zh": ["矛盾是宝贵的边界样本。", "行为增量比摘抄集合更有价值。"],
+      "de": ["Widersprüche sind wertvolle Randfälle.", "Verhaltensdeltas sind nützlicher als Zitatsammlungen."]
+    }
+  },
+  {
+    "slug": "designing-for-ambiguity",
+    "topic": "Thinking",
+    "date": "2025-12-16",
+    "title": {
+      "en": "Designing for Ambiguity",
+      "zh": "为模糊性设计",
+      "de": "Design für Ambiguität"
+    },
+    "excerpt": {
+      "en": "Interfaces should reveal where certainty ends instead of faking closure.",
+      "zh": "界面应展示确定性边界，而不是制造虚假的闭合感。",
+      "de": "Interfaces sollten Unsicherheitsgrenzen sichtbar machen statt falsche Eindeutigkeit zu erzeugen."
+    },
+    "sections": {
+      "en": [
+        "Many products optimize for confidence aesthetics. Users see polished certainty and over-trust outputs.",
+        "A better pattern is controlled ambiguity: explicit confidence range, source trace, and alternate hypotheses.",
+        "Good design makes doubt navigable, not paralyzing."
+      ],
+      "zh": [
+        "很多产品追求“确定性美学”，用户看到过度光滑的结果后容易过度信任。",
+        "更好的模式是“可控模糊”：显式置信区间、来源链路与备选假设。",
+        "好的设计不是消除怀疑，而是让怀疑可导航。"
+      ],
+      "de": [
+        "Viele Produkte inszenieren Sicherheit und erzeugen dadurch Übervertrauen.",
+        "Besser ist kontrollierte Ambiguität: Konfidenzbereich, Quellenpfad, Alternativhypothesen.",
+        "Gutes Design macht Zweifel navigierbar statt lähmend."
+      ]
+    },
+    "highlight": {
+      "en": "Confidence should be inspectable, not decorative.",
+      "zh": "置信度应可检视，而非装饰元素。",
+      "de": "Konfidenz muss prüfbar sein, nicht dekorativ."
+    },
+    "quote": {
+      "en": "Trust is built by exposing limits.",
+      "zh": "真正的信任，来自边界的显露。",
+      "de": "Vertrauen entsteht durch sichtbare Grenzen."
+    },
+    "sidenotes": {
+      "en": ["Overconfidence bias often starts at UI copy level.", "Alternatives create cognitive flexibility."],
+      "zh": ["过度自信偏差常从文案层开始。", "备选路径可提升认知灵活度。"],
+      "de": ["Overconfidence beginnt oft bereits in UI-Tonality.", "Alternativen fördern kognitive Flexibilität."]
+    }
+  },
+  {
+    "slug": "editing-tempo-and-attention",
+    "topic": "Thinking",
+    "date": "2025-11-30",
+    "title": {
+      "en": "Editing Tempo and Attention",
+      "zh": "剪辑节奏与注意力",
+      "de": "Schnitttempo und Aufmerksamkeit"
+    },
+    "excerpt": {
+      "en": "Video editing reveals how rhythm engineering can transfer to product UX.",
+      "zh": "视频剪辑揭示了“节奏工程”如何迁移到产品体验。",
+      "de": "Video-Editing zeigt, wie Rhythmus-Engineering in UX übertragbar wird."
+    },
+    "sections": {
+      "en": [
+        "Cut frequency determines cognitive breathing room.",
+        "In interfaces, this maps to interaction density: too much motion compresses comprehension.",
+        "I now treat transition pacing as an editorial decision, not a visual effect."
+      ],
+      "zh": [
+        "切点频率决定认知呼吸空间。",
+        "在界面里，这对应交互密度：动效过多会压缩理解空间。",
+        "我现在把转场节奏视为编辑决策，而不是视觉装饰。"
+      ],
+      "de": [
+        "Schnittfrequenz steuert kognitive Atemräume.",
+        "In Interfaces entspricht das der Interaktionsdichte: zu viel Bewegung komprimiert Verständnis.",
+        "Transition-Pacing ist daher eine redaktionelle Entscheidung, kein Effekt."
+      ]
+    },
+    "highlight": {
+      "en": "Pacing is architecture for attention.",
+      "zh": "节奏，是注意力的建筑学。",
+      "de": "Pacing ist Architektur für Aufmerksamkeit."
+    },
+    "quote": {
+      "en": "A good cut is a respectful interruption.",
+      "zh": "好的切点，是一种尊重式打断。",
+      "de": "Ein guter Schnitt ist eine respektvolle Unterbrechung."
+    },
+    "sidenotes": {
+      "en": ["Fast cuts need stable anchors.", "Not all sections should compete for attention."],
+      "zh": ["快节奏切换需要稳定锚点。", "并非所有区块都应争夺注意力。"],
+      "de": ["Schnelle Cuts brauchen stabile Anker.", "Nicht alle Bereiche dürfen zugleich Aufmerksamkeit fordern."]
+    }
+  },
+  {
+    "slug": "architecture-and-interface-memory",
+    "topic": "Books",
+    "date": "2025-10-22",
+    "title": {
+      "en": "Architecture and Interface Memory",
+      "zh": "建筑与界面记忆",
+      "de": "Architektur und Interface-Gedächtnis"
+    },
+    "excerpt": {
+      "en": "Spatial sequencing in architecture can teach interface wayfinding.",
+      "zh": "建筑中的空间序列可以启发界面中的路径记忆。",
+      "de": "Räumliche Sequenzen aus Architektur helfen beim Interface-Wayfinding."
+    },
+    "sections": {
+      "en": [
+        "Architectural circulation uses threshold moments to reset attention.",
+        "Digital products can mimic this with sectional rhythm and deliberate pauses.",
+        "Memory-friendly UX is less about novelty and more about repeatable orientation cues."
+      ],
+      "zh": [
+        "建筑动线会用“阈值时刻”重置人的注意力。",
+        "数字产品也可通过区段节奏与刻意留白实现类似效果。",
+        "易记忆的 UX 关键不是新奇，而是可重复的定位线索。"
+      ],
+      "de": [
+        "Architektonische Wegeführung nutzt Schwellenmomente zur Aufmerksamkeits-Reset.",
+        "Digitale Produkte können das über Abschnittsrhythmus und Pausen übertragen.",
+        "Gedächtnisfreundliche UX braucht weniger Novelty, mehr wiederholbare Orientierungssignale."
+      ]
+    },
+    "highlight": {
+      "en": "Orientation beats novelty over time.",
+      "zh": "长期来看，定位感胜过新奇感。",
+      "de": "Langfristig schlägt Orientierung die Neuheit."
+    },
+    "quote": {
+      "en": "Good spaces teach you how to return.",
+      "zh": "好的空间，会教你如何再次抵达。",
+      "de": "Gute Räume zeigen dir, wie man zurückkehrt."
+    },
+    "sidenotes": {
+      "en": ["Thresholds can be visual, textual, or interactive.", "Wayfinding reduces cognitive friction."],
+      "zh": ["阈值可以是视觉、文字或交互上的。", "路径记忆能显著降低认知摩擦。"],
+      "de": ["Schwellen können visuell, textlich oder interaktiv sein.", "Wayfinding reduziert kognitive Reibung."]
+    }
+  }
+]

@@ -1,0 +1,54 @@
+{
+  "cards": [
+    {
+      "title": { "en": "Salk Institute", "zh": "索尔克研究所", "de": "Salk Institute" },
+      "note": {
+        "en": "Axis and void composition for focus and orientation.",
+        "zh": "轴线与留白构成高度聚焦的空间秩序。",
+        "de": "Achse und Leere als Komposition für Fokus und Orientierung."
+      }
+    },
+    {
+      "title": { "en": "Church of Light", "zh": "光之教堂", "de": "Kirche des Lichts" },
+      "note": {
+        "en": "Minimal geometry amplified by controlled light.",
+        "zh": "极简几何在可控光线下获得张力。",
+        "de": "Minimale Geometrie gewinnt durch kontrolliertes Licht."
+      }
+    },
+    {
+      "title": { "en": "Therme Vals", "zh": "瓦尔斯温泉", "de": "Therme Vals" },
+      "note": {
+        "en": "Material continuity as spatial narrative.",
+        "zh": "材料连续性即空间叙事。",
+        "de": "Materialkontinuität als räumliche Erzählung."
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "year": "2021",
+      "text": {
+        "en": "Created first architecture mood atlas.",
+        "zh": "建立第一版建筑情绪图谱。",
+        "de": "Ersten Architektur-Mood-Atlas erstellt."
+      }
+    },
+    {
+      "year": "2023",
+      "text": {
+        "en": "Linked architecture motifs to interface spacing rules.",
+        "zh": "将建筑母题映射到界面间距规则。",
+        "de": "Architektur-Motive mit Interface-Spacing-Regeln verknüpft."
+      }
+    },
+    {
+      "year": "2025",
+      "text": {
+        "en": "Started urban geometry field notes project.",
+        "zh": "启动城市几何野外笔记项目。",
+        "de": "Projekt für Urban-Geometry-Field-Notes gestartet."
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "cards": [
+    {
+      "title": { "en": "30s Narrative Arc", "zh": "30 秒叙事弧", "de": "30s Narrative Arc" },
+      "note": {
+        "en": "Three-act pacing compressed for short-form social cuts.",
+        "zh": "将三幕节奏压缩到短视频长度。",
+        "de": "Drei-Akt-Rhythmus für Kurzformate komprimiert."
+      }
+    },
+    {
+      "title": { "en": "Cut Density Audit", "zh": "切点密度审计", "de": "Schnittdichte-Audit" },
+      "note": {
+        "en": "Balancing retention spikes against viewer fatigue.",
+        "zh": "平衡留存峰值与观看疲劳。",
+        "de": "Retention-Spitzen gegen Zuschauerermüdung ausbalancieren."
+      }
+    },
+    {
+      "title": { "en": "Sound Bridge Tests", "zh": "声音桥接实验", "de": "Sound-Bridge Tests" },
+      "note": {
+        "en": "Audio-led transitions for semantic continuity.",
+        "zh": "用声音先行实现语义连续。",
+        "de": "Audio-geführte Übergänge für semantische Kontinuität."
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "year": "2023",
+      "text": {
+        "en": "Began editing weekly visual notes.",
+        "zh": "开始每周剪辑视觉日志。",
+        "de": "Wöchentliche visuelle Notizen begonnen."
+      }
+    },
+    {
+      "year": "2024",
+      "text": {
+        "en": "Built rhythm scoring sheet for cut pacing.",
+        "zh": "建立切点节奏评分表。",
+        "de": "Rhythmus-Scoring für Schnitt-Timing aufgebaut."
+      }
+    },
+    {
+      "year": "2025",
+      "text": {
+        "en": "Connected editing heuristics to UX transition design.",
+        "zh": "将剪辑启发迁移到产品转场设计。",
+        "de": "Editing-Heuristiken mit UX-Transition-Design verknüpft."
+      }
+    }
+  ]
+}

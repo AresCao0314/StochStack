@@ -1,0 +1,54 @@
+{
+  "cards": [
+    {
+      "title": { "en": "The Order of Time", "zh": "时间的秩序", "de": "Die Ordnung der Zeit" },
+      "note": {
+        "en": "A compact reminder that models of time shape product pacing.",
+        "zh": "提醒我：你对时间的建模方式会塑造产品节奏。",
+        "de": "Zeigt, wie Zeitmodelle Produkt-Rhythmus beeinflussen."
+      }
+    },
+    {
+      "title": { "en": "Thinking in Systems", "zh": "系统之美", "de": "Thinking in Systems" },
+      "note": {
+        "en": "Feedback loops are design objects, not only analytic tools.",
+        "zh": "反馈回路不只是分析工具，更是设计对象。",
+        "de": "Feedback-Loops sind Designobjekte, nicht nur Analysewerkzeuge."
+      }
+    },
+    {
+      "title": { "en": "Ways of Seeing", "zh": "观看之道", "de": "Ways of Seeing" },
+      "note": {
+        "en": "Useful for UI composition and hierarchy decisions.",
+        "zh": "对界面构图与视觉层级非常有启发。",
+        "de": "Hilfreich für Komposition und visuelle Hierarchie in Interfaces."
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "year": "2023",
+      "text": {
+        "en": "Started indexing books by decision impact.",
+        "zh": "开始按“决策影响”建立阅读索引。",
+        "de": "Lesesystem nach Entscheidungswirkung eingeführt."
+      }
+    },
+    {
+      "year": "2024",
+      "text": {
+        "en": "Built first book-fragment retrieval prototype.",
+        "zh": "做出第一版“阅读碎片检索”原型。",
+        "de": "Ersten Prototyp für Buchfragment-Retrieval gebaut."
+      }
+    },
+    {
+      "year": "2025",
+      "text": {
+        "en": "Merged reading notes with AI prompt experiments.",
+        "zh": "将阅读笔记与 AI 提示实验合并。",
+        "de": "Lese-Notizen mit AI-Prompt-Experimenten verbunden."
+      }
+    }
+  ]
+}

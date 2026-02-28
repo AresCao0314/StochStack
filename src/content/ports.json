@@ -1,0 +1,186 @@
+[
+  {
+    "slug": "trial-flow-studio",
+    "name": {
+      "en": "TrialFlow Studio",
+      "zh": "试验流工作台",
+      "de": "TrialFlow Studio"
+    },
+    "description": {
+      "en": "Visual orchestration for protocol-to-execution study workflows.",
+      "zh": "将方案到执行阶段串联为可视化临床流程。",
+      "de": "Visuelle Orchestrierung klinischer Abläufe von Protokoll bis Execution."
+    },
+    "tags": ["AI", "Clinical", "Workflow"],
+    "status": "beta",
+    "link": "https://example.com/trialflow",
+    "screenshot": "https://images.unsplash.com/photo-1551281044-8f5f9f6f5f1f?auto=format&fit=crop&w=1200&q=80",
+    "techStack": ["Next.js", "TypeScript", "Graph"],
+    "designIntent": {
+      "en": "Translate protocol complexity into navigable operational states.",
+      "zh": "把复杂方案翻译成可导航的运营状态。",
+      "de": "Protokollkomplexität in navigierbare Betriebszustände übersetzen."
+    }
+  },
+  {
+    "slug": "signal-note-engine",
+    "name": {
+      "en": "Signal Note Engine",
+      "zh": "信号笔记引擎",
+      "de": "Signal Note Engine"
+    },
+    "description": {
+      "en": "Transforms fragmented notes into coherent editorial signal maps.",
+      "zh": "把碎片化笔记组织成可读的信号地图。",
+      "de": "Fragmentierte Notizen in konsistente Signal-Maps umformen."
+    },
+    "tags": ["AI", "Notes", "Knowledge"],
+    "status": "alpha",
+    "link": "https://example.com/signal-notes",
+    "screenshot": "https://images.unsplash.com/photo-1516387938699-a93567ec168e?auto=format&fit=crop&w=1200&q=80",
+    "techStack": ["MDX", "Embeddings", "RAG"],
+    "designIntent": {
+      "en": "Keep writing raw, then recover structure later with semantic indexing.",
+      "zh": "先保持原始书写，再用语义索引回收结构。",
+      "de": "Roh schreiben, Struktur später semantisch rekonstruieren."
+    }
+  },
+  {
+    "slug": "oncology-risk-radar",
+    "name": {
+      "en": "Oncology Risk Radar",
+      "zh": "肿瘤开发风险雷达",
+      "de": "Oncology Risk Radar"
+    },
+    "description": {
+      "en": "Early risk sensing layer for oncology program timelines.",
+      "zh": "用于肿瘤项目时间线的早期风险感知层。",
+      "de": "Frühe Risikoerkennung für Onkologie-Zeitpläne."
+    },
+    "tags": ["Clinical", "Analytics", "Dashboard"],
+    "status": "live",
+    "link": "https://example.com/risk-radar",
+    "screenshot": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1200&q=80",
+    "techStack": ["Charts", "Scoring", "Scenario"],
+    "designIntent": {
+      "en": "Expose uncertainty ranges before delays become visible in reports.",
+      "zh": "在报告显现延迟之前先暴露不确定区间。",
+      "de": "Unsicherheitskorridore sichtbar machen, bevor Verzögerungen reportet werden."
+    }
+  },
+  {
+    "slug": "stoch-prompt-workbench",
+    "name": {
+      "en": "Stoch Prompt Workbench",
+      "zh": "随机提示工作台",
+      "de": "Stoch Prompt Workbench"
+    },
+    "description": {
+      "en": "Prompt traces, evaluation logs, and reusable operator patterns.",
+      "zh": "用于提示轨迹、评估日志与操作模式复用。",
+      "de": "Prompt-Traces, Evaluationslogs und wiederverwendbare Operator-Patterns."
+    },
+    "tags": ["AI", "Prompt", "Ops"],
+    "status": "beta",
+    "link": "https://example.com/prompt-workbench",
+    "screenshot": "https://images.unsplash.com/photo-1483478550801-ceba5fe50e8e?auto=format&fit=crop&w=1200&q=80",
+    "techStack": ["PromptOps", "Versioning", "Bench"],
+    "designIntent": {
+      "en": "Treat prompts as evolving operational assets, not static text.",
+      "zh": "把提示词视为持续演化的运营资产，而非静态文本。",
+      "de": "Prompts als operative Assets statt statischer Texte behandeln."
+    }
+  },
+  {
+    "slug": "tennis-telemetry-log",
+    "name": {
+      "en": "Tennis Telemetry Log",
+      "zh": "网球训练遥测日志",
+      "de": "Tennis Telemetry Log"
+    },
+    "description": {
+      "en": "Session-level rhythm tracking for serve and footwork consistency.",
+      "zh": "记录发球与步伐在单次训练中的节奏一致性。",
+      "de": "Rhythmus-Tracking pro Session für Aufschlag und Fußarbeit."
+    },
+    "tags": ["Tennis", "Tracking", "Life"],
+    "status": "alpha",
+    "link": "https://example.com/tennis-log",
+    "screenshot": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=1200&q=80",
+    "techStack": ["Mobile", "Stats", "Review"],
+    "designIntent": {
+      "en": "Bridge subjective feel and measurable cadence across drills.",
+      "zh": "连接主观手感与可度量训练节奏。",
+      "de": "Subjektives Gefühl mit messbarer Kadenz in Drills verbinden."
+    }
+  },
+  {
+    "slug": "film-edit-rhythm-lab",
+    "name": {
+      "en": "Film Edit Rhythm Lab",
+      "zh": "影像节奏实验室",
+      "de": "Film Edit Rhythm Lab"
+    },
+    "description": {
+      "en": "Cut-density and transition pacing analyzer for short-form videos.",
+      "zh": "短视频剪辑的切点密度与转场节奏分析器。",
+      "de": "Analyse von Schnittdichte und Übergangs-Timing für Kurzformate."
+    },
+    "tags": ["Editing", "Video", "Experiment"],
+    "status": "beta",
+    "link": "https://example.com/edit-rhythm",
+    "screenshot": "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1200&q=80",
+    "techStack": ["Timeline", "Computer Vision", "Metrics"],
+    "designIntent": {
+      "en": "Support narrative pace decisions with measurable cut patterns.",
+      "zh": "用可度量的切点模式支撑叙事节奏决策。",
+      "de": "Narratives Timing über messbare Schnittmuster unterstützen."
+    }
+  },
+  {
+    "slug": "book-fragment-index",
+    "name": {
+      "en": "Book Fragment Index",
+      "zh": "阅读碎片索引",
+      "de": "Book Fragment Index"
+    },
+    "description": {
+      "en": "Cross-book concept clustering with concise synthesis snapshots.",
+      "zh": "跨书概念聚类与短摘要快照。",
+      "de": "Konzept-Clustering über Bücher mit kompakten Synthese-Snapshots."
+    },
+    "tags": ["Books", "Thinking", "Index"],
+    "status": "live",
+    "link": "https://example.com/book-index",
+    "screenshot": "https://images.unsplash.com/photo-1455885666463-9f41d1f2f6b8?auto=format&fit=crop&w=1200&q=80",
+    "techStack": ["Graph", "Embeddings", "Summarization"],
+    "designIntent": {
+      "en": "Compress a year of reading into reusable conceptual vectors.",
+      "zh": "把全年阅读压缩为可复用的概念向量。",
+      "de": "Ein Lesejahr in wiederverwendbare Konzeptvektoren komprimieren."
+    }
+  },
+  {
+    "slug": "urban-geometry-atlas",
+    "name": {
+      "en": "Urban Geometry Atlas",
+      "zh": "城市几何图谱",
+      "de": "Urban Geometry Atlas"
+    },
+    "description": {
+      "en": "Catalog of architectural motifs linked to spatial emotion notes.",
+      "zh": "建筑形态采样库，关联空间情绪注记。",
+      "de": "Katalog architektonischer Motive mit räumlichen Emotionsnotizen."
+    },
+    "tags": ["Architecture", "Atlas", "Visual"],
+    "status": "live",
+    "link": "https://example.com/urban-atlas",
+    "screenshot": "https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?auto=format&fit=crop&w=1200&q=80",
+    "techStack": ["Map", "Vision", "Taxonomy"],
+    "designIntent": {
+      "en": "Capture form-language patterns that influence interface composition.",
+      "zh": "捕捉影响界面构图的形态语言模式。",
+      "de": "Formsprachen erfassen, die Interface-Komposition prägen."
+    }
+  }
+]
