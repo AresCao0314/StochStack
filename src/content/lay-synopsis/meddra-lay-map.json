@@ -1,0 +1,14 @@
+[
+  { "term": "fatigue", "lay_en": "feeling very tired", "lay_de": "starke Muedigkeit" },
+  { "term": "rash", "lay_en": "skin rash or irritation", "lay_de": "Hautausschlag oder Hautreizung" },
+  { "term": "hepatotoxicity", "lay_en": "possible liver irritation or injury", "lay_de": "moegliche Leberreizung oder Leberschaedigung" },
+  { "term": "neutropenia", "lay_en": "low white blood cell count that may raise infection risk", "lay_de": "niedrige weisse Blutkoerperchen mit hoeherem Infektionsrisiko" },
+  { "term": "anemia", "lay_en": "low red blood cells that can cause weakness", "lay_de": "zu wenige rote Blutkoerperchen mit Schwaechegefuehl" },
+  { "term": "nausea", "lay_en": "feeling sick to your stomach", "lay_de": "Uebelkeitsgefuehl" },
+  { "term": "vomiting", "lay_en": "throwing up", "lay_de": "Erbrechen" },
+  { "term": "diarrhea", "lay_en": "frequent loose stools", "lay_de": "haeufiger duennfluessiger Stuhl" },
+  { "term": "headache", "lay_en": "head pain", "lay_de": "Kopfschmerzen" },
+  { "term": "dyspnea", "lay_en": "shortness of breath", "lay_de": "Atemnot" },
+  { "term": "adverse event", "lay_en": "a side effect or medical problem during the study", "lay_de": "eine Nebenwirkung oder ein medizinisches Problem waehrend der Studie" },
+  { "term": "serious adverse event", "lay_en": "a severe medical problem that needs urgent attention", "lay_de": "ein schwerwiegendes medizinisches Problem mit dringendem Handlungsbedarf" }
+]

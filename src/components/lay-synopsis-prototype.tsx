@@ -7,6 +7,8 @@ import type { Locale } from '@/lib/i18n';
 type Sample = {
   id: string;
   title: string;
+  therapeuticArea: string;
+  indication: string;
   language: string;
   text: string;
 };
@@ -48,7 +50,12 @@ const labels: Record<Locale, any> = {
     review: 'Protocol vs Lay Review',
     layCol: 'Lay sentence',
     srcCol: 'Protocol evidence',
-    score: 'Match'
+    score: 'Match',
+    ta: 'Therapeutic Area',
+    indication: 'Indication',
+    meddra: 'Apply MedDRA lay mapping',
+    custom: 'Custom Lexicon (one per line: source => target)',
+    lexicon: 'Lexicon Injection'
   },
   zh: {
     title: 'Lay Language Protocol Synopsis（EU）',
@@ -64,7 +71,12 @@ const labels: Record<Locale, any> = {
     review: 'Protocol vs Lay 对照审阅',
     layCol: 'Lay 句子',
     srcCol: 'Protocol 证据',
-    score: '匹配度'
+    score: '匹配度',
+    ta: '治疗领域',
+    indication: '适应症',
+    meddra: '启用 MedDRA lay 映射',
+    custom: '自定义术语库（每行：source => target）',
+    lexicon: '词库注入'
   },
   de: {
     title: 'Lay Language Protocol Synopsis (EU)',
@@ -81,7 +93,12 @@ const labels: Record<Locale, any> = {
     review: 'Protocol-vs-Lay Review',
     layCol: 'Lay-Satz',
     srcCol: 'Protocol-Evidenz',
-    score: 'Match'
+    score: 'Match',
+    ta: 'Therapiegebiet',
+    indication: 'Indikation',
+    meddra: 'MedDRA Lay-Mapping anwenden',
+    custom: 'Custom-Lexikon (pro Zeile: source => target)',
+    lexicon: 'Lexikon-Injektion'
   }
 };
 
@@ -91,6 +108,10 @@ export function LaySynopsisPrototype({ locale, samples }: { locale: Locale; samp
   const sample = useMemo(() => samples.find((x) => x.id === sampleId) ?? samples[0], [samples, sampleId]);
   const [text, setText] = useState(sample?.text ?? '');
   const [outputLanguage, setOutputLanguage] = useState<'en' | 'de'>('en');
+  const [therapeuticArea, setTherapeuticArea] = useState(sample?.therapeuticArea ?? 'Oncology');
+  const [indication, setIndication] = useState(sample?.indication ?? 'NSCLC');
+  const [useMeddraMap, setUseMeddraMap] = useState(true);
+  const [customLexiconText, setCustomLexiconText] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState<LaySynopsis | null>(null);
@@ -98,11 +119,32 @@ export function LaySynopsisPrototype({ locale, samples }: { locale: Locale; samp
   const [readability, setReadability] = useState<{ avgSentenceWords: number; jargonFlags: string[] } | null>(null);
   const [checklist, setChecklist] = useState<Array<{ item: string; pass: boolean }>>([]);
   const [traceability, setTraceability] = useState<TraceEntry[]>([]);
+  const [appliedLexicon, setAppliedLexicon] = useState<Array<{ source: string; target: string; scope: string; hits: number }>>([]);
 
   function onSampleChange(id: string) {
     setSampleId(id);
     const next = samples.find((x) => x.id === id);
-    if (next) setText(next.text);
+    if (next) {
+      setText(next.text);
+      setTherapeuticArea(next.therapeuticArea);
+      setIndication(next.indication);
+    }
+  }
+
+  function parseCustomLexicon(input: string) {
+    return input
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => {
+        const idx = line.indexOf('=>');
+        if (idx < 0) return null;
+        const source = line.slice(0, idx).trim();
+        const target = line.slice(idx + 2).trim();
+        if (!source || !target) return null;
+        return { source, target };
+      })
+      .filter(Boolean) as Array<{ source: string; target: string }>;
   }
 
   async function onGenerate() {
@@ -112,7 +154,15 @@ export function LaySynopsisPrototype({ locale, samples }: { locale: Locale; samp
       const res = await fetch('/api/lay-synopsis/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, locale, outputLanguage })
+        body: JSON.stringify({
+          text,
+          locale,
+          outputLanguage,
+          therapeuticArea,
+          indication,
+          useMeddraMap,
+          customLexicon: parseCustomLexicon(customLexiconText)
+        })
       });
       const data = await res.json();
       if (!data?.ok) {
@@ -124,6 +174,7 @@ export function LaySynopsisPrototype({ locale, samples }: { locale: Locale; samp
       setReadability(data.readability || null);
       setChecklist(Array.isArray(data.euChecklist) ? data.euChecklist : []);
       setTraceability(Array.isArray(data.traceability) ? (data.traceability as TraceEntry[]) : []);
+      setAppliedLexicon(Array.isArray(data?.lexiconInjection?.applied) ? data.lexiconInjection.applied : []);
     } catch {
       setError('Generation failed.');
     } finally {
@@ -145,7 +196,7 @@ export function LaySynopsisPrototype({ locale, samples }: { locale: Locale; samp
       </header>
 
       <section className="noise-border rounded-lg p-4">
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-4">
           <label className="text-sm">
             {t.sample}
             <select value={sample.id} onChange={(e) => onSampleChange(e.target.value)} className="mt-1 w-full rounded border border-ink/20 bg-transparent px-2 py-2">
@@ -166,12 +217,35 @@ export function LaySynopsisPrototype({ locale, samples }: { locale: Locale; samp
               </select>
             </div>
           </label>
+          <label className="text-sm">
+            {t.ta}
+            <input value={therapeuticArea} onChange={(e) => setTherapeuticArea(e.target.value)} className="mt-1 w-full rounded border border-ink/20 bg-transparent px-2 py-2" />
+          </label>
+          <label className="text-sm">
+            {t.indication}
+            <input value={indication} onChange={(e) => setIndication(e.target.value)} className="mt-1 w-full rounded border border-ink/20 bg-transparent px-2 py-2" />
+          </label>
         </div>
       </section>
 
       <section className="noise-border rounded-lg p-4">
         <h2 className="mb-2 text-lg font-semibold">{t.input}</h2>
         <textarea value={text} onChange={(e) => setText(e.target.value)} className="h-[220px] w-full rounded border border-ink/20 bg-transparent px-3 py-2 text-sm" />
+        <div className="mt-3 grid gap-3 md:grid-cols-2">
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={useMeddraMap} onChange={(e) => setUseMeddraMap(e.target.checked)} />
+            <span>{t.meddra}</span>
+          </label>
+          <label className="text-sm">
+            {t.custom}
+            <textarea
+              value={customLexiconText}
+              onChange={(e) => setCustomLexiconText(e.target.value)}
+              className="mt-1 h-24 w-full rounded border border-ink/20 bg-transparent px-2 py-2 text-xs"
+              placeholder="metastatic => cancer that has spread&#10;randomization => assignment by chance"
+            />
+          </label>
+        </div>
         <button type="button" onClick={onGenerate} disabled={busy || text.trim().length < 40} className="scanline mt-3 inline-flex items-center gap-2 rounded border border-ink/20 px-3 py-2 text-sm disabled:opacity-50">
           <Sparkles size={14} /> {busy ? '...' : t.generate}
         </button>
@@ -221,6 +295,15 @@ export function LaySynopsisPrototype({ locale, samples }: { locale: Locale; samp
                   </p>
                 </div>
               ) : null}
+              <div className="mt-4 rounded border border-ink/15 p-3 text-sm">
+                <p className="font-semibold">{t.lexicon}</p>
+                {appliedLexicon.length === 0 ? <p className="text-xs text-ink/70">No mapping applied.</p> : null}
+                {appliedLexicon.map((x, idx) => (
+                  <p key={`${x.source}-${idx}`} className="text-xs text-ink/70">
+                    [{x.scope}] {x.source} {'=>'} {x.target} (hits: {x.hits})
+                  </p>
+                ))}
+              </div>
             </article>
           </section>
 

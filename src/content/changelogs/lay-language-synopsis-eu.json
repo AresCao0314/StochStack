@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.3.0",
+    "title": {
+      "en": "TA/Indication + MedDRA Lexicon Injection",
+      "zh": "新增 TA/Indication + MedDRA 词库注入",
+      "de": "TA/Indikation + MedDRA Lexikon-Injektion hinzugefuegt"
+    },
+    "changes": {
+      "en": [
+        "Added configurable therapeutic-area and indication-specific lay lexicon injection.",
+        "Added MedDRA-to-lay expression mapping switch for safety terminology simplification.",
+        "Added custom lexicon override input and applied-mapping audit list with hit counts."
+      ],
+      "zh": [
+        "新增按治疗领域与适应症注入的可配置 lay 术语库。",
+        "新增 MedDRA 到 lay 表达映射开关，用于安全术语简化。",
+        "新增自定义词库覆盖输入，并输出命中次数的映射审计清单。"
+      ],
+      "de": [
+        "Konfigurierbare TA/Indikations-spezifische Lay-Lexikon-Injektion integriert.",
+        "MedDRA-zu-Lay-Mapping-Schalter zur Vereinfachung von Sicherheitsterminologie hinzugefuegt.",
+        "Custom-Lexikon-Override und Audit-Liste mit Trefferanzahl ergaenzt."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.2.0",
     "title": {
       "en": "Protocol-vs-Lay Traceability Review Added",

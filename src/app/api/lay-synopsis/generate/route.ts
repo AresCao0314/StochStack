@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import lexicons from '@/content/lay-synopsis/lexicons.json';
+import meddraMap from '@/content/lay-synopsis/meddra-lay-map.json';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -7,6 +9,10 @@ type GenerateRequest = {
   text?: string;
   locale?: 'en' | 'zh' | 'de';
   outputLanguage?: 'en' | 'de';
+  therapeuticArea?: string;
+  indication?: string;
+  customLexicon?: Array<{ source: string; target: string }>;
+  useMeddraMap?: boolean;
 };
 
 type LaySynopsis = {
@@ -29,6 +35,9 @@ type TraceEntry = {
   sourceIndex: number;
   matchScore: number;
 };
+
+type LexiconEntry = { source: string; target: string };
+type AppliedMapping = { source: string; target: string; scope: 'ta-indication' | 'meddra' | 'custom'; hits: number };
 
 function splitSentences(text: string) {
   return text
@@ -175,6 +184,77 @@ function stripFence(raw: string) {
   return raw.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```$/, '').trim();
 }
 
+function replaceWholeInsensitive(text: string, source: string, target: string) {
+  const escaped = source.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`\\b${escaped}\\b`, 'gi');
+  let hits = 0;
+  const out = text.replace(re, () => {
+    hits += 1;
+    return target;
+  });
+  return { out, hits };
+}
+
+function applyMappingToLay(lay: LaySynopsis, mappings: Array<LexiconEntry & { scope: AppliedMapping['scope'] }>) {
+  const clone: LaySynopsis = JSON.parse(JSON.stringify(lay));
+  const applied: AppliedMapping[] = [];
+  const fields: Array<keyof LaySynopsis> = [
+    'title',
+    'plainSummary',
+    'whyStudy',
+    'whoCanJoin',
+    'possibleBenefits',
+    'dataPrivacy',
+    'contactAndNextSteps'
+  ];
+  for (const map of mappings) {
+    let totalHits = 0;
+    for (const f of fields) {
+      const current = String(clone[f] ?? '');
+      const { out, hits } = replaceWholeInsensitive(current, map.source, map.target);
+      clone[f] = out as any;
+      totalHits += hits;
+    }
+    clone.whatWillHappen = clone.whatWillHappen.map((x) => {
+      const { out, hits } = replaceWholeInsensitive(x, map.source, map.target);
+      totalHits += hits;
+      return out;
+    });
+    clone.possibleRisks = clone.possibleRisks.map((x) => {
+      const { out, hits } = replaceWholeInsensitive(x, map.source, map.target);
+      totalHits += hits;
+      return out;
+    });
+    clone.participantRights = clone.participantRights.map((x) => {
+      const { out, hits } = replaceWholeInsensitive(x, map.source, map.target);
+      totalHits += hits;
+      return out;
+    });
+    if (totalHits > 0) {
+      applied.push({ source: map.source, target: map.target, scope: map.scope, hits: totalHits });
+    }
+  }
+  return { lay: clone, applied };
+}
+
+function selectTaLexicon(therapeuticArea: string, indication: string, outputLanguage: 'en' | 'de') {
+  const candidates = (lexicons as Array<any>).filter((x) => x.language === outputLanguage);
+  const ta = therapeuticArea.trim().toLowerCase();
+  const ind = indication.trim().toLowerCase();
+  const matched = candidates.find((x) => x.therapeuticArea.toLowerCase() === ta && x.indication.toLowerCase() === ind);
+  if (!matched) return [] as LexiconEntry[];
+  return Array.isArray(matched.entries)
+    ? matched.entries.map((x: any) => ({ source: String(x.source), target: String(x.target) }))
+    : [];
+}
+
+function selectMeddraMap(outputLanguage: 'en' | 'de') {
+  return (meddraMap as Array<any>).map((x) => ({
+    source: String(x.term),
+    target: outputLanguage === 'de' ? String(x.lay_de) : String(x.lay_en)
+  }));
+}
+
 async function generateWithQwen(text: string, outputLanguage: 'en' | 'de') {
   const apiKey = process.env.DASHSCOPE_API_KEY;
   if (!apiKey) return null;
@@ -230,12 +310,30 @@ export async function POST(request: Request) {
     const body = (await request.json()) as GenerateRequest;
     const text = String(body.text ?? '').trim();
     const outputLanguage: 'en' | 'de' = body.outputLanguage === 'de' ? 'de' : 'en';
+    const therapeuticArea = String(body.therapeuticArea ?? '');
+    const indication = String(body.indication ?? '');
+    const useMeddraMap = body.useMeddraMap !== false;
+    const customLexicon = Array.isArray(body.customLexicon)
+      ? body.customLexicon
+          .map((x) => ({ source: String(x.source ?? '').trim(), target: String(x.target ?? '').trim() }))
+          .filter((x) => x.source && x.target)
+      : [];
     if (text.length < 40) {
       return NextResponse.json({ ok: false, error: 'Please provide at least 40 characters of protocol text.' }, { status: 400 });
     }
 
     const qwen = await generateWithQwen(text, outputLanguage).catch(() => null);
-    const lay = qwen ?? localGenerate(text, outputLanguage);
+    const baseLay = qwen ?? localGenerate(text, outputLanguage);
+    const taLexicon = selectTaLexicon(therapeuticArea, indication, outputLanguage).map((x: LexiconEntry) => ({
+      ...x,
+      scope: 'ta-indication' as const
+    }));
+    const meddraLexicon = useMeddraMap
+      ? selectMeddraMap(outputLanguage).map((x: LexiconEntry) => ({ ...x, scope: 'meddra' as const }))
+      : [];
+    const custom = customLexicon.map((x: LexiconEntry) => ({ ...x, scope: 'custom' as const }));
+    const injected = [...taLexicon, ...meddraLexicon, ...custom];
+    const { lay, applied } = applyMappingToLay(baseLay, injected);
     const readability = {
       avgSentenceWords: Number(
         (
@@ -266,7 +364,16 @@ export async function POST(request: Request) {
       source: qwen ? 'qwen' : 'local-fallback',
       readability,
       euChecklist,
-      traceability: buildTraceability(lay, text)
+      traceability: buildTraceability(lay, text),
+      lexiconInjection: {
+        requested: {
+          therapeuticArea,
+          indication,
+          useMeddraMap,
+          customCount: customLexicon.length
+        },
+        applied
+      }
     });
   } catch {
     return NextResponse.json({ ok: false, error: 'Lay synopsis generation failed.' }, { status: 500 });

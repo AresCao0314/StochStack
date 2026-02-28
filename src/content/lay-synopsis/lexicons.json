@@ -1,0 +1,51 @@
+[
+  {
+    "id": "oncology-nsclc",
+    "therapeuticArea": "Oncology",
+    "indication": "NSCLC",
+    "language": "en",
+    "entries": [
+      { "source": "progression-free survival", "target": "how long the cancer stays under control before it gets worse" },
+      { "source": "metastatic", "target": "cancer that has spread to other parts of the body" },
+      { "source": "randomization", "target": "assignment by chance (like a random draw)" },
+      { "source": "standard of care", "target": "usual approved treatment" },
+      { "source": "investigational", "target": "still being studied and not yet fully approved" }
+    ]
+  },
+  {
+    "id": "immunology-ra",
+    "therapeuticArea": "Immunology",
+    "indication": "Rheumatoid Arthritis",
+    "language": "en",
+    "entries": [
+      { "source": "disease activity score", "target": "a score showing how active the disease is" },
+      { "source": "biologic", "target": "a targeted medicine made from living cells" },
+      { "source": "inflammatory markers", "target": "blood signals that show inflammation" },
+      { "source": "placebo", "target": "a treatment that looks the same but has no active medicine" }
+    ]
+  },
+  {
+    "id": "cardio-hf",
+    "therapeuticArea": "Cardiovascular",
+    "indication": "Heart Failure",
+    "language": "en",
+    "entries": [
+      { "source": "ejection fraction", "target": "how strongly the heart pumps blood each beat" },
+      { "source": "hospitalization", "target": "staying in hospital for treatment" },
+      { "source": "cardiovascular death", "target": "death related to heart or blood vessel disease" }
+    ]
+  },
+  {
+    "id": "oncology-nsclc-de",
+    "therapeuticArea": "Oncology",
+    "indication": "NSCLC",
+    "language": "de",
+    "entries": [
+      { "source": "progression-free survival", "target": "Zeitspanne, in der der Krebs nicht schlimmer wird" },
+      { "source": "metastatic", "target": "Krebs, der sich im Koerper ausgebreitet hat" },
+      { "source": "randomization", "target": "zufaellige Zuteilung per Losverfahren" },
+      { "source": "standard of care", "target": "uebliche zugelassene Standardbehandlung" },
+      { "source": "investigational", "target": "noch in Untersuchung und noch nicht voll zugelassen" }
+    ]
+  }
+]

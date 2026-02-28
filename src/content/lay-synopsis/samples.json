@@ -2,12 +2,16 @@
   {
     "id": "lay-onc-nsclc",
     "title": "Protocol Synopsis - NSCLC First-line Phase 3",
+    "therapeuticArea": "Oncology",
+    "indication": "NSCLC",
     "language": "en",
     "text": "Study Title: A randomized phase 3 trial in first-line metastatic NSCLC comparing investigational therapy plus SOC versus SOC alone.\n\nObjectives: Primary objective is progression-free survival. Secondary objectives include overall survival, safety, and quality of life.\n\nPopulation: Adults aged 18 years and older with histologically confirmed metastatic NSCLC, ECOG 0-1, and adequate organ function.\n\nKey Exclusion: Active CNS metastases, severe infection, prior PD-1 inhibitor in metastatic setting.\n\nDesign: Approximately 620 participants, 1:1 randomization, global multicenter, treatment every 3 weeks.\n\nAssessments: CT scans every 8 weeks, blood tests at each cycle, adverse event monitoring throughout.\n\nRisks and Benefits: Potential treatment-related side effects include fatigue, rash, and liver enzyme elevation. Potential benefit is improved disease control.\n\nParticipant Rights: Participation is voluntary; participants may withdraw at any time without affecting routine care."
   },
   {
     "id": "lay-imm-ra",
     "title": "Protocol Synopsis - Rheumatoid Arthritis Phase 2",
+    "therapeuticArea": "Immunology",
+    "indication": "Rheumatoid Arthritis",
     "language": "en",
     "text": "Study Title: Phase 2 trial evaluating efficacy and safety of an investigational biologic in moderate-to-severe rheumatoid arthritis.\n\nObjectives: Evaluate reduction in disease activity scores at week 12 and characterize safety profile.\n\nPopulation: Adults 18-70 years with confirmed rheumatoid arthritis and elevated inflammatory markers.\n\nKey Exclusion: Active or recent severe infection, active tuberculosis, pregnancy or breastfeeding.\n\nDesign: 240 participants randomized 2:1 to investigational biologic or placebo plus standard background therapy.\n\nAssessments: Joint assessment, patient-reported outcomes, laboratory safety tests, and adverse event checks.\n\nRisks and Benefits: Possible infections, injection-site reactions, and laboratory abnormalities; possible improvement in symptoms.\n\nParticipant Rights: Informed consent required, optional participation, and withdrawal allowed at any time."
   }
