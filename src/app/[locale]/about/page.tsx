@@ -6,41 +6,41 @@ const aboutTimeline = [
   {
     year: '2006',
     text: {
-      en: 'Moved from consuming narratives to training argument, rhythm, and point-of-view under pressure.',
-      zh: '从接收叙事，转向训练论证、节奏与高压下的观点组织。',
-      de: 'Vom Aufnehmen von Erzaehlungen hin zum Training von Argument, Rhythmus und Haltung unter Druck.'
+      en: 'Stories in, voice out.',
+      zh: '从读故事，到长出自己的声音。',
+      de: 'Von Geschichten zur eigenen Stimme.'
     }
   },
   {
     year: '2008',
     text: {
-      en: 'Shifted from intuition-first thinking to explicit structure: systems, feedback, and composable abstractions.',
-      zh: '从直觉先行，转向显式结构：系统、反馈与可组合的抽象。',
-      de: 'Vom intuitiven Denken zu expliziter Struktur: Systeme, Rueckkopplung und kombinierbare Abstraktion.'
+      en: 'Intuition met structure.',
+      zh: '让直觉接受结构的训练。',
+      de: 'Intuition traf auf Struktur.'
     }
   },
   {
     year: '2011',
     text: {
-      en: 'Started operating in cross-disciplinary space, treating biology and computation as one design language.',
-      zh: '进入交叉学科视角，把生命系统与计算系统视作同一种设计语言。',
-      de: 'Einstieg in interdisziplinaeres Denken: Biologie und Berechnung als eine gemeinsame Designsprache.'
+      en: 'Two disciplines, one grammar.',
+      zh: '两门学科，开始说同一种语法。',
+      de: 'Zwei Disziplinen, eine Grammatik.'
     }
   },
   {
     year: '2014',
     text: {
-      en: 'Moved from specialist depth to multi-role synthesis, linking technical truth with product and operating logic.',
-      zh: '从单点专业深挖，转向多角色综合：把技术真相与产品、运营逻辑接起来。',
-      de: 'Vom Spezialistentiefgang zur Rollen-Synthese: technische Wahrheit mit Produkt- und Operating-Logik verbinden.'
+      en: 'Depth turned into synthesis.',
+      zh: '从深挖一个点，变成拼接多个系统。',
+      de: 'Tiefe wurde zu Synthese.'
     }
   },
   {
     year: '2016',
     text: {
-      en: 'Learned to align strategy, communication, and execution loops across heterogeneous stakeholders.',
-      zh: '学会在异质协作中对齐战略、沟通与执行闭环。',
-      de: 'Gelernt, Strategie, Kommunikation und Execution-Loops ueber heterogene Stakeholder hinweg auszurichten.'
+      en: 'Strategy learned to speak execution.',
+      zh: '让战略学会说执行的语言。',
+      de: 'Strategie lernte, Execution zu sprechen.'
     }
   },
   {
@@ -54,17 +54,17 @@ const aboutTimeline = [
   {
     year: '2021',
     text: {
-      en: 'Reframed operations as an adaptive control problem: detect drift early, intervene with minimal friction.',
-      zh: '把运营重构为自适应控制问题：提前识别偏移，以最小摩擦完成干预。',
-      de: 'Operations als adaptives Steuerungsproblem neu gerahmt: Drift frueh erkennen, mit minimaler Reibung eingreifen.'
+      en: 'Operations became a control loop.',
+      zh: '把运营看成可调参的控制回路。',
+      de: 'Operations wurden zur regelbaren Schleife.'
     }
   },
   {
     year: '2023',
     text: {
-      en: 'Started externalizing tacit reasoning into reusable language interfaces and operational memory.',
-      zh: '开始把隐性推理外化为可复用的语言接口与组织记忆。',
-      de: 'Implizites Reasoning in wiederverwendbare Sprachschnittstellen und operative Erinnerung ueberfuehrt.'
+      en: 'Tacit logic became editable.',
+      zh: '把隐性逻辑，变成可编辑资产。',
+      de: 'Implizite Logik wurde editierbar.'
     }
   },
   {
