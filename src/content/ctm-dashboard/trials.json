@@ -1,0 +1,54 @@
+[
+  {
+    "id": "CTM-ONC-302",
+    "name": "ONC-302 Global Phase III",
+    "therapeuticArea": "Oncology",
+    "indication": "NSCLC",
+    "phase": "Phase III",
+    "region": "Global",
+    "sources": [
+      { "name": "CTMS", "status": "healthy", "lastSync": "2026-03-01T07:20:00Z", "coverage": "Milestones / Site startup / Budget" },
+      { "name": "EDC", "status": "lagging", "lastSync": "2026-02-28T22:15:00Z", "coverage": "Enrollment / Query burden / Protocol deviations" },
+      { "name": "RTSM", "status": "healthy", "lastSync": "2026-03-01T06:55:00Z", "coverage": "Randomization / Drug supply" },
+      { "name": "Excel Upload", "status": "warning", "lastSync": "2026-02-27T16:10:00Z", "coverage": "Regional FTE snapshots" }
+    ],
+    "kpis": [
+      {
+        "key": "siteStartup",
+        "label": "Site Startup",
+        "planned": 42,
+        "actual": 36,
+        "unit": "Activated Sites",
+        "thresholdPct": -8,
+        "owner": "Global Site Ops"
+      },
+      {
+        "key": "recruitment",
+        "label": "Patient Recruitment",
+        "planned": 480,
+        "actual": 401,
+        "unit": "Randomized Patients",
+        "thresholdPct": -10,
+        "owner": "Country CTM"
+      },
+      {
+        "key": "budget",
+        "label": "Budget Consumption",
+        "planned": 58,
+        "actual": 65,
+        "unit": "% Burn",
+        "thresholdPct": 8,
+        "owner": "Trial Finance"
+      },
+      {
+        "key": "fte",
+        "label": "FTE Utilization",
+        "planned": 74,
+        "actual": 87,
+        "unit": "% Utilization",
+        "thresholdPct": 10,
+        "owner": "Resource Manager"
+      }
+    ]
+  }
+]

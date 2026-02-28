@@ -1,0 +1,31 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.1.0",
+    "title": {
+      "en": "CTM daily control panel baseline",
+      "zh": "CTM 每日控制面板基线版本",
+      "de": "CTM Daily Control Panel Basisversion"
+    },
+    "changes": {
+      "en": [
+        "Added multi-source health board for CTMS/EDC/RTSM/Excel inputs.",
+        "Implemented KPI drift detection for site startup, recruitment, budget burn, and FTE utilization.",
+        "Added mitigation planner and daily action queue mapped to SOP skill headers.",
+        "Added ReAct-style intent routing to skill packs with reasoning and action traces."
+      ],
+      "zh": [
+        "新增 CTMS/EDC/RTSM/Excel 多源健康看板。",
+        "实现 site startup、recruitment、budget burn、FTE utilization 四类指标偏移检测。",
+        "新增与 SOP skill header 绑定的 mitigation 方案与每日行动队列。",
+        "新增 ReAct 风格意图路由，展示 reasoning/action 轨迹。"
+      ],
+      "de": [
+        "Multi-Source-Health-Board fuer CTMS/EDC/RTSM/Excel hinzugefuegt.",
+        "KPI-Drift-Erkennung fuer Site Startup, Recruitment, Budget Burn und FTE Utilization implementiert.",
+        "Mitigation Planner und Daily Action Queue mit SOP Skill Header Mapping hinzugefuegt.",
+        "ReAct-aehnliches Intent Routing mit Reasoning- und Action-Trace integriert."
+      ]
+    }
+  }
+]

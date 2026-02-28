@@ -13,6 +13,7 @@ import { CsrDraftPrototype } from '@/components/csr-draft-prototype';
 import { ProtocolDigitizationPrototype } from '@/components/protocol-digitization-prototype';
 import { SiteFeasibilityFeedbackPrototype } from '@/components/site-feasibility-feedback-prototype';
 import { SiteFeasibilityPrototype } from '@/components/site-feasibility-prototype';
+import { CtmDashboardPrototype, type TrialRecord, type SkillPack } from '@/components/ctm-dashboard-prototype';
 import { getDictionary, locales, type Locale } from '@/lib/i18n';
 import { getPortBySlug, getPorts } from '@/lib/content';
 import projects from '@/content/market-intelligence/projects.json';
@@ -27,6 +28,8 @@ import digitalTwinScenarios from '@/content/digital-twin/scenarios.json';
 import protocolDigitizationSamples from '@/content/protocol-digitization/samples.json';
 import laySynopsisSamples from '@/content/lay-synopsis/samples.json';
 import csrDraftSamples from '@/content/csr-drafting/samples.json';
+import ctmDashboardTrials from '@/content/ctm-dashboard/trials.json';
+import ctmDashboardSkills from '@/content/ctm-dashboard/skills.json';
 import marketChangelog from '@/content/changelogs/market-intelligence-highscore.json';
 import siteScoringChangelog from '@/content/changelogs/site-feasibility-scoring.json';
 import siteFeedbackChangelog from '@/content/changelogs/site-feasibility-human-feedback.json';
@@ -38,6 +41,7 @@ import digitalTwinChangelog from '@/content/changelogs/digital-twin-synthetic-co
 import protocolDigitizationChangelog from '@/content/changelogs/historical-protocol-digitizer.json';
 import laySynopsisChangelog from '@/content/changelogs/lay-language-synopsis-eu.json';
 import csrDraftChangelog from '@/content/changelogs/csr-drafting-bds-tfl.json';
+import ctmDashboardChangelog from '@/content/changelogs/ctm-ops-daily-dashboard.json';
 
 export function generateStaticParams() {
   const ports = getPorts();
@@ -58,6 +62,19 @@ export async function generateMetadata({ params }: { params: { locale: Locale; s
 }
 
 export default function PrototypeDetailPage({ params }: { params: { locale: Locale; slug: string } }) {
+  if (params.slug === 'ctm-ops-daily-dashboard') {
+    return (
+      <>
+        <CtmDashboardPrototype
+          locale={params.locale}
+          trials={ctmDashboardTrials as unknown as TrialRecord[]}
+          skills={ctmDashboardSkills as unknown as SkillPack[]}
+        />
+        <PrototypeChangelog locale={params.locale} entries={ctmDashboardChangelog as unknown as LogEntry[]} />
+      </>
+    );
+  }
+
   if (params.slug === 'market-intelligence-highscore') {
     return (
       <>
