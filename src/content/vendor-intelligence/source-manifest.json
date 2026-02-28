@@ -1,0 +1,39 @@
+{
+  "feeds": [
+    { "name": "Nature Machine Intelligence", "url": "https://www.nature.com/natmachintell.rss", "kind": "literature" },
+    { "name": "arXiv cs.AI", "url": "https://export.arxiv.org/rss/cs.AI", "kind": "literature" },
+    { "name": "arXiv q-bio", "url": "https://export.arxiv.org/rss/q-bio", "kind": "literature" },
+    { "name": "Medidata News", "url": "https://www.medidata.com/en/news/rss.xml", "kind": "vendor_update" },
+    { "name": "Veeva News", "url": "https://www.veeva.com/resources/feed/", "kind": "vendor_update" },
+    { "name": "IQVIA News", "url": "https://www.iqvia.com/rss", "kind": "vendor_update" }
+  ],
+  "scenarioKeywords": {
+    "medical-writing": ["csr", "protocol", "medical writing", "lay summary", "authoring"],
+    "site-feasibility": ["site selection", "site startup", "site activation", "feasibility"],
+    "patient-recruitment": ["patient recruitment", "enrollment", "eligibility", "cohort"],
+    "protocol-intelligence": ["protocol", "inclusion", "exclusion", "eligibility"],
+    "data-quality-rbqm": ["rbqm", "risk-based", "data quality", "anomaly"],
+    "synthetic-control": ["synthetic control", "digital twin", "simulation", "virtual cohort"],
+    "supply-rtsm": ["rtsm", "supply", "randomization", "drug supply"],
+    "safety-phv": ["safety", "pharmacovigilance", "signal detection", "adverse event"],
+    "submission-closeout": ["submission", "regulatory", "dossier", "close-out"],
+    "portfolio-control-tower": ["portfolio", "milestone", "budget", "resource"],
+    "multimodal-assessment": ["imaging", "computer vision", "multimodal", "pathology"]
+  },
+  "technologyKeywords": {
+    "GenAI": ["llm", "generative", "foundation model", "genai"],
+    "Agent Systems": ["agent", "orchestration", "autonomous workflow"],
+    "Machine Learning": ["machine learning", "predictive", "model"],
+    "Computer Vision": ["computer vision", "imaging", "pathology image"],
+    "Knowledge Graph": ["knowledge graph", "ontology"],
+    "Reinforcement Learning": ["reinforcement learning", "bandit"],
+    "Continuous Learning": ["continuous learning", "online learning"],
+    "Self-supervised Learning": ["self-supervised", "ssl"],
+    "Simulation / Digital Twin": ["digital twin", "simulation", "virtual patient"],
+    "Causal Inference": ["causal", "counterfactual"],
+    "Bayesian Modeling": ["bayesian", "posterior"],
+    "Optimization": ["optimization", "solver", "resource allocation"],
+    "NLP / IE": ["nlp", "information extraction", "text mining"],
+    "Rules Engine": ["rules engine", "constraint", "traceability"]
+  }
+}

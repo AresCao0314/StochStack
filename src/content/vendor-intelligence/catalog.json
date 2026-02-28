@@ -1,0 +1,344 @@
+{
+  "updatedAt": "2026-03-01T00:00:00Z",
+  "scenarios": [
+    {
+      "id": "medical-writing",
+      "name": { "en": "Clinical Writing Automation", "zh": "临床文档撰写自动化", "de": "Automatisierung klinischer Dokumente" },
+      "summary": {
+        "en": "CSR/protocol/lay-summary generation with traceable source grounding.",
+        "zh": "面向 CSR/protocol/lay summary 的可追溯自动生成。",
+        "de": "CSR/Protocol/Lay-Summary mit nachvollziehbarer Quellenbindung."
+      }
+    },
+    {
+      "id": "site-feasibility",
+      "name": { "en": "Site Feasibility & Startup", "zh": "站点可行性与启动", "de": "Site-Feasibility und Startup" },
+      "summary": {
+        "en": "Site ranking, activation risk prediction, and startup acceleration.",
+        "zh": "站点排名、启动风险预测与启动加速。",
+        "de": "Site-Ranking, Startup-Risikoprognose und Beschleunigung."
+      }
+    },
+    {
+      "id": "patient-recruitment",
+      "name": { "en": "Patient Recruitment Intelligence", "zh": "患者招募智能", "de": "Patientenrekrutierung-Intelligence" },
+      "summary": {
+        "en": "Eligibility cohort sizing, recruitment forecasting, and channel optimization.",
+        "zh": "可入组人群测算、招募预测与渠道优化。",
+        "de": "Eligibility-Schaetzung, Recruitment-Prognose und Kanaloptimierung."
+      }
+    },
+    {
+      "id": "protocol-intelligence",
+      "name": { "en": "Protocol Intelligence", "zh": "Protocol 智能", "de": "Protocol Intelligence" },
+      "summary": {
+        "en": "Protocol parsing, eligibility checks, and rule evidence retrieval.",
+        "zh": "协议解析、入排判断与规则证据检索。",
+        "de": "Protocol-Parsing, Eligibility-Pruefung und Evidenzabruf."
+      }
+    },
+    {
+      "id": "data-quality-rbqm",
+      "name": { "en": "RBQM & Data Quality", "zh": "RBQM 与数据质量", "de": "RBQM und Datenqualitaet" },
+      "summary": {
+        "en": "Risk-based monitoring, anomaly detection, and data issue triage.",
+        "zh": "风险导向监查、异常检测与数据问题分流。",
+        "de": "Risikobasiertes Monitoring, Anomalieerkennung und Data-Issue-Triage."
+      }
+    },
+    {
+      "id": "synthetic-control",
+      "name": { "en": "Digital Twin & Synthetic Control", "zh": "数字孪生与合成对照", "de": "Digital Twin und Synthetic Control" },
+      "summary": {
+        "en": "Historical control construction and sample-size optimization simulation.",
+        "zh": "历史对照构建与样本量优化仿真。",
+        "de": "Historische Kontrollarme und Simulation zur Sample-Size-Optimierung."
+      }
+    },
+    {
+      "id": "supply-rtsm",
+      "name": { "en": "RTSM & Supply Optimization", "zh": "RTSM 与供应优化", "de": "RTSM und Supply-Optimierung" },
+      "summary": {
+        "en": "Drug supply prediction, depot balance, and randomization operations.",
+        "zh": "药物供应预测、仓配平衡与随机化运营。",
+        "de": "Drug-Supply-Prognose, Depot-Balance und Randomisierungssteuerung."
+      }
+    },
+    {
+      "id": "safety-phv",
+      "name": { "en": "Safety/PV Signal Intelligence", "zh": "安全与药物警戒信号", "de": "Safety/PV Signal-Intelligence" },
+      "summary": {
+        "en": "Safety case triage, signal prioritization, and narrative automation.",
+        "zh": "安全病例分流、信号优先级与叙事自动化。",
+        "de": "Safety-Case-Triage, Signal-Priorisierung und Narrative-Automatisierung."
+      }
+    },
+    {
+      "id": "submission-closeout",
+      "name": { "en": "Submission & Close-out Acceleration", "zh": "递交与关库加速", "de": "Submission- und Close-out-Beschleunigung" },
+      "summary": {
+        "en": "Regulatory package readiness, dossier assembly, and close-out orchestration.",
+        "zh": "注册包就绪度、资料拼装与关库编排。",
+        "de": "Regulatory Readiness, Dossier-Montage und Close-out-Orchestrierung."
+      }
+    },
+    {
+      "id": "portfolio-control-tower",
+      "name": { "en": "Portfolio Control Tower", "zh": "组合管理控制塔", "de": "Portfolio Control Tower" },
+      "summary": {
+        "en": "Milestone, budget, and FTE control with scenario planning.",
+        "zh": "里程碑、预算与 FTE 的统一控制与情景规划。",
+        "de": "Steuerung von Milestones, Budget und FTE mit Szenarioplanung."
+      }
+    },
+    {
+      "id": "multimodal-assessment",
+      "name": { "en": "Imaging/Multimodal Assessment", "zh": "影像与多模态评估", "de": "Imaging- und Multimodale Bewertung" },
+      "summary": {
+        "en": "Computer vision for imaging endpoints and multi-modal outcome analytics.",
+        "zh": "以计算机视觉支持影像终点评估与多模态结局分析。",
+        "de": "Computer Vision fuer Imaging-Endpunkte und multimodale Outcome-Analyse."
+      }
+    }
+  ],
+  "technologyTaxonomy": [
+    "GenAI",
+    "Agent Systems",
+    "Machine Learning",
+    "Computer Vision",
+    "Knowledge Graph",
+    "Reinforcement Learning",
+    "Continuous Learning",
+    "Self-supervised Learning",
+    "Simulation / Digital Twin",
+    "Causal Inference",
+    "Bayesian Modeling",
+    "Optimization",
+    "NLP / IE",
+    "Rules Engine"
+  ],
+  "vendors": [
+    {
+      "id": "iqvia",
+      "name": "IQVIA",
+      "type": "CRO",
+      "products": [
+        {
+          "name": "AI-enabled Trial Optimization Suite",
+          "status": "live",
+          "scenarios": ["site-feasibility", "portfolio-control-tower", "patient-recruitment"],
+          "technologies": ["Machine Learning", "Optimization", "Bayesian Modeling"],
+          "description": "Portfolio-level optimization and operational forecasting for trial execution.",
+          "link": "https://www.iqvia.com/"
+        }
+      ]
+    },
+    {
+      "id": "parexel",
+      "name": "Parexel",
+      "type": "CRO",
+      "products": [
+        {
+          "name": "Clinical Data Intelligence Services",
+          "status": "live",
+          "scenarios": ["data-quality-rbqm", "submission-closeout"],
+          "technologies": ["Machine Learning", "NLP / IE"],
+          "description": "Risk analytics and data quality insights for study teams.",
+          "link": "https://www.parexel.com/"
+        }
+      ]
+    },
+    {
+      "id": "medidata",
+      "name": "Medidata",
+      "type": "Platform",
+      "products": [
+        {
+          "name": "Medidata AI Modules",
+          "status": "live",
+          "scenarios": ["site-feasibility", "data-quality-rbqm", "protocol-intelligence"],
+          "technologies": ["Machine Learning", "NLP / IE", "Agent Systems"],
+          "description": "AI capabilities across study build, risk monitoring, and workflow support.",
+          "link": "https://www.medidata.com/"
+        }
+      ]
+    },
+    {
+      "id": "veeva",
+      "name": "Veeva",
+      "type": "Platform",
+      "products": [
+        {
+          "name": "Vault Clinical + AI Search/Assist",
+          "status": "beta",
+          "scenarios": ["medical-writing", "submission-closeout", "protocol-intelligence"],
+          "technologies": ["GenAI", "Knowledge Graph", "Rules Engine"],
+          "description": "Document lifecycle and regulatory workflows with AI-assisted retrieval and drafting.",
+          "link": "https://www.veeva.com/"
+        }
+      ]
+    },
+    {
+      "id": "saama",
+      "name": "Saama",
+      "type": "Clinical AI",
+      "products": [
+        {
+          "name": "Clinical Analytics Cloud",
+          "status": "live",
+          "scenarios": ["data-quality-rbqm", "portfolio-control-tower"],
+          "technologies": ["Machine Learning", "Optimization", "Continuous Learning"],
+          "description": "Automated data review and quality risk surfacing.",
+          "link": "https://www.saama.com/"
+        }
+      ]
+    },
+    {
+      "id": "flatiron",
+      "name": "Flatiron Health",
+      "type": "RWD",
+      "products": [
+        {
+          "name": "Oncology RWE Data Products",
+          "status": "live",
+          "scenarios": ["patient-recruitment", "synthetic-control"],
+          "technologies": ["Causal Inference", "Machine Learning", "Bayesian Modeling"],
+          "description": "Real-world evidence datasets for trial planning and endpoint contextualization.",
+          "link": "https://flatiron.com/"
+        }
+      ]
+    },
+    {
+      "id": "pathai",
+      "name": "PathAI",
+      "type": "Clinical AI",
+      "products": [
+        {
+          "name": "Digital Pathology AI",
+          "status": "live",
+          "scenarios": ["multimodal-assessment"],
+          "technologies": ["Computer Vision", "Self-supervised Learning"],
+          "description": "AI-assisted pathology quantification and endpoint support.",
+          "link": "https://www.pathai.com/"
+        }
+      ]
+    },
+    {
+      "id": "tempus",
+      "name": "Tempus",
+      "type": "Clinical AI",
+      "products": [
+        {
+          "name": "Precision Medicine AI Platform",
+          "status": "live",
+          "scenarios": ["patient-recruitment", "protocol-intelligence"],
+          "technologies": ["Machine Learning", "Knowledge Graph", "NLP / IE"],
+          "description": "Molecular + clinical data insights for cohort strategy and trial matching.",
+          "link": "https://www.tempus.com/"
+        }
+      ]
+    },
+    {
+      "id": "insilico",
+      "name": "Insilico Medicine",
+      "type": "Biotech AI",
+      "products": [
+        {
+          "name": "Generative Discovery/Design Stack",
+          "status": "live",
+          "scenarios": ["portfolio-control-tower"],
+          "technologies": ["GenAI", "Reinforcement Learning", "Continuous Learning"],
+          "description": "AI-first drug discovery platform with design and optimization loops.",
+          "link": "https://insilico.com/"
+        }
+      ]
+    },
+    {
+      "id": "unlearn",
+      "name": "Unlearn",
+      "type": "Clinical AI",
+      "products": [
+        {
+          "name": "Digital Twin Generator",
+          "status": "beta",
+          "scenarios": ["synthetic-control", "patient-recruitment"],
+          "technologies": ["Simulation / Digital Twin", "Bayesian Modeling", "Causal Inference"],
+          "description": "Synthetic control modeling to improve trial efficiency.",
+          "link": "https://www.unlearn.ai/"
+        }
+      ]
+    },
+    {
+      "id": "datavant",
+      "name": "Datavant",
+      "type": "Data Infrastructure",
+      "products": [
+        {
+          "name": "Privacy-preserving Data Linkage",
+          "status": "live",
+          "scenarios": ["patient-recruitment", "safety-phv", "synthetic-control"],
+          "technologies": ["Machine Learning", "Optimization"],
+          "description": "Secure linkage infrastructure across healthcare datasets.",
+          "link": "https://www.datavant.com/"
+        }
+      ]
+    },
+    {
+      "id": "openai-enterprise",
+      "name": "OpenAI / Microsoft Ecosystem",
+      "type": "Foundation Model",
+      "products": [
+        {
+          "name": "Enterprise AI Copilot Stack",
+          "status": "live",
+          "scenarios": ["medical-writing", "protocol-intelligence", "submission-closeout", "portfolio-control-tower"],
+          "technologies": ["GenAI", "Agent Systems", "NLP / IE"],
+          "description": "General-purpose language and agent systems adaptable to clinical workflows.",
+          "link": "https://openai.com/"
+        }
+      ]
+    }
+  ],
+  "literature": [
+    {
+      "id": "lit-patient-sim-001",
+      "title": "Patient simulation frameworks for virtual trial cohorts",
+      "year": 2025,
+      "source": "Journal/Preprint Monitoring",
+      "link": "https://arxiv.org/",
+      "scenarios": ["synthetic-control", "patient-recruitment"],
+      "technologies": ["Simulation / Digital Twin", "Bayesian Modeling"],
+      "signal": "high"
+    },
+    {
+      "id": "lit-rbqm-001",
+      "title": "Risk-based quality monitoring using anomaly detection in multicenter trials",
+      "year": 2024,
+      "source": "Journal/Conference Monitoring",
+      "link": "https://arxiv.org/",
+      "scenarios": ["data-quality-rbqm"],
+      "technologies": ["Machine Learning", "Continuous Learning"],
+      "signal": "high"
+    },
+    {
+      "id": "lit-llm-clinical-writing-001",
+      "title": "LLM-assisted clinical writing with source traceability constraints",
+      "year": 2025,
+      "source": "Preprint Monitoring",
+      "link": "https://arxiv.org/",
+      "scenarios": ["medical-writing", "submission-closeout"],
+      "technologies": ["GenAI", "Rules Engine"],
+      "signal": "medium"
+    },
+    {
+      "id": "lit-multimodal-001",
+      "title": "Multimodal endpoint modeling across imaging and tabular clinical signals",
+      "year": 2025,
+      "source": "Conference Monitoring",
+      "link": "https://arxiv.org/",
+      "scenarios": ["multimodal-assessment", "protocol-intelligence"],
+      "technologies": ["Computer Vision", "Machine Learning", "Causal Inference"],
+      "signal": "medium"
+    }
+  ]
+}

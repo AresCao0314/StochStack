@@ -1,0 +1,25 @@
+{
+  "updatedAt": "2026-03-01T00:00:00Z",
+  "items": [
+    {
+      "id": "sig-001",
+      "title": "New AI workflow update in clinical document lifecycle",
+      "source": "vendor monitoring",
+      "publishedAt": "2026-02-28",
+      "link": "https://example.com/signal-1",
+      "scenarios": ["medical-writing", "submission-closeout"],
+      "technologies": ["GenAI", "Rules Engine"],
+      "kind": "vendor_update"
+    },
+    {
+      "id": "sig-002",
+      "title": "Patient simulation method improves trial planning confidence intervals",
+      "source": "literature monitoring",
+      "publishedAt": "2026-02-27",
+      "link": "https://example.com/signal-2",
+      "scenarios": ["synthetic-control", "patient-recruitment"],
+      "technologies": ["Simulation / Digital Twin", "Bayesian Modeling"],
+      "kind": "literature"
+    }
+  ]
+}

@@ -1,5 +1,36 @@
 [
   {
+    "slug": "vendor-ai-intelligence-radar",
+    "name": {
+      "en": "Clinical AI Vendor Intelligence Radar",
+      "zh": "临床 AI Vendor 情报雷达",
+      "de": "Clinical AI Vendor Intelligence Radar"
+    },
+    "description": {
+      "en": "Scenario-first radar for CRO/tech vendor products, technology stacks, and literature signals across clinical development workflows.",
+      "zh": "按场景组织 CRO/科技公司产品、技术栈与文献信号的临床研发情报雷达。",
+      "de": "Szenario-basierter Radar fuer CRO/Tech-Produkte, Technologie-Stacks und Literatur-Signale in der klinischen Entwicklung."
+    },
+    "tags": [
+      "Clinical Ops",
+      "Vendor Intelligence",
+      "AI Landscape"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/vendor-ai-intelligence-radar",
+    "screenshot": "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "RSS/Atom Monitoring",
+      "Scenario Taxonomy",
+      "AI Modality Mapping"
+    ],
+    "designIntent": {
+      "en": "Turn fragmented vendor and literature updates into scenario-aware decision surfaces for clinical teams.",
+      "zh": "把碎片化 vendor 动态与文献更新重组为面向临床团队的场景化决策界面。",
+      "de": "Fragmentierte Vendor- und Literatur-Updates in szenariobasierte Entscheidungsflaechen fuer klinische Teams ueberfuehren."
+    }
+  },
+  {
     "slug": "ctm-ops-daily-dashboard",
     "name": {
       "en": "CTM Daily Control Panel",

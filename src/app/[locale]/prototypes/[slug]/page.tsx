@@ -14,6 +14,7 @@ import { ProtocolDigitizationPrototype } from '@/components/protocol-digitizatio
 import { SiteFeasibilityFeedbackPrototype } from '@/components/site-feasibility-feedback-prototype';
 import { SiteFeasibilityPrototype } from '@/components/site-feasibility-prototype';
 import { CtmDashboardPrototype, type TrialRecord, type SkillPack } from '@/components/ctm-dashboard-prototype';
+import { VendorIntelligencePrototype, type Catalog, type Signals } from '@/components/vendor-intelligence-prototype';
 import { getDictionary, locales, type Locale } from '@/lib/i18n';
 import { getPortBySlug, getPorts } from '@/lib/content';
 import { loadCtmSopRegistry } from '@/lib/ctm-sop-registry';
@@ -30,6 +31,8 @@ import protocolDigitizationSamples from '@/content/protocol-digitization/samples
 import laySynopsisSamples from '@/content/lay-synopsis/samples.json';
 import csrDraftSamples from '@/content/csr-drafting/samples.json';
 import ctmDashboardTrials from '@/content/ctm-dashboard/trials.json';
+import vendorIntelligenceCatalog from '@/content/vendor-intelligence/catalog.json';
+import vendorIntelligenceSignals from '@/content/vendor-intelligence/signals.json';
 import marketChangelog from '@/content/changelogs/market-intelligence-highscore.json';
 import siteScoringChangelog from '@/content/changelogs/site-feasibility-scoring.json';
 import siteFeedbackChangelog from '@/content/changelogs/site-feasibility-human-feedback.json';
@@ -42,6 +45,7 @@ import protocolDigitizationChangelog from '@/content/changelogs/historical-proto
 import laySynopsisChangelog from '@/content/changelogs/lay-language-synopsis-eu.json';
 import csrDraftChangelog from '@/content/changelogs/csr-drafting-bds-tfl.json';
 import ctmDashboardChangelog from '@/content/changelogs/ctm-ops-daily-dashboard.json';
+import vendorIntelligenceChangelog from '@/content/changelogs/vendor-ai-intelligence-radar.json';
 
 export function generateStaticParams() {
   const ports = getPorts();
@@ -62,6 +66,19 @@ export async function generateMetadata({ params }: { params: { locale: Locale; s
 }
 
 export default function PrototypeDetailPage({ params }: { params: { locale: Locale; slug: string } }) {
+  if (params.slug === 'vendor-ai-intelligence-radar') {
+    return (
+      <>
+        <VendorIntelligencePrototype
+          locale={params.locale}
+          catalog={vendorIntelligenceCatalog as unknown as Catalog}
+          signals={vendorIntelligenceSignals as unknown as Signals}
+        />
+        <PrototypeChangelog locale={params.locale} entries={vendorIntelligenceChangelog as unknown as LogEntry[]} />
+      </>
+    );
+  }
+
   if (params.slug === 'ctm-ops-daily-dashboard') {
     const registry = loadCtmSopRegistry();
     return (

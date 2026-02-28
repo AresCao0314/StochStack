@@ -1,0 +1,31 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.1.0",
+    "title": {
+      "en": "Vendor intelligence radar baseline",
+      "zh": "Vendor Intelligence 雷达基线版本",
+      "de": "Vendor-Intelligence-Radar Basisversion"
+    },
+    "changes": {
+      "en": [
+        "Added scenario-first cards covering broad clinical AI use cases beyond GenAI.",
+        "Mapped vendors/products to use-cases and technology modalities (CV, RL, simulation, causal, agents).",
+        "Added literature signal panel and daily auto-collected feed signal panel.",
+        "Added daily sync script using RSS/Atom + keyword mapping into scenarios and technologies."
+      ],
+      "zh": [
+        "新增场景优先卡片，覆盖不局限于 GenAI 的临床 AI 应用场景。",
+        "建立 vendor/product 与场景、技术模态（CV、RL、仿真、因果、Agent）映射。",
+        "新增文献信号面板与每日自动采集信号面板。",
+        "新增每日同步脚本：RSS/Atom + 关键词映射到场景与技术。"
+      ],
+      "de": [
+        "Szenario-zentrierte Karten fuer breite klinische AI-Use-Cases jenseits von GenAI hinzugefuegt.",
+        "Vendor/Produkt-Mapping auf Use-Cases und Technologie-Modalitaeten (CV, RL, Simulation, Causal, Agents).",
+        "Literatur-Signalpanel und taegliches Auto-Signalpanel hinzugefuegt.",
+        "Taeglicher Sync per RSS/Atom mit Keyword-Mapping auf Szenarien und Technologien hinzugefuegt."
+      ]
+    }
+  }
+]

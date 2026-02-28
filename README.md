@@ -71,6 +71,23 @@ Manual run:
 python3 scripts/fetch_ctgov_site_feasibility.py --page-size 100 --max-pages 4 --limit-per-profile 220 --timeout 20
 ```
 
+## Daily Vendor Intelligence Radar Sync
+
+- Script: `scripts/sync_vendor_ai_radar.py`
+- Feed manifest: `src/content/vendor-intelligence/source-manifest.json`
+- Output: `src/content/vendor-intelligence/signals.json`
+
+Manual run:
+
+```bash
+python3 scripts/sync_vendor_ai_radar.py --timeout 12 --limit-per-feed 8
+```
+
+Notes:
+- Scenario and technology mapping is keyword-based (editable in manifest).
+- Supports both vendor updates and literature signals via RSS/Atom feeds.
+- The existing daily refresh script now includes this sync before container rebuild.
+
 ## Protocol PDF Auto-Extraction (Qwen)
 
 - Endpoint: `POST /api/protocol/extract`
