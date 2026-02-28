@@ -1,0 +1,32 @@
+{
+  "id": "site_selection",
+  "name": "Data driven trial footprint and site selection capability",
+  "channel": "Trial delivery & submissions",
+  "slots": {
+    "region": { "type": "enum", "required": true, "options": ["US","EU","China","APAC","Global"] },
+    "diversity_focus": { "type": "enum", "required": false, "options": ["yes","no"] },
+
+    "country": { "type": "enum_dynamic", "required": false, "resolver": "country_list_by_region" },
+    "phase": { "type": "enum", "required": true, "options": ["I","II","III","IV"] },
+    "therapeutic_area": { "type": "enum", "required": true, "options": ["Oncology","Ophthalmology","Cardio","Immunology","Respiratory","Other"] },
+    "tumor_type": { "type": "string", "required": false },
+    "objective": { "type": "enum", "required": true, "options": ["fast_startup","fast_recruitment","high_quality","cost_optimal"] }
+  },
+  "clarifying_questions": {
+    "region": "Which region is the study targeting (US/EU/China/APAC/Global)?",
+    "diversity_focus": "For US site selection, do you need to optimize for patient diversity / representation? (yes/no)",
+    "phase": "What phase is the trial (I/II/III/IV)?",
+    "therapeutic_area": "Which therapeutic area?",
+    "objective": "What is your primary objective (fast_startup/fast_recruitment/high_quality/cost_optimal)?"
+  },
+  "routing": {
+    "rules": [
+      { "if": "region == 'US' and diversity_focus == 'yes'", "target": "tool_h1_site_universe" },
+
+      { "if": "region == 'US'", "target": "db_us_site_warehouse" },
+      { "if": "region == 'China'", "target": "db_cn_site_warehouse" },
+      { "if": "region in ['EU','APAC','Global']", "target": "global_site_hub" }
+    ]
+  },
+  "pipeline": ["intent_parser","slot_filler","candidate_builder","ranker","explainability_narrator"]
+}

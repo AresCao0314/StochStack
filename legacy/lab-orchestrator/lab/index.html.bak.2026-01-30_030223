@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ARES AI Studio • Lab</title>
+<style>
+body{margin:0;font-family:system-ui;background:#08312A;color:#E5E3DE}
+.wrap{max-width:1040px;margin:0 auto;padding:56px 18px}
+.tag{display:inline-block;border:1px solid #00E47C;color:#00E47C;padding:6px 10px;border-radius:999px;font-size:12px}
+h1{font-size:40px;margin:14px 0 10px;line-height:1.1}
+.muted{opacity:.85}
+.box{margin-top:18px;background:rgba(246,245,243,.06);border:1px solid rgba(0,228,124,.22);border-radius:18px;padding:18px}
+textarea{width:100%;height:108px;border-radius:12px;border:1px solid rgba(229,227,222,.25);background:rgba(0,0,0,.18);color:#F6F5F3;padding:12px;font-size:14px}
+button{margin-top:10px;background:#00E47C;border:none;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
+pre{white-space:pre-wrap;word-break:break-word;background:rgba(0,0,0,.28);padding:12px;border-radius:12px;margin:0}
+</style></head>
+<body>
+<div class="wrap">
+  <span class="tag">Demo • Orchestration Portal</span>
+  <h1>Medicine Data, AI & System</h1>
+  <p class="muted">Natural-language → intent → routed channel → execution plan</p>
+
+  <div class="box">
+    <div style="font-weight:700;color:#00E47C;margin-bottom:8px">User Input</div>
+    <textarea id="q" placeholder="e.g., Recommend oncology sites in China for Phase III with fast startup."></textarea>
+    <button onclick="run()">Route & Plan</button>
+    <p class="muted">Backend: <code>/api/triage</code></p>
+  </div>
+
+  <div class="box">
+    <div style="font-weight:700;color:#00E47C;margin-bottom:8px">Routing Result</div>
+    <pre id="out">Waiting...</pre>
+  </div>
+</div>
+
+<script>
+function esc(s){return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");}
+
+async function run(){
+  const q = document.getElementById('q').value.trim();
+  if(!q) return;
+
+  const out = document.getElementById('out');
+  out.textContent = "Running...";
+
+  const r = await fetch('/api/triage', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({utterance:q})
+  });
+
+  const data = await r.json();
+
+  if(!data.supported){
+    out.innerHTML = `
+<b>Not supported yet</b> • captured for analysis ✅<br/>
+<div style="margin-top:8px;opacity:.9">Request: <code>${esc(data.utterance)}</code></div>
+<div style="margin-top:8px;opacity:.7">Next action: ${esc(data.next_action)}</div>
+`;
+    return;
+  }
+
+  const plan = (data.execution_plan || [])
+    .map(x => `<li><b>${x.step}</b> — ${esc(x.app)}</li>`).join("");
+
+  out.innerHTML = `
+<div><b>Routed ✅</b></div>
+<div style="margin-top:8px">
+  <div>Channel: <b>${esc(data.routed_channel)}</b></div>
+  <div>Initiative: <b>${esc(data.initiative)}</b></div>
+  <div>Intent ID: <code>${esc(data.intent)}</code> • confidence: <b>${esc(data.confidence)}</b></div>
+</div>
+
+<div style="margin-top:12px"><b>Execution plan</b></div>
+<ol style="margin:8px 0 0 18px">${plan}</ol>
+
+<div style="margin-top:12px;opacity:.75">
+  LLM rationale: ${esc(data.llm?.rationale_short || "")}
+</div>
+`;
+}
+</script>
+</script>
+</body></html>

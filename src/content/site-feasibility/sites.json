@@ -1,0 +1,194 @@
+[
+  {
+    "id": "us-boston-onc-01",
+    "name": "Boston Cancer Research Center",
+    "country": "United States",
+    "region": "North America",
+    "city": "Boston",
+    "startupMedianDays": 42,
+    "piCount": 18,
+    "stabilityScore": 88,
+    "recentTrialYears": [2026, 2025, 2024, 2023],
+    "sponsorAffinity": { "globalPharma": 0.82, "biotech": 0.61 },
+    "conditionProfiles": [
+      { "therapeuticArea": "Oncology", "indication": "NSCLC", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 26, "competitorTrials": 14, "avgEnrollment": 420 },
+      { "therapeuticArea": "Oncology", "indication": "Breast Cancer", "phase": "Phase 2", "studyType": "Interventional", "ctgovTrials": 18, "competitorTrials": 9, "avgEnrollment": 280 }
+    ]
+  },
+  {
+    "id": "us-houston-onc-02",
+    "name": "Houston Precision Trials Institute",
+    "country": "United States",
+    "region": "North America",
+    "city": "Houston",
+    "startupMedianDays": 55,
+    "piCount": 14,
+    "stabilityScore": 84,
+    "recentTrialYears": [2026, 2025, 2024],
+    "sponsorAffinity": { "globalPharma": 0.73, "biotech": 0.68 },
+    "conditionProfiles": [
+      { "therapeuticArea": "Oncology", "indication": "NSCLC", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 22, "competitorTrials": 16, "avgEnrollment": 390 },
+      { "therapeuticArea": "Oncology", "indication": "Melanoma", "phase": "Phase 2", "studyType": "Interventional", "ctgovTrials": 13, "competitorTrials": 8, "avgEnrollment": 230 }
+    ]
+  },
+  {
+    "id": "de-berlin-immun-01",
+    "name": "Berlin Immunology Unit",
+    "country": "Germany",
+    "region": "Europe",
+    "city": "Berlin",
+    "startupMedianDays": 47,
+    "piCount": 12,
+    "stabilityScore": 86,
+    "recentTrialYears": [2026, 2025, 2024, 2022],
+    "sponsorAffinity": { "globalPharma": 0.78, "biotech": 0.57 },
+    "conditionProfiles": [
+      { "therapeuticArea": "Immunology", "indication": "Rheumatoid Arthritis", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 19, "competitorTrials": 11, "avgEnrollment": 310 },
+      { "therapeuticArea": "Immunology", "indication": "Psoriasis", "phase": "Phase 2", "studyType": "Interventional", "ctgovTrials": 16, "competitorTrials": 7, "avgEnrollment": 240 }
+    ]
+  },
+  {
+    "id": "de-munich-onc-01",
+    "name": "Munich Oncology Translational Center",
+    "country": "Germany",
+    "region": "Europe",
+    "city": "Munich",
+    "startupMedianDays": 60,
+    "piCount": 10,
+    "stabilityScore": 80,
+    "recentTrialYears": [2025, 2024, 2023],
+    "sponsorAffinity": { "globalPharma": 0.74, "biotech": 0.59 },
+    "conditionProfiles": [
+      { "therapeuticArea": "Oncology", "indication": "Breast Cancer", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 14, "competitorTrials": 8, "avgEnrollment": 360 },
+      { "therapeuticArea": "Oncology", "indication": "NSCLC", "phase": "Phase 2", "studyType": "Interventional", "ctgovTrials": 11, "competitorTrials": 5, "avgEnrollment": 210 }
+    ]
+  },
+  {
+    "id": "uk-london-cns-01",
+    "name": "London Neuro Clinical Hub",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "city": "London",
+    "startupMedianDays": 58,
+    "piCount": 11,
+    "stabilityScore": 82,
+    "recentTrialYears": [2026, 2025, 2023],
+    "sponsorAffinity": { "globalPharma": 0.66, "biotech": 0.72 },
+    "conditionProfiles": [
+      { "therapeuticArea": "CNS", "indication": "Alzheimer's Disease", "phase": "Phase 2", "studyType": "Interventional", "ctgovTrials": 17, "competitorTrials": 10, "avgEnrollment": 260 },
+      { "therapeuticArea": "CNS", "indication": "Parkinson's Disease", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 9, "competitorTrials": 4, "avgEnrollment": 340 }
+    ]
+  },
+  {
+    "id": "fr-paris-cardio-01",
+    "name": "Paris Cardiometabolic Center",
+    "country": "France",
+    "region": "Europe",
+    "city": "Paris",
+    "startupMedianDays": 50,
+    "piCount": 13,
+    "stabilityScore": 85,
+    "recentTrialYears": [2026, 2025, 2024],
+    "sponsorAffinity": { "globalPharma": 0.75, "biotech": 0.55 },
+    "conditionProfiles": [
+      { "therapeuticArea": "Cardiovascular", "indication": "Heart Failure", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 15, "competitorTrials": 8, "avgEnrollment": 440 },
+      { "therapeuticArea": "Cardiovascular", "indication": "Atrial Fibrillation", "phase": "Phase 2", "studyType": "Observational", "ctgovTrials": 10, "competitorTrials": 3, "avgEnrollment": 510 }
+    ]
+  },
+  {
+    "id": "jp-tokyo-onc-01",
+    "name": "Tokyo Solid Tumor Institute",
+    "country": "Japan",
+    "region": "APAC",
+    "city": "Tokyo",
+    "startupMedianDays": 63,
+    "piCount": 15,
+    "stabilityScore": 83,
+    "recentTrialYears": [2026, 2025, 2024],
+    "sponsorAffinity": { "globalPharma": 0.69, "biotech": 0.64 },
+    "conditionProfiles": [
+      { "therapeuticArea": "Oncology", "indication": "Gastric Cancer", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 21, "competitorTrials": 12, "avgEnrollment": 370 },
+      { "therapeuticArea": "Oncology", "indication": "NSCLC", "phase": "Phase 2", "studyType": "Interventional", "ctgovTrials": 12, "competitorTrials": 6, "avgEnrollment": 240 }
+    ]
+  },
+  {
+    "id": "sg-singapore-onc-01",
+    "name": "Singapore Oncology Network",
+    "country": "Singapore",
+    "region": "APAC",
+    "city": "Singapore",
+    "startupMedianDays": 39,
+    "piCount": 9,
+    "stabilityScore": 90,
+    "recentTrialYears": [2026, 2025, 2024, 2023],
+    "sponsorAffinity": { "globalPharma": 0.77, "biotech": 0.74 },
+    "conditionProfiles": [
+      { "therapeuticArea": "Oncology", "indication": "Hepatocellular Carcinoma", "phase": "Phase 2", "studyType": "Interventional", "ctgovTrials": 20, "competitorTrials": 13, "avgEnrollment": 210 },
+      { "therapeuticArea": "Oncology", "indication": "NSCLC", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 16, "competitorTrials": 11, "avgEnrollment": 330 }
+    ]
+  },
+  {
+    "id": "cn-shanghai-immun-01",
+    "name": "Shanghai Autoimmune Research Hospital",
+    "country": "China",
+    "region": "APAC",
+    "city": "Shanghai",
+    "startupMedianDays": 46,
+    "piCount": 16,
+    "stabilityScore": 87,
+    "recentTrialYears": [2026, 2025, 2024],
+    "sponsorAffinity": { "globalPharma": 0.71, "biotech": 0.69 },
+    "conditionProfiles": [
+      { "therapeuticArea": "Immunology", "indication": "Systemic Lupus Erythematosus", "phase": "Phase 2", "studyType": "Interventional", "ctgovTrials": 18, "competitorTrials": 9, "avgEnrollment": 260 },
+      { "therapeuticArea": "Immunology", "indication": "Rheumatoid Arthritis", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 23, "competitorTrials": 15, "avgEnrollment": 410 }
+    ]
+  },
+  {
+    "id": "au-sydney-cns-01",
+    "name": "Sydney Neuro Trial Group",
+    "country": "Australia",
+    "region": "APAC",
+    "city": "Sydney",
+    "startupMedianDays": 52,
+    "piCount": 8,
+    "stabilityScore": 81,
+    "recentTrialYears": [2025, 2024, 2023],
+    "sponsorAffinity": { "globalPharma": 0.62, "biotech": 0.76 },
+    "conditionProfiles": [
+      { "therapeuticArea": "CNS", "indication": "Alzheimer's Disease", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 11, "competitorTrials": 7, "avgEnrollment": 350 },
+      { "therapeuticArea": "CNS", "indication": "Multiple Sclerosis", "phase": "Phase 2", "studyType": "Interventional", "ctgovTrials": 14, "competitorTrials": 5, "avgEnrollment": 220 }
+    ]
+  },
+  {
+    "id": "us-seattle-cardio-01",
+    "name": "Seattle Cardiovascular Research Alliance",
+    "country": "United States",
+    "region": "North America",
+    "city": "Seattle",
+    "startupMedianDays": 49,
+    "piCount": 12,
+    "stabilityScore": 86,
+    "recentTrialYears": [2026, 2025, 2024, 2023],
+    "sponsorAffinity": { "globalPharma": 0.79, "biotech": 0.58 },
+    "conditionProfiles": [
+      { "therapeuticArea": "Cardiovascular", "indication": "Heart Failure", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 19, "competitorTrials": 12, "avgEnrollment": 470 },
+      { "therapeuticArea": "Cardiovascular", "indication": "Atrial Fibrillation", "phase": "Phase 2", "studyType": "Observational", "ctgovTrials": 13, "competitorTrials": 4, "avgEnrollment": 530 }
+    ]
+  },
+  {
+    "id": "kr-seoul-onc-01",
+    "name": "Seoul Precision Oncology Hospital",
+    "country": "South Korea",
+    "region": "APAC",
+    "city": "Seoul",
+    "startupMedianDays": 44,
+    "piCount": 11,
+    "stabilityScore": 89,
+    "recentTrialYears": [2026, 2025, 2024],
+    "sponsorAffinity": { "globalPharma": 0.76, "biotech": 0.67 },
+    "conditionProfiles": [
+      { "therapeuticArea": "Oncology", "indication": "Gastric Cancer", "phase": "Phase 2", "studyType": "Interventional", "ctgovTrials": 17, "competitorTrials": 10, "avgEnrollment": 250 },
+      { "therapeuticArea": "Oncology", "indication": "Hepatocellular Carcinoma", "phase": "Phase 3", "studyType": "Interventional", "ctgovTrials": 15, "competitorTrials": 11, "avgEnrollment": 340 }
+    ]
+  }
+]

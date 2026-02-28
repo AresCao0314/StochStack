@@ -1,0 +1,24 @@
+{
+  "id": "onco_p3_us",
+  "name": "Oncology P3 US",
+  "role_access": ["project_lead"],
+  "enabled_skills": ["site_selection", "site_startup", "rbqm_quality"],
+  "defaults": {
+    "therapeutic_area": "oncology",
+    "phase": "3",
+    "region": "US"
+  },
+  "skill_overrides": {
+    "site_selection": {
+      "slots": {
+        "region": {"type":"string","required": false},
+        "diversity_focus": {"type":"string","required": false}
+      },
+      "routing": {
+        "rules": [
+          {"if": "region == 'US'", "target": "tool_h1_site_universe"}
+        ]
+      }
+    }
+  }
+}

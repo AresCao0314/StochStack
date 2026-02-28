@@ -1,0 +1,74 @@
+{
+  "id": "e2e_automation_authoring",
+  "name": "AI tools for end-to-end automation, 1st step authoring",
+  "channel": "Data & AI",
+  "slots": {
+    "doc_type": {
+      "type": "enum",
+      "required": true,
+      "options": ["Protocol", "CSR", "Other"]
+    },
+    "sub_task": {
+      "type": "enum",
+      "required": true,
+      "options": [
+        "protocol_structure_authoring",
+        "csr_drafting",
+        "lay_synopsis_generator",
+        "compare_documents",
+        "pdf_table_to_json",
+        "qc_and_packaging"
+      ]
+    },
+    "audience": {
+      "type": "enum",
+      "required": false,
+      "options": ["Medical", "Regulatory", "Patients", "Internal"]
+    },
+    "input_format": {
+      "type": "enum",
+      "required": false,
+      "options": ["DOCX", "PDF", "TXT", "Mixed"]
+    },
+    "output_format": {
+      "type": "enum",
+      "required": false,
+      "options": ["DOCX", "Markdown", "JSON", "DiffReport"]
+    },
+    "tool_preference": {
+      "type": "enum",
+      "required": false,
+      "options": ["AlphaLife", "GiniDoc", "Internal", "NoPreference"]
+    },
+    "pilot_ok": {
+      "type": "enum",
+      "required": false,
+      "options": ["Yes", "No"]
+    }
+  },
+  "clarifying_questions": {
+    "doc_type": "Which document type are you working on (Protocol/CSR/Other)?",
+    "sub_task": "Which task do you want (protocol_structure_authoring / csr_drafting / lay_synopsis_generator / compare_documents / pdf_table_to_json / qc_and_packaging)?"
+  },
+  "routing": {
+    "rules": [
+      { "if": "sub_task == 'csr_drafting' and tool_preference == 'AlphaLife'", "target": "tool_alphalife_csr_pilot" },
+      { "if": "sub_task == 'csr_drafting' and tool_preference == 'GiniDoc'", "target": "tool_ginidoc_future_internal" },
+      { "if": "sub_task == 'csr_drafting' and (tool_preference == 'NoPreference' or tool_preference == 'Internal') and pilot_ok == 'Yes'", "target": "tool_alphalife_csr_pilot" },
+      { "if": "sub_task == 'csr_drafting' and (tool_preference == 'NoPreference' or tool_preference == 'Internal') and pilot_ok == 'No'", "target": "tool_ginidoc_future_internal" },
+
+      { "if": "sub_task == 'protocol_structure_authoring'", "target": "app_protocol_structure_builder" },
+      { "if": "sub_task == 'lay_synopsis_generator'", "target": "app_lay_synopsis_generator" },
+      { "if": "sub_task == 'compare_documents'", "target": "app_doc_compare" },
+      { "if": "sub_task == 'pdf_table_to_json'", "target": "app_pdf_table_to_json" },
+      { "if": "sub_task == 'qc_and_packaging'", "target": "app_qc_packager" }
+    ]
+  },
+  "pipeline": [
+    "intent_parser",
+    "slot_filler",
+    "task_router",
+    "handoff_builder",
+    "deliver"
+  ]
+}

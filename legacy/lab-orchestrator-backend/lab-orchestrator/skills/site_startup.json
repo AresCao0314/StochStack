@@ -1,0 +1,13 @@
+{
+  "id": "site_startup",
+  "name": "site_startup",
+  "channel": "TBD",
+  "slots": {
+    "region": { "type": "enum", "required": false, "options": ["US","EU","China","APAC","Global"] },
+    "phase": { "type": "enum", "required": false, "options": ["I","II","III","IV"] },
+    "therapeutic_area": { "type": "enum", "required": false, "options": ["Oncology","Ophthalmology","Cardio","Immunology","Respiratory","Other"] }
+  },
+  "clarifying_questions": {},
+  "routing": { "rules": [] },
+  "pipeline": ["intent_parser","slot_filler","deliver"]
+}

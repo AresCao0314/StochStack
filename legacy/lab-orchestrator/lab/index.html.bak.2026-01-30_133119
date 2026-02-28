@@ -1,0 +1,296 @@
+sudo cp /var/www/lab/index.html /var/www/lab/index.html.bak.$(date +%F_%H%M%S)
+
+sudo tee /var/www/lab/index.html >/dev/null <<'HTML'
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ARES AI Studio Lab</title>
+  <style>
+    body{margin:0;font-family:system-ui;background:#08312A;color:#E5E3DE}
+    .wrap{max-width:1040px;margin:0 auto;padding:56px 18px}
+    .tag{display:inline-block;border:1px solid #00E47C;color:#00E47C;padding:6px 10px;border-radius:999px;font-size:12px}
+    h1{font-size:40px;margin:14px 0 10px;line-height:1.1}
+    .muted{opacity:.85}
+    .box{margin-top:18px;background:rgba(246,245,243,.06);border:1px solid rgba(0,228,124,.22);border-radius:18px;padding:18px}
+    textarea{width:100%;height:108px;border-radius:12px;border:1px solid rgba(229,227,222,.25);background:rgba(0,0,0,.18);color:#F6F5F3;padding:12px;font-size:14px}
+    button{margin-top:10px;background:#00E47C;border:none;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
+    button.secondary{background:transparent;border:1px solid rgba(229,227,222,.35);color:#E5E3DE}
+    pre{white-space:pre-wrap;word-break:break-word;background:rgba(0,0,0,.28);padding:12px;border-radius:12px;margin:0}
+    code{background:rgba(0,0,0,.25);padding:2px 6px;border-radius:8px}
+    .small{font-size:12px;opacity:.8}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+    .kv{display:grid;grid-template-columns:180px 1fr;gap:8px 14px;margin-top:10px}
+    .pill{display:inline-block;border:1px solid rgba(0,228,124,.35);padding:4px 10px;border-radius:999px;margin:6px 6px 0 0;font-size:12px}
+    input, select{
+      width:100%;
+      height:38px;
+      border-radius:12px;
+      border:1px solid rgba(229,227,222,.25);
+      background:rgba(0,0,0,.18);
+      color:#F6F5F3;
+      padding:6px 10px;
+      font-size:14px;
+      box-sizing:border-box;
+    }
+    label{display:block;margin-bottom:6px;font-weight:700}
+    .field{margin-top:12px}
+    .divider{height:1px;background:rgba(229,227,222,.18);margin:14px 0}
+    a{color:#00E47C}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <span class="tag">Demo • Orchestration Portal</span>
+  <h1>Medicine Data, AI & System</h1>
+  <p class="muted">Natural language → skill routing → guided slot filling → route target → execution plan</p>
+
+  <div class="box">
+    <div style="font-weight:800;color:#00E47C;margin-bottom:8px">User Input</div>
+    <textarea id="q" placeholder="e.g., Help me select oncology sites for a Phase III study in China with fast startup."></textarea>
+
+    <div class="row">
+      <button onclick="startTurn()">Route & Plan</button>
+      <button class="secondary" onclick="resetState()">Reset state</button>
+      <span class="small">State slots: <code id="state">empty</code></span>
+    </div>
+
+    <div class="small muted" style="margin-top:10px">
+      API: <code>/api/triage</code> • State saved in <code>localStorage</code>
+    </div>
+  </div>
+
+  <div class="box">
+    <div style="font-weight:800;color:#00E47C;margin-bottom:8px">Routing Result</div>
+    <div id="out" class="muted">Waiting...</div>
+
+    <!-- Guided slot form -->
+    <div id="slotForm" style="margin-top:14px;display:none">
+      <div class="divider"></div>
+      <div style="font-weight:800;margin-bottom:6px">Provide missing fields</div>
+      <div id="slotFields"></div>
+      <div class="row">
+        <button onclick="submitSlots()">Continue</button>
+        <span class="small">This updates slots and re-runs triage.</span>
+      </div>
+    </div>
+
+    <!-- Debug -->
+    <div class="divider"></div>
+    <div class="row" style="margin-top:0">
+      <button class="secondary" onclick="toggleDebug()">Toggle raw JSON</button>
+      <span class="small">For troubleshooting</span>
+    </div>
+    <div id="debug" style="display:none;margin-top:10px"><pre id="raw">{}</pre></div>
+  </div>
+</div>
+
+<script>
+function esc(s){return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");}
+
+function getSlots(){
+  try { return JSON.parse(localStorage.getItem("lab_slots") || "{}"); }
+  catch(e){ return {}; }
+}
+function setSlots(s){
+  localStorage.setItem("lab_slots", JSON.stringify(s || {}));
+  updateStateBadge();
+}
+function updateStateBadge(){
+  const s = getSlots();
+  const keys = Object.keys(s || {});
+  document.getElementById("state").textContent = keys.length ? keys.join(",") : "empty";
+}
+updateStateBadge();
+
+function showSlotForm(show){
+  document.getElementById("slotForm").style.display = show ? "block" : "none";
+}
+
+async function callTriage(utterance){
+  const slots = getSlots();
+  const r = await fetch('/api/triage', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({utterance, slots})
+  });
+  return await r.json();
+}
+
+function toggleDebug(){
+  const d = document.getElementById("debug");
+  d.style.display = (d.style.display === "none") ? "block" : "none";
+}
+
+function renderSlotForm(data){
+  const missing = data.missing_fields || [];
+  const specs = data.field_specs || {};
+  const slots = data.slots || {};
+
+  const container = document.getElementById("slotFields");
+  container.innerHTML = "";
+
+  if(!missing.length){
+    showSlotForm(false);
+    return;
+  }
+
+  missing.forEach(field => {
+    const spec = specs[field] || {type:"string"};
+    const type = spec.type || "string";
+    const required = !!spec.required;
+    const options = spec.options || null;
+
+    const wrap = document.createElement("div");
+    wrap.className = "field";
+
+    const label = document.createElement("label");
+    label.innerHTML = `${esc(field)} ${required ? '<span class="small">(required)</span>' : ''}`;
+    wrap.appendChild(label);
+
+    let inputEl;
+
+    if(type === "enum" && Array.isArray(options) && options.length){
+      inputEl = document.createElement("select");
+      const ph = document.createElement("option");
+      ph.value = "";
+      ph.textContent = "-- select --";
+      inputEl.appendChild(ph);
+
+      options.forEach(opt => {
+        const o = document.createElement("option");
+        o.value = opt;
+        o.textContent = opt;
+        inputEl.appendChild(o);
+      });
+
+      if(slots[field]) inputEl.value = slots[field];
+
+    } else {
+      inputEl = document.createElement("input");
+      inputEl.type = "text";
+      inputEl.value = slots[field] ?? "";
+      inputEl.placeholder = (type === "enum_dynamic")
+        ? `type here (resolver: ${spec.resolver || "n/a"})`
+        : "type here";
+    }
+
+    inputEl.id = `slot_${field}`;
+    wrap.appendChild(inputEl);
+
+    // hint
+    const hint = document.createElement("div");
+    hint.className = "small";
+    hint.style.marginTop = "6px";
+    if(type === "enum"){
+      hint.textContent = "Choose one option.";
+    } else if(type === "enum_dynamic"){
+      hint.textContent = `Dynamic field (resolver: ${spec.resolver || "n/a"}).`;
+    } else {
+      hint.textContent = "Free text.";
+    }
+    wrap.appendChild(hint);
+
+    container.appendChild(wrap);
+  });
+
+  showSlotForm(true);
+}
+
+function render(data){
+  window.__lastData = data;
+  document.getElementById("raw").textContent = JSON.stringify(data, null, 2);
+
+  const out = document.getElementById("out");
+
+  if(!data.supported){
+    showSlotForm(false);
+    out.innerHTML = `
+      <b>Not supported yet</b> • captured for analysis ✅
+      <div style="margin-top:8px">Request: <code>${esc(data.utterance)}</code></div>
+      <div style="margin-top:8px;opacity:.75">Next action: ${esc(data.next_action || "")}</div>
+    `;
+    return;
+  }
+
+  const plan = (data.execution_plan || []).map(x => `<span class="pill">${esc(x.step)} — ${esc(x.app)}</span>`).join("");
+
+  const missing = (data.missing_fields || []);
+  const missingHtml = missing.length
+    ? `<div style="margin-top:10px"><b>Missing required fields:</b> ${missing.map(f=>`<code>${esc(f)}</code>`).join(" ")}</div>`
+    : `<div style="margin-top:10px"><b>All required fields provided ✅</b></div>`;
+
+  const target = data.target_connector ? `<code>${esc(data.target_connector)}</code>` : `<span class="small muted">n/a</span>`;
+
+  out.innerHTML = `
+    <div><b>Routed ✅</b></div>
+
+    <div class="kv">
+      <div class="small muted">Channel</div><div><b>${esc(data.routed_channel)}</b></div>
+      <div class="small muted">Initiative</div><div><b>${esc(data.initiative)}</b></div>
+      <div class="small muted">Skill / Intent</div><div><code>${esc(data.intent)}</code> • confidence: <b>${esc(data.confidence)}</b></div>
+      <div class="small muted">Route target</div><div>${target}</div>
+      <div class="small muted">Next action</div><div><code>${esc(data.next_action || "")}</code></div>
+    </div>
+
+    ${missingHtml}
+
+    <div style="margin-top:12px"><b>Execution plan</b></div>
+    <div style="margin-top:6px">${plan || '<span class="small muted">n/a</span>'}</div>
+
+    <div style="margin-top:12px"><b>Slots (state)</b></div>
+    <pre style="margin-top:8px">${esc(JSON.stringify(data.slots || {}, null, 2))}</pre>
+
+    <div style="margin-top:12px;opacity:.75">LLM rationale: ${esc(data.llm?.rationale_short || "")}</div>
+  `;
+
+  // Guided form render (missing_fields + field_specs)
+  renderSlotForm(data);
+}
+
+async function startTurn(){
+  const q = document.getElementById('q').value.trim();
+  if(!q) return;
+  document.getElementById('out').textContent = "Running...";
+  const data = await callTriage(q);
+  setSlots(data.slots || {});
+  render(data);
+}
+
+async function submitSlots(){
+  const dataOut = window.__lastData;
+  if(!dataOut) return;
+
+  const missing = dataOut.missing_fields || [];
+  const current = getSlots();
+
+  // Update current slots with form values
+  missing.forEach(field => {
+    const el = document.getElementById(`slot_${field}`);
+    if(!el) return;
+    const v = (el.value ?? "").trim();
+    if(v) current[field] = v;
+  });
+
+  setSlots(current);
+
+  // Re-run triage: utterance can be a lightweight "continue" with hints
+  const follow = missing.map(f => `${f}=${current[f] ?? ""}`).join(", ");
+  document.getElementById("out").textContent = "Continuing...";
+  const data = await callTriage(follow || "continue");
+  setSlots(data.slots || {});
+  render(data);
+}
+
+function resetState(){
+  localStorage.removeItem("lab_slots");
+  updateStateBadge();
+  showSlotForm(false);
+  document.getElementById("out").textContent = "State reset. Waiting...";
+  document.getElementById("raw").textContent = "{}";
+}
+</script>
+</body>
+</html>
+HTML
