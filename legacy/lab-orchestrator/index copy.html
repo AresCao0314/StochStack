@@ -1,0 +1,2935 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ARES AI Studio Lab</title>
+  <style>
+    :root{
+      --bg:#08312A;
+      --accent:#00E47C;
+      --warm:#E5E3DE;
+      --light:#F6F5F3;
+      --card: rgba(246,245,243,.06);
+      --border: rgba(0,228,124,.22);
+      --border2: rgba(229,227,222,.20);
+      --ink: rgba(246,245,243,.92);
+      --muted: rgba(229,227,222,.78);
+      --shadow: 0 10px 40px rgba(0,0,0,.25);
+      --danger:#ffd03d;
+      --red:#ff6b6b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 800px at 20% 0%, rgba(0,228,124,.14), transparent 60%),
+                  radial-gradient(900px 600px at 90% 10%, rgba(0,228,124,.10), transparent 55%),
+                  var(--bg);
+      color: var(--ink);
+    }
+    .wrap{max-width:1120px;margin:0 auto;padding:48px 18px 72px}
+    .topline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .tag{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid var(--accent);
+      color:var(--accent);
+      padding:6px 12px;border-radius:999px;font-size:12px;
+      background: rgba(0,228,124,.06);
+    }
+    .tag .dot{width:7px;height:7px;border-radius:999px;background:var(--accent)}
+    h1{font-size:44px;letter-spacing:-.5px;margin:14px 0 8px;line-height:1.05}
+    .subtitle{color:var(--muted);max-width:980px;line-height:1.5}
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:14px;
+      color: var(--accent);
+      letter-spacing:.5px;
+      text-transform: uppercase;
+    }
+
+    /* --- Mode switch --- */
+    .modeBar{
+      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .toggle{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(229,227,222,.22);
+      background: rgba(0,0,0,.14);
+      padding:6px 8px;border-radius:999px;
+    }
+    .toggle button{
+      border:none;border-radius:999px;
+      padding:7px 10px;
+      font-weight:900;cursor:pointer;
+      background: transparent;
+      color: rgba(229,227,222,.85);
+    }
+    .toggle button.active{
+      background: rgba(0,228,124,.18);
+      color: var(--light);
+      border:1px solid rgba(0,228,124,.25);
+    }
+
+    /* --- Highscore grid --- */
+    .hsWrap{margin-top:18px}
+    .hsHead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .hsTitle{font-weight:900;color:var(--light)}
+    .hsHint{font-size:12px;color:rgba(229,227,222,.72)}
+    .hsGrid{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+    @media(min-width:760px){ .hsGrid{ grid-template-columns: repeat(2, 1fr);} }
+    @media(min-width:1080px){ .hsGrid{ grid-template-columns: repeat(5, 1fr);} }
+
+    .hsCard{
+      padding:12px 12px 10px;
+      border-radius:16px;
+      border:1px solid rgba(229,227,222,.16);
+      background: rgba(0,0,0,.14);
+      transition: transform .12s ease, border-color .12s ease, background .12s ease, opacity .12s ease;
+      cursor: pointer;
+      user-select: none;
+      min-height:98px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hsCard:hover{ transform: translateY(-2px); border-color: rgba(0,228,124,.35); }
+    .hsGroup{font-size:11px;color:rgba(229,227,222,.70);margin-bottom:6px}
+    .hsName{font-size:12.5px;line-height:1.25;color:rgba(246,245,243,.92);font-weight:800}
+    .hsId{margin-top:8px;font-size:11px;color:rgba(229,227,222,.65)}
+    .hsBadge{
+      position:absolute;top:10px;right:10px;
+      font-size:11px;font-weight:900;
+      padding:4px 8px;border-radius:999px;
+      border:1px solid rgba(0,228,124,.28);
+      color:rgba(0,228,124,.95);
+      background: rgba(0,228,124,.08);
+      display:none;
+    }
+    .hsFlags{
+      position:absolute;left:10px;top:10px;display:flex;gap:6px;flex-wrap:wrap;max-width:70%;
+    }
+    .flag{
+      font-size:10px;
+      font-weight:1000;
+      padding:3px 7px;
+      border-radius:999px;
+      border:1px solid rgba(229,227,222,.18);
+      color:rgba(229,227,222,.86);
+      background: rgba(0,0,0,.12);
+    }
+    .flag.green{border-color: rgba(0,228,124,.26); color: rgba(0,228,124,.95); background: rgba(0,228,124,.08);}
+    .flag.yellow{border-color: rgba(255,208,61,.28); color: rgba(255,208,61,.95); background: rgba(255,208,61,.08);}
+    .flag.red{border-color: rgba(255,107,107,.22); color: rgba(255,107,107,.95); background: rgba(255,107,107,.08);}
+
+    .hsCard.dim{ opacity:.45; }
+    .hsCard.active{
+      border-color: rgba(0,228,124,.85);
+      box-shadow: 0 0 0 1px rgba(0,228,124,.35), 0 12px 45px rgba(0,228,124,.10);
+      background: rgba(0,228,124,.08);
+    }
+    .hsCard.active .hsBadge{ display:inline-flex; }
+
+    /* --- Main layout --- */
+    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px}
+    @media(min-width:980px){ .grid{grid-template-columns: 1.05fr .95fr;} }
+
+    textarea{
+      width:100%;
+      height:110px;
+      border-radius:14px;
+      border:1px solid var(--border2);
+      background: rgba(0,0,0,.18);
+      color: var(--light);
+      padding:12px 12px;
+      font-size:15px;
+      outline:none;
+    }
+    textarea:focus{border-color: rgba(0,228,124,.55)}
+    .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button{
+      border:none;border-radius:12px;padding:10px 14px;
+      font-weight:900;cursor:pointer;background: var(--accent);color: #06261f;
+    }
+    button.secondary{
+      background: transparent;border: 1px solid rgba(229,227,222,.30);
+      color: var(--warm);font-weight:800;
+    }
+    button.ghost{
+      background: rgba(0,0,0,.14);
+      border:1px solid rgba(229,227,222,.22);
+      color: var(--warm);
+      font-weight:900;
+    }
+    button.danger{
+      background: rgba(255,208,61,.14);
+      border: 1px solid rgba(255,208,61,.38);
+      color: #ffd03d;
+    }
+    .small{font-size:12px;color: rgba(229,227,222,.72)}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(0,228,124,.28);
+      background: rgba(0,0,0,.16);
+      padding:6px 10px;border-radius:999px;
+      color: var(--warm);
+      font-size:12px;
+      margin:6px 6px 0 0;
+    }
+    .kv{display:grid;grid-template-columns:160px 1fr;gap:10px 14px;margin-top:10px}
+    .k{color: rgba(229,227,222,.70);font-size:12px}
+    .v{color: var(--light)}
+    code{
+      background: rgba(0,0,0,.22);
+      padding:3px 8px;border-radius:999px;
+      border:1px solid rgba(229,227,222,.14);
+      color: var(--light);
+      font-size:12px;
+    }
+    a{color: var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .divider{height:1px;background: rgba(229,227,222,.14);margin:14px 0}
+    .form{margin-top:10px}
+    label{display:block;font-weight:900;margin:12px 0 6px}
+    input, select{
+      width:100%;height:40px;border-radius:12px;
+      border:1px solid rgba(229,227,222,.22);
+      background: rgba(0,0,0,.16);
+      color: var(--light);
+      padding:8px 10px;
+      outline:none;
+    }
+    input:focus, select:focus{border-color: rgba(0,228,124,.55)}
+    .hint{margin-top:6px;color: rgba(229,227,222,.62);font-size:12px}
+    .ok{color: var(--accent);font-weight:900}
+    .warn{color: #ffd03d;font-weight:900}
+    .bad{color: var(--danger);font-weight:900}
+    .hidden{display:none}
+    details{margin-top:12px}
+    summary{cursor:pointer;color: rgba(229,227,222,.75);font-size:12px}
+    pre{
+      margin:10px 0 0;
+      white-space:pre-wrap;word-break:break-word;
+      background: rgba(0,0,0,.25);
+      border:1px solid rgba(229,227,222,.12);
+      padding:12px;border-radius:14px;
+      color: rgba(246,245,243,.90);
+      overflow:auto;
+    }
+
+    /* --- Project Lead console --- */
+    .plGrid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media(min-width:980px){
+      .plGrid{ grid-template-columns: .72fr 1.28fr; }
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    .cfgEditor{
+      height:280px;
+      font-size:13px;
+      line-height:1.4;
+    }
+    .mini{
+      font-size:11px;
+      color: rgba(229,227,222,.70);
+    }
+    .row.tight{margin-top:8px}
+    /* --- Leadership cockpit --- */
+    .leaderShell{
+      margin-top:18px;
+    }
+    .leaderGrid{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:16px;
+      margin-top:12px;
+    }
+    @media(max-width:980px){
+      .leaderGrid{ grid-template-columns: 1fr; }
+    }
+
+    /* left rail */
+    .rail{
+      background: rgba(0,0,0,.16);
+      border:1px solid rgba(229,227,222,.14);
+      border-radius:18px;
+      padding:14px;
+      box-shadow:none;
+    }
+    .railTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .railTitle{
+      font-weight:1000;
+      color: rgba(246,245,243,.94);
+    }
+    .search{
+      width:100%;
+      height:40px;
+      border-radius:14px;
+      border:1px solid rgba(229,227,222,.18);
+      background: rgba(0,0,0,.18);
+      color: var(--light);
+      padding:8px 10px;
+      outline:none;
+      margin-top:10px;
+    }
+    .search:focus{ border-color: rgba(0,228,124,.55); }
+
+    .filters{
+      display:flex; gap:8px; flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .fbtn{
+      font-size:12px;
+      font-weight:1000;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(229,227,222,.18);
+      background: rgba(0,0,0,.12);
+      color: rgba(229,227,222,.86);
+      cursor:pointer;
+    }
+    .fbtn.active{
+      border-color: rgba(0,228,124,.32);
+      background: rgba(0,228,124,.10);
+      color: rgba(0,228,124,.95);
+    }
+
+    .initList{
+      margin-top:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      max-height: 620px;
+      overflow:auto;
+      padding-right:6px;
+    }
+    .initItem{
+      position:relative;
+      border-radius:16px;
+      border:1px solid rgba(229,227,222,.14);
+      background: rgba(0,0,0,.14);
+      padding:12px;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+    .initItem:hover{
+      transform: translateY(-1px);
+      border-color: rgba(0,228,124,.30);
+    }
+    .initItem.active{
+      border-color: rgba(0,228,124,.85);
+      background: rgba(0,228,124,.10);
+      box-shadow: 0 0 0 1px rgba(0,228,124,.25), 0 18px 55px rgba(0,228,124,.08);
+    }
+    .initCh{
+      font-size:11px;
+      color: rgba(229,227,222,.70);
+      margin-bottom:6px;
+    }
+    .initNm{
+      font-size:12.5px;
+      font-weight:1000;
+      color: rgba(246,245,243,.94);
+      line-height:1.25;
+    }
+    .initMeta{
+      margin-top:8px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .pct{
+      font-size:11px;
+      color: rgba(229,227,222,.72);
+    }
+    .badges{
+      display:flex; gap:6px; flex-wrap:wrap;
+    }
+    .bdg{
+      font-size:10px;
+      font-weight:1000;
+      padding:3px 7px;
+      border-radius:999px;
+      border:1px solid rgba(229,227,222,.16);
+      background: rgba(0,0,0,.10);
+      color: rgba(229,227,222,.86);
+    }
+    .bdg.green{border-color: rgba(0,228,124,.25); background: rgba(0,228,124,.08); color: rgba(0,228,124,.95);}
+    .bdg.yellow{border-color: rgba(255,208,61,.22); background: rgba(255,208,61,.08); color: rgba(255,208,61,.95);}
+    .bdg.red{border-color: rgba(255,107,107,.18); background: rgba(255,107,107,.10); color: rgba(255,107,107,.95);}
+
+    /* right swimlanes */
+    .cockpit{
+      position:relative;
+      border-radius:18px;
+      padding:14px;
+      border:1px solid rgba(0,228,124,.18);
+      background:
+        radial-gradient(900px 600px at 30% 0%, rgba(0,228,124,.12), transparent 60%),
+        radial-gradient(700px 520px at 85% 5%, rgba(106,210,226,.10), transparent 55%),
+        rgba(0,0,0,.12);
+      overflow:hidden;
+    }
+    .cockpit::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(229,227,222,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(229,227,222,.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity:.35;
+      pointer-events:none;
+    }
+    .cockpitHead{
+      position:relative;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .focusTitle{
+      font-weight:1100;
+      color: rgba(246,245,243,.95);
+    }
+    .focusSub{
+      font-size:12px;
+      color: rgba(229,227,222,.78);
+      max-width:760px;
+      line-height:1.45;
+    }
+    .quickStats{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .qs{
+      padding:8px 10px;
+      border-radius:14px;
+      border:1px solid rgba(229,227,222,.14);
+      background: rgba(0,0,0,.14);
+      position:relative;
+    }
+    .qs .t{font-size:10px; text-transform:uppercase; letter-spacing:.45px; color: rgba(229,227,222,.72); font-weight:1000;}
+    .qs .v{margin-top:4px; font-size:14px; font-weight:1100; color: rgba(246,245,243,.94);}
+
+    .lanes{
+      position:relative;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media(max-width:980px){
+      .lanes{ grid-template-columns: 1fr; }
+    }
+    .lane{
+      position:relative;
+      border-radius:18px;
+      border:1px solid rgba(229,227,222,.14);
+      background: rgba(0,0,0,.14);
+      padding:12px;
+      min-height: 480px;
+    }
+    .lane h3{
+      margin:0;
+      font-size:12px;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+      color: rgba(0,228,124,.92);
+    }
+    .lane .desc{
+      margin-top:8px;
+      font-size:12px;
+      color: rgba(229,227,222,.76);
+      line-height:1.4;
+    }
+    .stack{
+      margin-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .node{
+      border-radius:16px;
+      border:1px solid rgba(229,227,222,.14);
+      background: rgba(0,0,0,.12);
+      padding:10px;
+    }
+    .nodeTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .nodeTitle{
+      font-weight:1100;
+      color: rgba(246,245,243,.94);
+      font-size:12.5px;
+    }
+    .nodeHint{
+      font-size:11px;
+      color: rgba(229,227,222,.72);
+    }
+    .tags{
+      display:flex; gap:6px; flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .tag2{
+      font-size:10px;
+      font-weight:1000;
+      padding:3px 7px;
+      border-radius:999px;
+      border:1px solid rgba(229,227,222,.14);
+      background: rgba(0,0,0,.10);
+      color: rgba(229,227,222,.86);
+    }
+    .tag2.shared{
+      border-color: rgba(0,228,124,.28);
+      background: rgba(0,228,124,.08);
+      color: rgba(0,228,124,.95);
+    }
+    .tag2.warn{
+      border-color: rgba(255,208,61,.22);
+      background: rgba(255,208,61,.08);
+      color: rgba(255,208,61,.95);
+    }
+    .tag2.risk{
+      border-color: rgba(255,107,107,.18);
+      background: rgba(255,107,107,.10);
+      color: rgba(255,107,107,.95);
+    }
+    .nodeBody{
+      margin-top:10px;
+      font-size:12px;
+      color: rgba(229,227,222,.82);
+      line-height:1.45;
+    }
+    .nodeBody ul{ margin:6px 0 0; padding-left:18px; }
+    .nodeBody li{ margin:6px 0; }
+
+    .pulse{
+      animation: pulseGlow 2.2s ease-in-out infinite;
+    }
+    @keyframes pulseGlow{
+      0%,100%{ box-shadow: 0 0 0 0 rgba(0,228,124,.0); }
+      50%{ box-shadow: 0 0 0 2px rgba(0,228,124,.18); }
+    }
+    /* --- Leverage Bar (shared assets heat) --- */
+    .leverageBar{
+      position:relative;
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    @media(min-width:980px){
+      .leverageBar{ grid-template-columns: 1fr 1fr; }
+    }
+    .lBox{
+      border:1px solid rgba(229,227,222,.14);
+      background: rgba(0,0,0,.12);
+      border-radius:16px;
+      padding:10px;
+    }
+    .lTitle{
+      font-size:10px;
+      letter-spacing:.45px;
+      text-transform:uppercase;
+      color: rgba(229,227,222,.70);
+      font-weight:1000;
+      margin-bottom:8px;
+    }
+    .lChips{ display:flex; gap:8px; flex-wrap:wrap; }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(229,227,222,.16);
+      background: rgba(0,0,0,.10);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+    .chip:hover{
+      transform: translateY(-1px);
+      border-color: rgba(0,228,124,.32);
+      background: rgba(0,228,124,.08);
+    }
+    .chip .k{
+      font-size:10px;
+      font-weight:1000;
+      color: rgba(229,227,222,.78);
+    }
+    .chip .v{
+      font-size:11px;
+      font-weight:1100;
+      color: rgba(246,245,243,.94);
+    }
+    .chip .n{
+      font-size:11px;
+      font-weight:1100;
+      color: rgba(0,228,124,.95);
+    }
+    .chip .type{
+      font-size:10px;
+      font-weight:1000;
+      padding:2px 7px;
+      border-radius:999px;
+      border:1px solid rgba(0,228,124,.22);
+      color: rgba(0,228,124,.95);
+      background: rgba(0,228,124,.07);
+    }
+  /* ===== Leadership Connect • DAS ===== */
+.dasGrid{
+  position:relative;
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap:12px;
+  margin-top:10px;
+}
+@media(max-width:980px){
+  .dasGrid{ grid-template-columns: 1fr; }
+}
+.dasMatrixCard, .dasPanelCard{
+  border:1px solid rgba(229,227,222,.14);
+  background: rgba(0,0,0,.12);
+  border-radius:18px;
+  padding:12px;
+}
+.dasHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.dasTitle{
+  font-weight:1100;
+  color: rgba(246,245,243,.94);
+}
+.dasLegend{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:12px;
+  color: rgba(229,227,222,.72);
+}
+.cellTag{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;height:22px;
+  border-radius:8px;
+  font-weight:1100;
+  border:1px solid rgba(229,227,222,.16);
+  background: rgba(0,0,0,.12);
+  color: rgba(229,227,222,.86);
+}
+.cellTag.p{ border-color: rgba(0,228,124,.28); background: rgba(0,228,124,.10); color: rgba(0,228,124,.95);}
+.cellTag.e{ border-color: rgba(229,227,222,.22); background: rgba(229,227,222,.08); color: rgba(246,245,243,.92);}
+.cellTag.r{ border-color: rgba(106,210,226,.22); background: rgba(106,210,226,.08); color: rgba(106,210,226,.95);}
+.cellTag.g{ border-color: rgba(255,208,61,.28); background: rgba(255,208,61,.10); color: rgba(255,208,61,.95);}
+
+.dasMatrix{
+  margin-top:10px;
+  border-radius:16px;
+  overflow:auto;
+  border:1px solid rgba(229,227,222,.12);
+}
+.dasTable{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  min-width: 920px; /* ensure columns visible on desktop */
+}
+.dasTable th, .dasTable td{
+  padding:10px 10px;
+  border-bottom:1px solid rgba(229,227,222,.10);
+  border-right:1px solid rgba(229,227,222,.08);
+  vertical-align:middle;
+}
+.dasTable th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(6px);
+  font-size:11px;
+  letter-spacing:.35px;
+  text-transform:uppercase;
+  color: rgba(229,227,222,.75);
+  font-weight:1000;
+}
+.dasTable th:first-child{
+  left:0;
+  z-index:3;
+}
+.dasTable td:first-child{
+  position:sticky;
+  left:0;
+  z-index:1;
+  background: rgba(0,0,0,.28);
+  backdrop-filter: blur(6px);
+  min-width: 260px;
+}
+.dasRowTitle{
+  font-size:12px;
+  font-weight:1000;
+  color: rgba(246,245,243,.93);
+  line-height:1.25;
+}
+.dasRowSub{
+  margin-top:5px;
+  font-size:11px;
+  color: rgba(229,227,222,.70);
+}
+
+.dasCell{
+  text-align:center;
+  cursor:pointer;
+  user-select:none;
+  font-weight:1100;
+  border-radius:10px;
+}
+.dasCell .mini{
+  display:block;
+  margin-top:3px;
+  font-weight:900;
+  font-size:10px;
+  color: rgba(229,227,222,.70);
+}
+.dasCell.p{ background: rgba(0,228,124,.10); border:1px solid rgba(0,228,124,.20); color: rgba(0,228,124,.95); }
+.dasCell.e{ background: rgba(229,227,222,.06); border:1px solid rgba(229,227,222,.12); color: rgba(246,245,243,.92); }
+.dasCell.r{ background: rgba(106,210,226,.08); border:1px solid rgba(106,210,226,.16); color: rgba(106,210,226,.95); }
+.dasCell.g{ background: rgba(255,208,61,.10); border:1px solid rgba(255,208,61,.18); color: rgba(255,208,61,.95); }
+
+.compCard{
+  border-radius:16px;
+  border:1px solid rgba(229,227,222,.14);
+  background: rgba(0,0,0,.14);
+  padding:12px;
+  cursor:pointer;
+  transition: transform .12s ease, border-color .12s ease, background .12s ease;
+}
+.compCard:hover{ transform: translateY(-1px); border-color: rgba(0,228,124,.30); }
+.compCard.active{
+  border-color: rgba(0,228,124,.85);
+  background: rgba(0,228,124,.10);
+  box-shadow: 0 0 0 1px rgba(0,228,124,.25), 0 18px 55px rgba(0,228,124,.08);
+}
+.compTitle{
+  font-weight:1100;
+  color: rgba(246,245,243,.95);
+  font-size:12.5px;
+}
+.compDesc{
+  margin-top:8px;
+  font-size:12px;
+  color: rgba(229,227,222,.78);
+  line-height:1.45;
+}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topline">
+      <span class="tag"><span class="dot"></span> Demo • Orchestration Portal</span>
+      <span class="small">State saved in <code>localStorage</code></span>
+      <span class="small">• Mode: <code id="modeBadge">end_user</code></span>
+      <span id="projectBadgeWrap" class="small hidden">• Project: <code id="projectBadge">—</code></span>
+    </div>
+
+    <div class="modeBar">
+      <div class="toggle" role="tablist" aria-label="Mode">
+        <button id="btnEndUser" class="active" onclick="setMode('end_user')" role="tab">End User</button>
+        <button id="btnProjectLead" onclick="setMode('project_lead')" role="tab">Project Lead</button>
+        <button id="btnLeadership" onclick="setMode('leadership')" role="tab">Leadership</button>
+      </div>
+      <span class="small" id="modeHint">
+        End User uses <code>/api/triage</code> • Project Lead tests <code>/api/projects/&lt;project_id&gt;/triage</code> and edits <code>/api/projects/&lt;project_id&gt;/config</code>
+      </span>
+    </div>
+
+    <h1>Medicine Data, AI & System</h1>
+    <div id="subtitle" class="subtitle">
+      Start with a landscape view of our 10 Highscore initiatives. Click a card to load an example prompt (Shift+Click to run immediately).
+    </div>
+
+    <!-- Leadership dashboard -->
+    <div id="ldConsole" class="card hidden leaderShell">
+      <h2>Leadership Cockpit</h2>
+      <div class="small">
+        Left: initiatives portfolio. Right: 3 swimlanes — <b>Data Foundation</b> → <b>Systems</b> → <b>AI Apps</b>.
+        Shared resources are highlighted to expose leverage points for Medicine-level strategy.
+      </div>
+      <!-- Leadership sub-tabs -->
+      <div class="modeBar" style="margin-top:12px">
+        <div class="toggle" role="tablist" aria-label="Leadership View">
+          <button id="btnLdCockpit" class="active" onclick="ldSetView('cockpit')" role="tab">Cockpit</button>
+          <button id="btnLdConnect" onclick="ldSetView('connect')" role="tab">Connect • DAS</button>
+        </div>
+        <span class="small" id="ldViewHint">Cockpit shows swimlanes. Connect • DAS shows leverage matrix + leadership asks.</span>
+      </div>
+
+      <!-- Connect • DAS view -->
+      <div id="ldConnectView" class="hidden" style="margin-top:12px">
+        <div class="leaderGrid" style="grid-template-columns: 360px 1fr;">
+          <!-- Left rail: components -->
+          <div class="rail">
+            <div class="railTop">
+              <div class="railTitle">Shared Components (DAS)</div>
+              <div class="small"><code id="selComp">—</code></div>
+            </div>
+
+            <input id="compSearch" class="search" placeholder="Search components..." oninput="ldRenderConnect()" />
+
+            <div id="compList" class="initList" style="max-height: 560px;"></div>
+
+            <div class="divider"></div>
+            <div class="small">
+              Tip: pick a component → see which initiatives depend on it, and what leadership decisions unblock scale.
+            </div>
+          </div>
+
+          <!-- Right: matrix + connect panel -->
+          <div class="cockpit" style="padding:16px;">
+            <div class="cockpitHead" style="margin-bottom:8px;">
+              <div>
+                <div class="focusTitle">Leadership Connect • DAS</div>
+                <div class="focusSub" id="dasSubtitle">
+                  Select a component on the left. We’ll show a 10×8 leverage matrix and the decision asks to connect Data, AI and Systems.
+                </div>
+              </div>
+              <div class="quickStats">
+                <div class="qs">
+                  <div class="t">Focused component</div>
+                  <div class="v" id="dasStatComp">—</div>
+                </div>
+                <div class="qs">
+                  <div class="t">Initiatives impacted</div>
+                  <div class="v" id="dasStatImpact">—</div>
+                </div>
+                <div class="qs">
+                  <div class="t">Top leverage</div>
+                  <div class="v" id="dasStatLeverage">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="dasGrid">
+              <div class="dasMatrixCard">
+                <div class="dasHead">
+                  <div class="dasTitle">10×8 Leverage Matrix</div>
+                  <div class="dasLegend">
+                    <span class="cellTag p">P</span> Primary
+                    <span class="cellTag e">E</span> Enable
+                    <span class="cellTag r">R</span> Reuse
+                    <span class="cellTag g">G</span> Gap
+                  </div>
+                </div>
+                <div id="dasMatrix" class="dasMatrix"></div>
+              </div>
+
+              <div class="dasPanelCard">
+                <div class="dasHead">
+                  <div class="dasTitle">Leadership Ask / Connect Plan</div>
+                  <div class="small"><code id="dasFocusKey">—</code></div>
+                </div>
+
+                <div class="kv" style="margin-top:10px">
+                  <div class="k">Why this matters</div><div class="v" id="dasWhy">—</div>
+                  <div class="k">Unblocks</div><div class="v" id="dasUnblocks">—</div>
+                  <div class="k">Decision ask</div><div class="v" id="dasAsk">—</div>
+                  <div class="k">Owners to connect</div><div class="v" id="dasOwners">—</div>
+                  <div class="k">Next 2 weeks</div><div class="v" id="dasNext2w">—</div>
+                </div>
+
+                <div class="divider"></div>
+                <div class="small" style="letter-spacing:.5px;text-transform:uppercase;color:var(--accent);font-weight:900">
+                  Suggested talking points
+                </div>
+                <div id="dasTalk" class="small" style="margin-top:8px;line-height:1.5;color:rgba(229,227,222,.82)">—</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="leaderGrid">
+        <!-- Left rail: initiative list -->
+        <div class="rail">
+          <div class="railTop">
+            <div class="railTitle">Initiatives (10)</div>
+            <div class="small"><code id="selId">—</code></div>
+          </div>
+
+          <input id="initSearch" class="search" placeholder="Search initiatives / keywords..." oninput="ldApplyFilters()" />
+
+          <div class="filters" role="tablist" aria-label="filters">
+            <button class="fbtn active" id="f_all" onclick="ldSetFilter('all')">All</button>
+            <button class="fbtn" id="f_decision" onclick="ldSetFilter('decision')">Decision</button>
+            <button class="fbtn" id="f_cross" onclick="ldSetFilter('cross')">Cross-FN</button>
+            <button class="fbtn" id="f_gov" onclick="ldSetFilter('gov')">Gov</button>
+          </div>
+
+          <div id="initList" class="initList"></div>
+        </div>
+
+        <!-- Right cockpit: swimlanes -->
+        <div class="cockpit">
+          <div class="cockpitHead">
+            <div>
+              <div class="focusTitle" id="focusTitle">Select an initiative</div>
+              <div class="focusSub" id="focusSub">
+                Click a card on the left. We’ll show the data stack, connected systems, and AI applications, with shared assets flagged for leverage.
+              </div>
+            </div>
+
+            <div class="quickStats">
+              <div class="qs">
+                <div class="t">Shared assets</div>
+                <div class="v" id="statShared">—</div>
+              </div>
+              <div class="qs">
+                <div class="t">Systems</div>
+                <div class="v" id="statSystems">—</div>
+              </div>
+              <div class="qs">
+                <div class="t">AI apps</div>
+                <div class="v" id="statAI">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="leverageBar" id="leverageBar">
+            <div class="lBox">
+              <div class="lTitle">This initiative leverage points</div>
+              <div class="lChips" id="chipsLocal"></div>
+            </div>
+            <div class="lBox">
+              <div class="lTitle">Portfolio hotspots</div>
+              <div class="lChips" id="chipsGlobal"></div>
+            </div>
+          </div>
+
+          <div class="lanes">
+            <div class="lane">
+              <h3>Data Foundation</h3>
+              <div class="desc">Databases • Base data • Warehouse links • Lineage assumptions</div>
+              <div class="stack" id="laneData"></div>
+            </div>
+
+            <div class="lane">
+              <h3>Systems</h3>
+              <div class="desc">Operational platforms • Catalog • Access workflows • Tooling</div>
+              <div class="stack" id="laneSystems"></div>
+            </div>
+
+            <div class="lane">
+              <h3>AI Apps</h3>
+              <div class="desc">Agents • Models • Automation outputs • Guardrails</div>
+              <div class="stack" id="laneAI"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Lead console -->
+    <div id="plConsole" class="card hidden" style="margin-top:18px">
+      <h2>Project Lead Console</h2>
+      <div class="small">
+        This console is for configuring project-specific routing and defaults.
+        You’ll need an admin token to save (<code>LAB_ADMIN_TOKEN</code>).
+      </div>
+
+      <div class="plGrid">
+        <!-- Left: project selection + token -->
+        <div class="card" style="background:rgba(0,0,0,.10);border-color:rgba(229,227,222,.16);box-shadow:none">
+          <h2 style="color:rgba(0,228,124,.95)">Project</h2>
+
+          <label>Project ID</label>
+          <input id="plProjectId" placeholder="e.g., onco_p3_us" />
+
+          <div class="row tight">
+            <button class="ghost" onclick="plLoadProjects()">Refresh project list</button>
+            <button class="ghost" onclick="plLoadConfig()">Load config</button>
+          </div>
+
+          <div class="divider"></div>
+
+          <label>Existing projects</label>
+          <select id="plProjectSelect" onchange="plSelectChanged()">
+            <option value="">-- select --</option>
+          </select>
+          <div class="hint">Projects are folder names under <code>LAB_PROJECTS_DIR/projects</code>.</div>
+
+          <div class="divider"></div>
+
+          <label>Admin Token (for Save)</label>
+          <input id="plToken" class="mono" placeholder="Bearer token (stored in sessionStorage)" />
+          <div class="hint">
+            Saved to <code>sessionStorage</code> only (not persisted across browser restarts).
+          </div>
+
+          <div class="row tight">
+            <button class="ghost" onclick="plRememberToken()">Use token</button>
+            <button class="secondary" onclick="plClearToken()">Clear</button>
+          </div>
+
+          <div id="plStatus" class="small" style="margin-top:12px">Waiting…</div>
+        </div>
+
+        <!-- Right: config editor -->
+        <div class="card" style="background:rgba(0,0,0,.10);border-color:rgba(229,227,222,.16);box-shadow:none">
+          <h2 style="color:rgba(0,228,124,.95)">Config.json</h2>
+
+          <div class="small">
+            Edit project config JSON. Save requires token.
+            <span class="mini">Tip: click “Template” to generate a sane baseline.</span>
+          </div>
+
+          <div class="row tight">
+            <button class="ghost" onclick="plTemplate()">Template</button>
+            <button class="ghost" onclick="plPretty()">Pretty</button>
+            <button class="ghost" onclick="plValidate()">Validate</button>
+            <button class="danger" onclick="plSaveConfig()">Save (PUT)</button>
+          </div>
+
+          <textarea id="cfgEditor" class="cfgEditor mono" placeholder="{ ... }"></textarea>
+          <div class="hint">
+            Save endpoint: <code>/api/projects/&lt;project_id&gt;/config</code>
+          </div>
+
+          <details>
+            <summary>Show last save/load response (debug)</summary>
+            <pre id="plRaw">{}</pre>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <!-- Highscore cards -->
+    <div class="hsWrap card">
+      <div class="hsHead">
+        <div class="hsTitle">Highscore initiatives (10)</div>
+        <div class="hsHint" id="hsHint">Click = fill prompt + reset slots • Shift+Click = fill + run</div>
+      </div>
+      <div id="hsGrid" class="hsGrid"></div>
+    </div>
+
+    <!-- EndUser/PL triage grid (hidden in leadership mode) -->
+    <div id="triageGrid" class="grid">
+      <!-- Left: input -->
+      <div class="card">
+        <h2 id="inputTitle">User Input</h2>
+        <textarea id="q" placeholder="e.g., US oncology Phase III site selection with diversity requirement."></textarea>
+        <div class="row">
+          <button onclick="startTurn()">Route & Plan</button>
+          <button class="secondary" onclick="resetState()">Reset state</button>
+          <span class="small">slots: <code id="state">empty</code></span>
+        </div>
+        <div class="small" style="margin-top:10px">API: <code id="apiHint">/api/triage</code></div>
+      </div>
+
+      <!-- Right: output -->
+      <div class="card">
+        <h2>Routing Result</h2>
+        <div id="status" class="small">Waiting…</div>
+        <div id="out" style="margin-top:10px"></div>
+
+        <div id="tool" class="hidden" style="margin-top:14px">
+          <div class="divider"></div>
+          <div class="small" style="letter-spacing:.5px;text-transform:uppercase;color:var(--accent);font-weight:900">Handoff</div>
+          <div id="toolBody" style="margin-top:10px"></div>
+        </div>
+
+        <div id="slotForm" class="hidden" style="margin-top:14px">
+          <div class="divider"></div>
+          <div class="small" style="letter-spacing:.5px;text-transform:uppercase;color:var(--accent);font-weight:900">Provide missing fields</div>
+          <div id="slotFields" class="form"></div>
+          <div class="row">
+            <button onclick="submitSlots()">Continue</button>
+            <span class="small">Update slots and re-run triage</span>
+          </div>
+        </div>
+
+        <details>
+          <summary>Show raw JSON (debug)</summary>
+          <pre id="raw">{}</pre>
+        </details>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* =========================================================
+   Utilities
+========================================================= */
+function esc(s){return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");}
+function titleize(key){ return (key||"").replaceAll("_"," ").replace(/\b\w/g, m=>m.toUpperCase());}
+function show(el, yes){ el.classList.toggle("hidden", !yes); }
+
+const STORAGE = {
+  mode: "lab_mode",
+  endSlots: "lab_slots_end_user",
+  plProject: "lab_pl_project_id",
+  plSlotsPrefix: "lab_slots_project_", // + projectId
+  tokenSession: "lab_admin_token_session",
+  leaderFocus: "lab_leader_focus",     // initiative id
+};
+
+/* =========================================================
+   Mode
+========================================================= */
+function getMode(){
+  return localStorage.getItem(STORAGE.mode) || "end_user";
+}
+function setMode(mode){
+  localStorage.setItem(STORAGE.mode, mode);
+  renderModeUI();
+}
+function getActiveProjectId(){
+  return (localStorage.getItem(STORAGE.plProject) || "").trim();
+}
+function setActiveProjectId(pid){
+  localStorage.setItem(STORAGE.plProject, (pid||"").trim());
+  renderModeUI();
+}
+function getApiHint(){
+  const mode = getMode();
+  if(mode === "project_lead"){
+    const pid = getActiveProjectId();
+    if(!pid) return "/api/projects/<project_id>/triage";
+    return `/api/projects/${encodeURIComponent(pid)}/triage`;
+  }
+  return "/api/triage";
+}
+function renderModeUI(){
+  const mode = getMode();
+  document.getElementById("modeBadge").textContent = mode;
+
+  // buttons
+  document.getElementById("btnEndUser").classList.toggle("active", mode==="end_user");
+  document.getElementById("btnProjectLead").classList.toggle("active", mode==="project_lead");
+  document.getElementById("btnLeadership").classList.toggle("active", mode==="leadership");
+
+  // consoles
+  show(document.getElementById("plConsole"), mode==="project_lead");
+  show(document.getElementById("ldConsole"), mode==="leadership");
+
+  // triage grid should be hidden in leadership
+  show(document.getElementById("triageGrid"), mode!=="leadership");
+
+  // badges + titles
+  const projectId = getActiveProjectId();
+  const showProject = (mode==="project_lead" && !!projectId);
+  show(document.getElementById("projectBadgeWrap"), showProject);
+  document.getElementById("projectBadge").textContent = projectId || "—";
+
+  document.getElementById("apiHint").textContent = getApiHint();
+
+  // subtitle + hint text
+  const hsHint = document.getElementById("hsHint");
+  if(mode==="project_lead"){
+    document.getElementById("subtitle").innerHTML =
+      `Project Lead mode: configure per-project routing + defaults, then test against <code>${esc(getApiHint())}</code>.`;
+    document.getElementById("inputTitle").textContent = "Test Prompt (Project Lead)";
+    document.getElementById("modeHint").innerHTML =
+      `End User uses <code>/api/triage</code> • Project Lead tests <code>/api/projects/&lt;project_id&gt;/triage</code> and edits <code>/api/projects/&lt;project_id&gt;/config</code>`;
+    hsHint.textContent = "Click = fill prompt + reset slots • Shift+Click = fill + run";
+  } else if(mode==="leadership"){
+    document.getElementById("subtitle").textContent =
+      "Leadership mode: show portfolio posture, decision asks, strategy opportunities, and governance. Click an initiative card to focus.";
+    document.getElementById("modeHint").innerHTML =
+      `Leadership focuses on decision points and measurable value (no triage required in demo).`;
+    hsHint.textContent = "Click = focus for discussion (no triage)";
+    // init leadership cockpit
+    ldInitLeadership();
+
+    // sync Highscore highlight (optional)
+    const f = localStorage.getItem(STORAGE.leaderFocus) || "";
+    if(f) setActiveHighscore(f);
+  } else {
+    document.getElementById("subtitle").textContent =
+      "Start with a landscape view of our 10 Highscore initiatives. Click a card to load an example prompt (Shift+Click to run immediately).";
+    document.getElementById("inputTitle").textContent = "User Input";
+    document.getElementById("modeHint").innerHTML =
+      `End User uses <code>/api/triage</code> • Project Lead tests <code>/api/projects/&lt;project_id&gt;/triage</code> and edits <code>/api/projects/&lt;project_id&gt;/config</code>`;
+    hsHint.textContent = "Click = fill prompt + reset slots • Shift+Click = fill + run";
+  }
+
+  updateStateBadge();
+}
+// renderModeUI();
+
+/* =========================================================
+   Highscore
+========================================================= */
+const HIGHSCORE = [
+  {id:"portfolio_mgmt", channel:"Trial design & planning", name:"Portfolio management approach for milestones, budget and resources"},
+  {id:"trial_simulator", channel:"Trial design & planning", name:"Boehringer specific trial simulator capability"},
+  {id:"site_startup", channel:"Trial delivery & submissions", name:"Optimized site startup capability"},
+  {id:"site_selection", channel:"Trial delivery & submissions", name:"Data driven trial footprint and site selection capability"},
+  {id:"partner_of_choice", channel:"Trial delivery & submissions", name:"Differentiated global “Partner-of-Choice” model"},
+  {id:"submission_closeout", channel:"Trial delivery & submissions", name:"Submission and close-out acceleration capability"},
+  {id:"rbqm_quality", channel:"Trial delivery & submissions", name:"Holistic analytics/AI-enabled and risk based clinical trial (data) quality mgmt approach"},
+  {id:"sourcing_cost", channel:"Trial delivery & submissions", name:"Simplified clinical delivery and sourcing model to optimize costs"},
+  {id:"data_foundation", channel:"Data & AI", name:"Integrated, scalable data and tech foundation"},
+  {id:"e2e_automation_authoring", channel:"Data & AI", name:"AI tools for end-to-end automation, 1st step authoring"},
+];
+
+const PROMPTS = {
+  site_selection: "US oncology Phase III site selection; objective=high_quality; diversity_focus=high_representation",
+  site_startup: "EU Phase II oncology site startup: fastest activation; identify risk flags",
+  submission_closeout: "Accelerate submission + close-out for Phase III study: checklist + auto-packaging",
+  rbqm_quality: "RBQM quality: extract signals + recommend risk-based monitoring for Phase II trial",
+  portfolio_mgmt: "Portfolio planning: milestones + budget + resource allocation for 3 concurrent studies",
+  trial_simulator: "Trial simulator: enrollment curve + sensitivity scan for Phase II oncology",
+  partner_of_choice: "Vendor strategy: propose Partner-of-Choice model for oncology program",
+  sourcing_cost: "Optimize sourcing cost: compare scenarios for global trial delivery",
+  data_foundation: "Find clinical ops datasets in data catalog + show lineage + request access",
+  e2e_automation_authoring: "Authoring automation: ingest protocol -> outline -> draft -> QC -> deliver"
+};
+
+/* Leadership flags (mock) */
+const INIT_META = {
+  portfolio_mgmt: {flags:["DECISION","CROSS-FN"], ask:"Approve portfolio KPI standard + owner", value:"Unify milestones/budget/resources into one decision cadence."},
+  trial_simulator: {flags:["CROSS-FN"], ask:"Agree assumptions + gold dataset", value:"Reduce rework via sensitivity + scenario planning."},
+  site_startup: {flags:["DECISION"], ask:"Set activation SLA + escalation model", value:"Cut time-to-activation; surface predictable delays."},
+  site_selection: {flags:["DECISION"], ask:"Buy vs build signal sources (US diversity)", value:"Faster footprint decisions with representation constraints."},
+  partner_of_choice: {flags:["CROSS-FN"], ask:"Define preferred vendor playbook", value:"Consistency across regions; reduce contracting friction."},
+  submission_closeout: {flags:["GOV"], ask:"Define regulated boundary + audit trail", value:"Accelerate closeout packaging with compliant automation."},
+  rbqm_quality: {flags:["GOV"], ask:"Approve risk model governance", value:"Earlier signal detection; fewer late surprises."},
+  sourcing_cost: {flags:["DECISION"], ask:"Select sourcing optimization policy", value:"Comparable scenarios; cost/quality trade-offs explicit."},
+  data_foundation: {flags:["CROSS-FN","DECISION"], ask:"Approve shared schema + access templates", value:"Speed up access; reduce duplication; enable reuse."},
+  e2e_automation_authoring: {flags:["GOV","DECISION"], ask:"Approve QC gates + usage policy", value:"Scale authoring safely; convert drafts faster."},
+};
+
+function flagClass(f){
+  if(f==="DECISION") return "flag yellow";
+  if(f==="CROSS-FN") return "flag green";
+  if(f==="GOV") return "flag red";
+  return "flag";
+}
+
+function renderHighscore(activeId=null){
+  const grid = document.getElementById("hsGrid");
+  grid.innerHTML = "";
+
+  HIGHSCORE.forEach(item=>{
+    const div = document.createElement("div");
+    div.className = "hsCard" + (activeId ? (item.id===activeId ? " active" : " dim") : "");
+    div.id = `hs_${item.id}`;
+
+    const meta = INIT_META[item.id] || {};
+    const flags = (meta.flags || []).map(f=>`<span class="${flagClass(f)}">${esc(f)}</span>`).join("");
+
+    div.innerHTML = `
+      <div class="hsBadge">ROUTED</div>
+      <div class="hsFlags">${flags}</div>
+      <div style="height:14px"></div>
+      <div class="hsGroup">${esc(item.channel)}</div>
+      <div class="hsName">${esc(item.name)}</div>
+      <div class="hsId"><code>${esc(item.id)}</code></div>
+    `;
+
+    div.addEventListener("click", async (ev) => {
+      const mode = getMode();
+
+      if(mode==="leadership"){
+        localStorage.setItem(STORAGE.leaderFocus, item.id);
+        setActiveHighscore(item.id);
+        ldSelect(item.id);
+        return;
+      }
+
+      // reset slots for current mode/project (avoid stale)
+      clearSlotsForCurrentContext();
+      updateStateBadge();
+
+      const q = document.getElementById("q");
+      q.value = PROMPTS[item.id] || `Tell me about ${item.id}`;
+      q.focus();
+
+      if(ev.shiftKey){
+        await startTurn();
+      }
+    });
+
+    grid.appendChild(div);
+  });
+}
+
+function setActiveHighscore(id){
+  renderHighscore(id || null);
+}
+renderHighscore(null);
+
+/* =========================================================
+   Slots (separate per mode / per project)
+========================================================= */
+function slotsKey(){
+  const mode = getMode();
+  if(mode === "project_lead"){
+    const pid = getActiveProjectId();
+    return pid ? (STORAGE.plSlotsPrefix + pid) : (STORAGE.plSlotsPrefix + "__no_project__");
+  }
+  // leadership does not use slots; keep end_user slots key
+  return STORAGE.endSlots;
+}
+
+function getSlots(){
+  try { return JSON.parse(localStorage.getItem(slotsKey()) || "{}"); }
+  catch(e){ return {}; }
+}
+function setSlots(s){
+  localStorage.setItem(slotsKey(), JSON.stringify(s || {}));
+  updateStateBadge();
+}
+function clearSlotsForCurrentContext(){
+  localStorage.removeItem(slotsKey());
+}
+function updateStateBadge(){
+  const mode = getMode();
+  if(mode==="leadership"){
+    document.getElementById("state").textContent = "n/a";
+    return;
+  }
+  const s = getSlots();
+  const keys = Object.keys(s || {});
+  document.getElementById("state").textContent = keys.length ? keys.join(",") : "empty";
+}
+
+/* =========================================================
+   API calls
+========================================================= */
+async function fetchJson(url, opts={}){
+  const r = await fetch(url, opts);
+  const text = await r.text();
+  let data;
+  try{ data = JSON.parse(text); }
+  catch(e){
+    throw new Error(`Non-JSON response (HTTP ${r.status}): ${text.slice(0, 300)}`);
+  }
+  if(!r.ok){
+    const msg = data?.detail ? JSON.stringify(data.detail) : (data?.message || text.slice(0,200));
+    throw new Error(`HTTP ${r.status}: ${msg}`);
+  }
+  return data;
+}
+
+async function callTriage(utterance){
+  const mode = getMode();
+  const slots = getSlots();
+
+  let url = "/api/triage";
+  if(mode === "project_lead"){
+    const pid = getActiveProjectId();
+    if(!pid) throw new Error("Project Lead mode: please select a Project ID first (in Project Lead Console).");
+    url = `/api/projects/${encodeURIComponent(pid)}/triage`;
+  }
+  if(mode === "leadership"){
+    throw new Error("Leadership mode does not run triage.");
+  }
+
+  return await fetchJson(url, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({utterance, slots})
+  });
+}
+
+/* =========================================================
+   Rendering results (End User / Project Lead)
+========================================================= */
+function renderToolCard(data){
+  const box = document.getElementById("tool");
+  const body = document.getElementById("toolBody");
+  body.innerHTML = "";
+  const tc = data.tool_card;
+
+  if(!tc){ show(box, false); return; }
+
+  const who = (tc.who_can_use || []).map(x=>`<li>${esc(x)}</li>`).join("");
+  const how = (tc.how_to_use || []).map(x=>`<li>${esc(x)}</li>`).join("");
+
+  body.innerHTML = `
+    <div class="kv">
+      <div class="k">Destination</div><div class="v"><b>${esc(tc.title || "External Tool")}</b></div>
+      <div class="k">Why</div><div class="v">${esc(tc.why || "")}</div>
+      <div class="k">Access</div><div class="v">${esc(tc.access_note || "")}</div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <a href="${esc(tc.link)}" target="_blank" rel="noreferrer"><button>Open tool ↗</button></a>
+      <span class="small">${esc(tc.link)}</span>
+    </div>
+    <div class="divider"></div>
+    <div class="kv">
+      <div class="k">Who can use</div>
+      <div class="v"><ul style="margin:0;padding-left:18px">${who}</ul></div>
+      <div class="k">How to use</div>
+      <div class="v"><ol style="margin:0;padding-left:18px">${how}</ol></div>
+    </div>
+  `;
+  show(box, true);
+}
+
+function renderSlotForm(data){
+  const box = document.getElementById("slotForm");
+  const container = document.getElementById("slotFields");
+  container.innerHTML = "";
+
+  const missing = data.missing_fields || [];
+  const specs = data.field_specs || {};
+  const slots = data.slots || {};
+
+  if(!missing.length){ show(box, false); return; }
+
+  missing.forEach(field => {
+    const spec = specs[field] || {type:"string"};
+    const type = spec.type || "string";
+    const options = spec.options || null;
+
+    const label = document.createElement("label");
+    label.textContent = titleize(field);
+    container.appendChild(label);
+
+    let inputEl;
+
+    if(type === "enum" && Array.isArray(options) && options.length){
+      inputEl = document.createElement("select");
+      const ph = document.createElement("option");
+      ph.value = "";
+      ph.textContent = "-- select --";
+      inputEl.appendChild(ph);
+
+      options.forEach(opt => {
+        const o = document.createElement("option");
+        o.value = opt;
+        o.textContent = opt;
+        inputEl.appendChild(o);
+      });
+
+      if(slots[field]) inputEl.value = slots[field];
+    } else {
+      inputEl = document.createElement("input");
+      inputEl.type = "text";
+      inputEl.value = slots[field] ?? "";
+      inputEl.placeholder = (type === "enum_dynamic")
+        ? `type here (resolver: ${spec.resolver || "n/a"})`
+        : "type here";
+    }
+
+    inputEl.id = `slot_${field}`;
+    container.appendChild(inputEl);
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent =
+      type === "enum" ? "Choose one option."
+      : type === "enum_dynamic" ? `Dynamic field (resolver: ${spec.resolver || "n/a"}).`
+      : "Free text.";
+    container.appendChild(hint);
+  });
+
+  show(box, true);
+}
+
+function render(data){
+  document.getElementById("raw").textContent = JSON.stringify(data, null, 2);
+
+  // highlight routed initiative
+  if(data && data.supported && data.intent){
+    setActiveHighscore(data.intent);
+  } else {
+    renderHighscore(null);
+  }
+
+  const status = document.getElementById("status");
+  const out = document.getElementById("out");
+
+  if(!data.supported){
+    status.innerHTML = `<span class="warn">Not supported yet</span> • captured ✅`;
+    out.innerHTML = `
+      <div class="kv">
+        <div class="k">Request</div><div class="v"><code>${esc(data.utterance)}</code></div>
+        <div class="k">Next</div><div class="v"><code>${esc(data.next_action || "")}</code></div>
+      </div>
+    `;
+    renderToolCard({tool_card:null});
+    renderSlotForm({missing_fields:[]});
+    return;
+  }
+
+  status.innerHTML = `<span class="ok">Routed ✅</span>`;
+
+  const plan = (data.execution_plan || []).map(x => `<span class="pill">${esc(x.step)} — ${esc(x.app)}</span>`).join("");
+
+  const missing = (data.missing_fields || []);
+  const missingLine = missing.length
+    ? `<div class="row"><span class="warn">Missing:</span> ${missing.map(f=>`<code>${esc(f)}</code>`).join(" ")}</div>`
+    : `<div class="row"><span class="ok">All required fields provided</span></div>`;
+
+  const target = data.target_connector ? `<code>${esc(data.target_connector)}</code>` : `<span class="small">n/a</span>`;
+
+  out.innerHTML = `
+    <div class="kv">
+      <div class="k">Channel</div><div class="v"><b>${esc(data.routed_channel)}</b></div>
+      <div class="k">Initiative</div><div class="v"><b>${esc(data.initiative)}</b></div>
+      <div class="k">Skill / Intent</div><div class="v"><code>${esc(data.intent)}</code> • confidence: <b>${esc(data.confidence)}</b></div>
+      <div class="k">Route target</div><div class="v">${target}</div>
+      <div class="k">Next action</div><div class="v"><code>${esc(data.next_action || "")}</code></div>
+    </div>
+
+    <div class="divider"></div>
+    ${missingLine}
+
+    <div style="margin-top:8px">
+      <div class="k" style="margin-bottom:6px">Execution plan</div>
+      <div>${plan || '<span class="small">n/a</span>'}</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="small">LLM note: ${esc(data.llm?.rationale_short || "")}</div>
+  `;
+
+  renderToolCard(data);
+  renderSlotForm(data);
+}
+
+/* =========================================================
+   Main actions
+========================================================= */
+async function startTurn(){
+  const q = document.getElementById('q').value.trim();
+  if(!q) return;
+
+  document.getElementById("status").textContent = "Running…";
+
+  try{
+    const data = await callTriage(q);
+    setSlots(data.slots || {});
+    render(data);
+  }catch(err){
+    document.getElementById("status").innerHTML = `<span class="warn">Request failed</span>`;
+    document.getElementById("out").innerHTML = `
+      <div class="kv">
+        <div class="k">Error</div><div class="v"><code>${esc(err.message || String(err))}</code></div>
+      </div>
+      <div class="small" style="margin-top:8px">Open DevTools → Network → request → Response to see full payload.</div>
+    `;
+    document.getElementById("raw").textContent = "{}";
+    show(document.getElementById("slotForm"), false);
+    show(document.getElementById("tool"), false);
+  }
+}
+
+async function submitSlots(){
+  const dataOut = JSON.parse(document.getElementById("raw").textContent || "{}");
+  const missing = dataOut.missing_fields || [];
+  const current = getSlots();
+
+  missing.forEach(field => {
+    const el = document.getElementById(`slot_${field}`);
+    if(!el) return;
+    const v = (el.value ?? "").trim();
+    if(v) current[field] = v;
+  });
+
+  setSlots(current);
+  document.getElementById("status").textContent = "Continuing…";
+
+  // run triage again with same prompt (more robust)
+  const q = document.getElementById('q').value.trim() || "continue";
+  const data = await callTriage(q);
+
+  setSlots(data.slots || {});
+  render(data);
+}
+
+function resetState(){
+  clearSlotsForCurrentContext();
+  updateStateBadge();
+  document.getElementById("status").textContent = "State reset. Waiting…";
+  document.getElementById("out").innerHTML = "";
+  document.getElementById("raw").textContent = "{}";
+  show(document.getElementById("slotForm"), false);
+  show(document.getElementById("tool"), false);
+  renderHighscore(null);
+}
+
+/* =========================================================
+   Project Lead: token helpers
+========================================================= */
+function getToken(){
+  return sessionStorage.getItem(STORAGE.tokenSession) || "";
+}
+function plRememberToken(){
+  const t = (document.getElementById("plToken").value || "").trim();
+  if(!t){
+    plSetStatus(`<span class="warn">Token is empty.</span>`);
+    return;
+  }
+  sessionStorage.setItem(STORAGE.tokenSession, t);
+  plSetStatus(`<span class="ok">Token set (sessionStorage).</span>`);
+}
+function plClearToken(){
+  sessionStorage.removeItem(STORAGE.tokenSession);
+  document.getElementById("plToken").value = "";
+  plSetStatus(`Token cleared.`);
+}
+
+/* =========================================================
+   Project Lead: projects + config
+========================================================= */
+function plSetStatus(html){
+  document.getElementById("plStatus").innerHTML = html;
+}
+function plSetRaw(obj){
+  document.getElementById("plRaw").textContent = JSON.stringify(obj, null, 2);
+}
+function plSelectChanged(){
+  const sel = document.getElementById("plProjectSelect");
+  const pid = sel.value || "";
+  if(pid){
+    document.getElementById("plProjectId").value = pid;
+    setActiveProjectId(pid);
+  }
+}
+
+async function plLoadProjects(){
+  try{
+    plSetStatus("Loading projects…");
+    const data = await fetchJson("/api/projects");
+    const projects = data.projects || data?.projects?.projects || data?.ok && data?.projects || data.projects || [];
+    const arr = Array.isArray(projects) ? projects : (data.projects || []);
+    const sel = document.getElementById("plProjectSelect");
+    sel.innerHTML = `<option value="">-- select --</option>` + arr.map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join("");
+    plSetRaw(data);
+    plSetStatus(`<span class="ok">Loaded</span> • ${arr.length} project(s)`);
+  }catch(e){
+    plSetStatus(`<span class="warn">Failed</span> • ${esc(e.message)}`);
+  }
+}
+
+function plReadProjectId(){
+  const pid = (document.getElementById("plProjectId").value || "").trim();
+  if(pid) setActiveProjectId(pid);
+  return pid;
+}
+
+async function plLoadConfig(){
+  const pid = plReadProjectId();
+  if(!pid){
+    plSetStatus(`<span class="warn">Please set a Project ID.</span>`);
+    return;
+  }
+  try{
+    plSetStatus("Loading config…");
+    const data = await fetchJson(`/api/projects/${encodeURIComponent(pid)}/config`);
+    const cfg = data.config || data;
+    document.getElementById("cfgEditor").value = JSON.stringify(cfg, null, 2);
+    plSetRaw(data);
+    plSetStatus(`<span class="ok">Loaded</span> • ${esc(pid)}`);
+    renderModeUI();
+  }catch(e){
+    plSetStatus(`<span class="warn">Failed</span> • ${esc(e.message)}`);
+  }
+}
+
+function plTemplate(){
+  const pid = plReadProjectId() || "onco_p3_us";
+  const tpl = {
+    project_id: pid,
+    enabled_skills: ["site_selection","site_startup","rbqm_quality"],
+    defaults: { therapeutic_area: "oncology", phase: "3", region: "US" },
+    keyword_fallbacks: {
+      site_selection: ["site selection","feasibility","shortlist","site universe","recruitment"],
+      rbqm_quality: ["rbqm","central monitoring","quality signals","risk based quality"],
+      site_startup: ["site startup","activation","ssu","irb","ec submission"]
+    },
+    slot_aliases: {
+      region: { from: ["country"], map: { "us":"US","u.s.":"US","united states":"US" } }
+    },
+    routing_overrides: {
+      site_selection: [{ if: "region == \"US\"", target: "tool_h1_site_universe" }]
+    },
+    tool_cards: {},
+    admin: {}
+  };
+  document.getElementById("cfgEditor").value = JSON.stringify(tpl, null, 2);
+  plSetStatus(`<span class="ok">Template generated</span> • edit then Save`);
+}
+
+function plPretty(){
+  const ta = document.getElementById("cfgEditor");
+  try{
+    const obj = JSON.parse(ta.value || "{}");
+    ta.value = JSON.stringify(obj, null, 2);
+    plSetStatus(`<span class="ok">Pretty OK</span>`);
+  }catch(e){
+    plSetStatus(`<span class="warn">Invalid JSON</span> • ${esc(e.message)}`);
+  }
+}
+
+function plValidate(){
+  const ta = document.getElementById("cfgEditor");
+  try{
+    const obj = JSON.parse(ta.value || "{}");
+    const pid = plReadProjectId();
+    if(pid && obj.project_id && obj.project_id !== pid){
+      plSetStatus(`<span class="warn">Mismatch</span> • editor.project_id=${esc(obj.project_id)} but Project ID=${esc(pid)} (will be overwritten on save)`);
+    } else {
+      plSetStatus(`<span class="ok">Valid JSON</span>`);
+    }
+    plSetRaw({ok:true, validation:"passed", keys:Object.keys(obj)});
+  }catch(e){
+    plSetStatus(`<span class="warn">Invalid JSON</span> • ${esc(e.message)}`);
+  }
+}
+
+async function plSaveConfig(){
+  const pid = plReadProjectId();
+  if(!pid){
+    plSetStatus(`<span class="warn">Please set a Project ID.</span>`);
+    return;
+  }
+
+  const token = getToken() || (document.getElementById("plToken").value || "").trim();
+  if(!token){
+    plSetStatus(`<span class="warn">Missing token</span> • set Admin Token first`);
+    return;
+  }
+
+  let cfg;
+  try{
+    cfg = JSON.parse(document.getElementById("cfgEditor").value || "{}");
+  }catch(e){
+    plSetStatus(`<span class="warn">Invalid JSON</span> • ${esc(e.message)}`);
+    return;
+  }
+
+  cfg.project_id = pid;
+
+  try{
+    plSetStatus("Saving…");
+    const data = await fetchJson(`/api/projects/${encodeURIComponent(pid)}/config`, {
+      method:"PUT",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization": token.startsWith("Bearer ") ? token : ("Bearer " + token)
+      },
+      body: JSON.stringify(cfg)
+    });
+    plSetRaw(data);
+    plSetStatus(`<span class="ok">Saved</span> • ${esc(pid)}`);
+    document.getElementById("cfgEditor").value = JSON.stringify(cfg, null, 2);
+    await plLoadProjects();
+  }catch(e){
+    plSetStatus(`<span class="warn">Save failed</span> • ${esc(e.message)}`);
+  }
+}
+
+/* =========================================================
+   Leadership (Mock data + focus)
+========================================================= */
+/* =========================================================
+   Leadership cockpit (portfolio → data → systems → AI)
+========================================================= */
+
+const LD = {
+  filter: "all",
+  selectedId: null
+};
+
+// initiative-level definition
+const LD_INITIATIVES = [
+  {
+    id:"data_foundation",
+    channel:"Data & AI",
+    name:"Integrated, scalable data and tech foundation",
+    tags:["CROSS-FN","DECISION"],
+    progress: 78,
+    summary:"Unify Medicine-level data products: schema, ownership, access patterns, and reusable connectors.",
+    data: {
+      databases: [
+        {name:"ClinicalOpsDB (Postgres)", note:"ops events + site activation", shared:true, usedBy:["site_startup","site_selection","rbqm_quality"]},
+        {name:"TrialMaster (Oracle)", note:"study metadata / milestones", shared:true, usedBy:["portfolio_mgmt","trial_simulator","submission_closeout"]},
+        {name:"VendorHubDB (MySQL)", note:"vendor performance & contracts", shared:true, usedBy:["partner_of_choice","sourcing_cost"]},
+      ],
+      baseData: [
+        {name:"Study registry", note:"study id, phase, countries, timelines", shared:true, usedBy:["portfolio_mgmt","trial_simulator","site_startup","submission_closeout"]},
+        {name:"Site universe", note:"site profile, PI, capabilities, diversity signals", shared:true, usedBy:["site_selection","site_startup"]},
+        {name:"RBQM signals", note:"KRIs/KQIs, SDV, deviations", shared:true, usedBy:["rbqm_quality","submission_closeout"]},
+      ],
+      warehouses: [
+        {name:"Snowflake • MED_WAREHOUSE", note:"curated marts + governance", shared:true, usedBy:["ALL"]},
+        {name:"Databricks Lakehouse", note:"feature store + notebooks", shared:true, usedBy:["trial_simulator","rbqm_quality","site_selection"]},
+      ]
+    },
+    systems: [
+      {name:"Data Catalog", note:"discoverability + lineage; access request flow", tags:["Shared","Decision"]},
+      {name:"Access Gateway", note:"RBAC templates + approval SLA", tags:["Shared"]},
+      {name:"Connector Registry", note:"standardized connectors for tools/apps", tags:["Shared"]},
+    ],
+    ai: [
+      {name:"Schema-aware routing", note:"intent/slots standardized across teams", tags:["Shared"]},
+      {name:"Eval harness", note:"KPI definitions + monthly reporting gate", tags:["Decision","Gov"]},
+      {name:"Audit logging", note:"traceability required for regulated expansion", tags:["Gov","Risk"]},
+    ]
+  },
+
+  {
+    id:"site_selection",
+    channel:"Trial delivery & submissions",
+    name:"Data driven trial footprint and site selection capability",
+    tags:["DECISION","CROSS-FN"],
+    progress: 62,
+    summary:"Make footprint choices measurable: quality + speed + representation constraints.",
+    data: {
+      databases: [
+        {name:"ClinicalOpsDB (Postgres)", note:"activation/enrollment ops signals", shared:true, usedBy:["site_startup","rbqm_quality"]},
+        {name:"SiteIntelDB (Elastic)", note:"site unstructured notes + performance docs", shared:false, usedBy:["site_selection"]},
+      ],
+      baseData: [
+        {name:"Site universe", note:"site profile + PI + capacity", shared:true, usedBy:["site_startup"]},
+        {name:"Diversity signals", note:"representation metrics by region", shared:false, usedBy:["site_selection"]},
+        {name:"Enrollment history", note:"study-site enrollment curves", shared:true, usedBy:["trial_simulator"]},
+      ],
+      warehouses: [
+        {name:"Snowflake • MED_WAREHOUSE", note:"curated marts (site, study, country)", shared:true, usedBy:["ALL"]},
+        {name:"Databricks Lakehouse", note:"feature pipelines + model training", shared:true, usedBy:["trial_simulator","rbqm_quality"]},
+      ]
+    },
+    systems: [
+      {name:"Feasibility Portal", note:"where teams request/approve footprint", tags:["Decision"]},
+      {name:"External Signal Vendor", note:"commercial signals (optional)", tags:["Decision","Risk"]},
+      {name:"Connector Registry", note:"standard connectors to pull signals", tags:["Shared"]},
+    ],
+    ai: [
+      {name:"Footprint recommender", note:"optimize quality/speed/diversity trade-offs", tags:["Decision"]},
+      {name:"Constraint explainer", note:"why recommended sites satisfy constraints", tags:["Gov"]},
+      {name:"Scenario comparator", note:"compare 3–5 footprints with KPIs", tags:["Decision"]},
+    ]
+  },
+
+  {
+    id:"site_startup",
+    channel:"Trial delivery & submissions",
+    name:"Optimized site startup capability",
+    tags:["DECISION"],
+    progress: 55,
+    summary:"Shorten time-to-activation with standardized signals + escalations.",
+    data: {
+      databases: [
+        {name:"ClinicalOpsDB (Postgres)", note:"SSU milestones, blockers", shared:true, usedBy:["site_selection","rbqm_quality"]},
+        {name:"IRBTracker (SQL Server)", note:"IRB/EC submissions and outcomes", shared:false, usedBy:["site_startup"]},
+      ],
+      baseData: [
+        {name:"Study registry", note:"phase, country, timeline baseline", shared:true, usedBy:["portfolio_mgmt","submission_closeout"]},
+        {name:"Site universe", note:"contacts, feasibility, documents", shared:true, usedBy:["site_selection"]},
+      ],
+      warehouses: [
+        {name:"Snowflake • MED_WAREHOUSE", note:"SSU marts + KPI dashboards", shared:true, usedBy:["ALL"]},
+      ]
+    },
+    systems: [
+      {name:"SSU Workflow Tool", note:"tasks, approvals, SLA tracking", tags:["Decision"]},
+      {name:"Doc Management", note:"site packet templates", tags:["Gov"]},
+    ],
+    ai: [
+      {name:"Blocker classifier", note:"cluster delays (contract/IRB/budget)", tags:["Decision"]},
+      {name:"Activation ETA", note:"predict activation time + confidence", tags:["Gov"]},
+    ]
+  },
+
+  {
+    id:"rbqm_quality",
+    channel:"Trial delivery & submissions",
+    name:"Holistic analytics/AI-enabled and risk based clinical trial (data) quality mgmt approach",
+    tags:["GOV","CROSS-FN"],
+    progress: 48,
+    summary:"Detect risks earlier using KRIs/KQIs and consistent quality gates.",
+    data: {
+      databases: [
+        {name:"ClinicalOpsDB (Postgres)", note:"monitoring events + deviations", shared:true, usedBy:["site_startup","site_selection"]},
+        {name:"EDC Extracts (S3)", note:"clinical data snapshots", shared:false, usedBy:["rbqm_quality"]},
+      ],
+      baseData: [
+        {name:"RBQM signals", note:"KRI/KQI definitions + thresholds", shared:true, usedBy:["submission_closeout"]},
+        {name:"Monitoring findings", note:"site visit findings + actions", shared:false, usedBy:["rbqm_quality"]},
+      ],
+      warehouses: [
+        {name:"Databricks Lakehouse", note:"feature store + risk models", shared:true, usedBy:["site_selection","trial_simulator"]},
+        {name:"Snowflake • MED_WAREHOUSE", note:"quality marts", shared:true, usedBy:["ALL"]},
+      ]
+    },
+    systems: [
+      {name:"Central Monitoring Hub", note:"signals dashboards + triage", tags:["Gov"]},
+      {name:"Issue Tracker", note:"CAPA + follow-ups", tags:["Gov"]},
+      {name:"Connector Registry", note:"standard connectors", tags:["Shared"]},
+    ],
+    ai: [
+      {name:"Risk signal engine", note:"prioritize sites/studies for action", tags:["Gov"]},
+      {name:"Narrative generator", note:"auto explain top risks + evidence", tags:["Gov"]},
+      {name:"Policy guardrail", note:"what AI can/can’t recommend", tags:["Gov","Risk"]},
+    ]
+  },
+
+  {
+    id:"submission_closeout",
+    channel:"Trial delivery & submissions",
+    name:"Submission and close-out acceleration capability",
+    tags:["GOV","DECISION"],
+    progress: 41,
+    summary:"Accelerate packaging while keeping audit trail and approvals intact.",
+    data: {
+      databases: [
+        {name:"TrialMaster (Oracle)", note:"milestones + document inventory", shared:true, usedBy:["portfolio_mgmt","trial_simulator"]},
+        {name:"DocVault (SharePoint/ECM)", note:"documents + versions", shared:false, usedBy:["submission_closeout"]},
+      ],
+      baseData: [
+        {name:"RBQM signals", note:"quality readiness evidence", shared:true, usedBy:["rbqm_quality"]},
+        {name:"Closeout checklist", note:"country/site/doc requirements", shared:false, usedBy:["submission_closeout"]},
+      ],
+      warehouses: [
+        {name:"Snowflake • MED_WAREHOUSE", note:"submission marts", shared:true, usedBy:["ALL"]},
+      ]
+    },
+    systems: [
+      {name:"eTMF / ECM", note:"final storage + audit requirements", tags:["Gov"]},
+      {name:"Approval Workflow", note:"role-based signoff chain", tags:["Gov","Decision"]},
+    ],
+    ai: [
+      {name:"Checklist copilot", note:"gap detection and next-step suggestions", tags:["Decision","Gov"]},
+      {name:"Auto packaging draft", note:"draft pack structure (non-final)", tags:["Gov","Risk"]},
+    ]
+  },
+
+  {
+    id:"e2e_automation_authoring",
+    channel:"Data & AI",
+    name:"AI tools for end-to-end automation, 1st step authoring",
+    tags:["GOV","DECISION"],
+    progress: 52,
+    summary:"Scale drafting with QC gates; separate draft vs regulated output.",
+    data: {
+      databases: [
+        {name:"DocVault (SharePoint/ECM)", note:"inputs + corp templates", shared:true, usedBy:["submission_closeout"]},
+      ],
+      baseData: [
+        {name:"Template library", note:"approved structures, style guides", shared:true, usedBy:["submission_closeout"]},
+        {name:"Protocol sections", note:"source-of-truth outlines", shared:false, usedBy:["e2e_automation_authoring"]},
+      ],
+      warehouses: [
+        {name:"Snowflake • MED_WAREHOUSE", note:"doc metadata marts", shared:true, usedBy:["ALL"]},
+      ]
+    },
+    systems: [
+      {name:"Authoring Workbench", note:"draft/QC/approval staging", tags:["Gov","Decision"]},
+      {name:"Policy Library", note:"allowed use + red-lines", tags:["Gov","Shared"]},
+    ],
+    ai: [
+      {name:"Section drafter", note:"draft sections from structured inputs", tags:["Gov"]},
+      {name:"QC checker", note:"consistency/traceability checks", tags:["Gov"]},
+      {name:"Citation linker", note:"link evidence to claims", tags:["Gov"]},
+    ]
+  },
+
+  {
+    id:"portfolio_mgmt",
+    channel:"Trial design & planning",
+    name:"Portfolio management approach for milestones, budget and resources",
+    tags:["DECISION"],
+    progress: 58,
+    summary:"One portfolio cadence: compare programs with consistent KPIs.",
+    data: {
+      databases: [
+        {name:"TrialMaster (Oracle)", note:"portfolio milestones", shared:true, usedBy:["trial_simulator","submission_closeout"]},
+        {name:"FinanceCube (SAP extract)", note:"budget actuals/forecast", shared:false, usedBy:["portfolio_mgmt"]},
+      ],
+      baseData: [
+        {name:"Study registry", note:"program baseline", shared:true, usedBy:["trial_simulator","site_startup"]},
+        {name:"Resource plan", note:"role-based capacity & demand", shared:false, usedBy:["portfolio_mgmt"]},
+      ],
+      warehouses: [
+        {name:"Snowflake • MED_WAREHOUSE", note:"portfolio marts", shared:true, usedBy:["ALL"]},
+      ]
+    },
+    systems: [
+      {name:"Portfolio Dashboard", note:"exec view + decision log", tags:["Decision"]},
+      {name:"Resource Planning Tool", note:"demand vs capacity", tags:["Decision"]},
+    ],
+    ai: [
+      {name:"Portfolio scenario", note:"what-if changes & constraints", tags:["Decision"]},
+      {name:"Risk summary", note:"auto summarize risks across programs", tags:["Gov"]},
+    ]
+  },
+
+  {
+    id:"trial_simulator",
+    channel:"Trial design & planning",
+    name:"Boehringer specific trial simulator capability",
+    tags:["CROSS-FN"],
+    progress: 46,
+    summary:"Simulate enrollment curves with explainable assumptions.",
+    data: {
+      databases: [
+        {name:"TrialMaster (Oracle)", note:"study metadata", shared:true, usedBy:["portfolio_mgmt","submission_closeout"]},
+      ],
+      baseData: [
+        {name:"Enrollment history", note:"historical curves", shared:true, usedBy:["site_selection"]},
+        {name:"Country/site capacity", note:"capacity priors", shared:true, usedBy:["site_selection"]},
+      ],
+      warehouses: [
+        {name:"Databricks Lakehouse", note:"model training + experiments", shared:true, usedBy:["rbqm_quality","site_selection"]},
+        {name:"Snowflake • MED_WAREHOUSE", note:"curated history marts", shared:true, usedBy:["ALL"]},
+      ]
+    },
+    systems: [
+      {name:"Simulation Notebook", note:"assumptions + reproducibility", tags:["Gov"]},
+      {name:"Experiment Registry", note:"track runs + metrics", tags:["Gov","Shared"]},
+    ],
+    ai: [
+      {name:"Enrollment forecaster", note:"curve prediction + uncertainty", tags:["Gov"]},
+      {name:"Assumption explainer", note:"explain drivers of changes", tags:["Gov"]},
+    ]
+  },
+
+  {
+    id:"partner_of_choice",
+    channel:"Trial delivery & submissions",
+    name:"Differentiated global “Partner-of-Choice” model",
+    tags:["CROSS-FN"],
+    progress: 37,
+    summary:"Standard vendor playbooks to reduce friction and improve quality.",
+    data: {
+      databases: [
+        {name:"VendorHubDB (MySQL)", note:"vendor performance", shared:true, usedBy:["sourcing_cost"]},
+      ],
+      baseData: [
+        {name:"Vendor scorecards", note:"quality/cost/speed benchmarks", shared:true, usedBy:["sourcing_cost"]},
+        {name:"Contract templates", note:"preferred clauses", shared:false, usedBy:["partner_of_choice"]},
+      ],
+      warehouses: [
+        {name:"Snowflake • MED_WAREHOUSE", note:"vendor marts", shared:true, usedBy:["ALL"]},
+      ]
+    },
+    systems: [
+      {name:"Vendor Portal", note:"scorecards + governance", tags:["Gov"]},
+      {name:"Contracting Workflow", note:"cycle time tracking", tags:["Decision"]},
+    ],
+    ai: [
+      {name:"Vendor fit matcher", note:"recommend best partners by context", tags:["Decision"]},
+    ]
+  },
+
+  {
+    id:"sourcing_cost",
+    channel:"Trial delivery & submissions",
+    name:"Simplified clinical delivery and sourcing model to optimize costs",
+    tags:["DECISION"],
+    progress: 34,
+    summary:"Make cost/quality trade-offs explicit with comparable scenarios.",
+    data: {
+      databases: [
+        {name:"VendorHubDB (MySQL)", note:"contracts + cost history", shared:true, usedBy:["partner_of_choice"]},
+        {name:"FinanceCube (SAP extract)", note:"budget actuals", shared:true, usedBy:["portfolio_mgmt"]},
+      ],
+      baseData: [
+        {name:"Vendor scorecards", note:"quality/cost/speed", shared:true, usedBy:["partner_of_choice"]},
+        {name:"Scenario library", note:"standard assumptions", shared:false, usedBy:["sourcing_cost"]},
+      ],
+      warehouses: [
+        {name:"Snowflake • MED_WAREHOUSE", note:"cost marts", shared:true, usedBy:["ALL"]},
+      ]
+    },
+    systems: [
+      {name:"Sourcing Scenario Tool", note:"compare scenarios", tags:["Decision"]},
+      {name:"Connector Registry", note:"pull vendor/cost signals", tags:["Shared"]},
+    ],
+    ai: [
+      {name:"Cost optimizer", note:"recommend scenario under constraints", tags:["Decision"]},
+      {name:"Explainability card", note:"why chosen scenario", tags:["Gov"]},
+    ]
+  },
+];
+
+/* ===== Shared asset usage (portfolio-level) ===== */
+let LD_ASSET_USAGE = null;
+
+function ldAssetKey(type, name){
+  return `${type}::${(name||"").trim()}`;
+}
+
+function ldComputeAssetUsage(){
+  const usage = {}; // key -> {type,name,count,initiatives:Set}
+  const add = (type, name, initId) => {
+    const key = ldAssetKey(type, name);
+    if(!usage[key]){
+      usage[key] = { type, name, count:0, initiatives:new Set() };
+    }
+    if(!usage[key].initiatives.has(initId)){
+      usage[key].initiatives.add(initId);
+      usage[key].count += 1;
+    }
+  };
+
+  LD_INITIATIVES.forEach(it=>{
+    (it.data?.databases||[]).forEach(x=> add("DB", x.name, it.id));
+    (it.data?.baseData||[]).forEach(x=> add("DATA", x.name, it.id));
+    (it.data?.warehouses||[]).forEach(x=> add("WH", x.name, it.id));
+    (it.systems||[]).forEach(x=> add("SYS", x.name, it.id));
+    (it.ai||[]).forEach(x=> add("AI", x.name, it.id));
+  });
+
+  LD_ASSET_USAGE = usage;
+  return usage;
+}
+
+function ldGetUsageCount(type, name){
+  if(!LD_ASSET_USAGE) ldComputeAssetUsage();
+  const key = ldAssetKey(type, name);
+  return LD_ASSET_USAGE[key]?.count || 0;
+}
+
+function ldGetInitiativesForAsset(type, name){
+  if(!LD_ASSET_USAGE) ldComputeAssetUsage();
+  const key = ldAssetKey(type, name);
+  const s = LD_ASSET_USAGE[key]?.initiatives;
+  return s ? Array.from(s) : [];
+}
+
+function ldTopAssetsGlobal(limit=6){
+  if(!LD_ASSET_USAGE) ldComputeAssetUsage();
+  const arr = Object.values(LD_ASSET_USAGE)
+    .filter(x=> x.count >= 2)                // shared only
+    .sort((a,b)=> b.count - a.count);
+  return arr.slice(0, limit);
+}
+
+function ldTopAssetsForInitiative(it, limit=6){
+  if(!LD_ASSET_USAGE) ldComputeAssetUsage();
+  const local = [];
+
+  const push = (type, name) => {
+    const cnt = ldGetUsageCount(type, name);
+    if(cnt >= 2){
+      local.push({type, name, count: cnt});
+    }
+  };
+
+  (it.data?.databases||[]).forEach(x=> push("DB", x.name));
+  (it.data?.baseData||[]).forEach(x=> push("DATA", x.name));
+  (it.data?.warehouses||[]).forEach(x=> push("WH", x.name));
+  (it.systems||[]).forEach(x=> push("SYS", x.name));
+  (it.ai||[]).forEach(x=> push("AI", x.name));
+
+  // de-dup by key, keep highest count
+  const map = {};
+  local.forEach(a=>{
+    const k = ldAssetKey(a.type, a.name);
+    if(!map[k] || map[k].count < a.count) map[k] = a;
+  });
+
+  return Object.values(map)
+    .sort((a,b)=> b.count - a.count)
+    .slice(0, limit);
+}
+
+function ldTypeLabel(t){
+  if(t==="DB") return "DB";
+  if(t==="DATA") return "DATA";
+  if(t==="WH") return "WH";
+  if(t==="SYS") return "SYS";
+  if(t==="AI") return "AI";
+  return t;
+}
+
+function ldRenderChips(containerId, assets, onClick){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML = "";
+
+  if(!assets?.length){
+    el.innerHTML = `<span class="small">No shared hotspots.</span>`;
+    return;
+  }
+
+  assets.forEach(a=>{
+    const chip = document.createElement("div");
+    chip.className = "chip";
+    chip.innerHTML = `
+      <span class="type">${ldTypeLabel(a.type)}</span>
+      <span class="v">${esc(a.name)}</span>
+      <span class="n">×${esc(a.count)}</span>
+    `;
+    chip.onclick = ()=> onClick?.(a);
+    el.appendChild(chip);
+  });
+}
+
+function ldShowAssetImpact(a){
+  const ids = ldGetInitiativesForAsset(a.type, a.name);
+  // show as a compact message in subtitle area
+  const msg = ids.length
+    ? `Shared asset: ${a.type} • ${a.name} • used by ${ids.length} initiatives → ${ids.join(", ")}`
+    : `Asset: ${a.type} • ${a.name}`;
+  const sub = document.getElementById("focusSub");
+  if(sub) sub.textContent = msg;
+
+  // If current selection not in the list, jump to first to make it tangible.
+  if(ids.length && (!LD.selectedId || !ids.includes(LD.selectedId))){
+    ldSelect(ids[0]);
+  }
+}
+
+function ldTagBadge(t){
+  const x = (t||"").toUpperCase();
+  if(x==="DECISION") return "bdg yellow";
+  if(x==="CROSS-FN") return "bdg green";
+  if(x==="GOV") return "bdg red";
+  return "bdg";
+}
+
+function ldSetFilter(f){
+  LD.filter = f;
+  ["all","decision","cross","gov"].forEach(k=>{
+    const id = "f_" + k;
+    const btn = document.getElementById(id);
+    if(btn) btn.classList.toggle("active", k===f);
+  });
+  ldApplyFilters();
+}
+
+function ldApplyFilters(){
+  const q = (document.getElementById("initSearch")?.value || "").trim().toLowerCase();
+  const list = document.getElementById("initList");
+  if(!list) return;
+  list.innerHTML = "";
+
+  const showByFilter = (it) => {
+    if(LD.filter==="all") return true;
+    if(LD.filter==="decision") return (it.tags||[]).includes("DECISION");
+    if(LD.filter==="cross") return (it.tags||[]).includes("CROSS-FN");
+    if(LD.filter==="gov") return (it.tags||[]).includes("GOV");
+    return true;
+  };
+
+  const matchSearch = (it) => {
+    if(!q) return true;
+    const hay = [
+      it.id, it.channel, it.name, it.summary,
+      ...(it.tags||[]),
+      ...(it.data?.databases||[]).map(x=>x.name + " " + x.note),
+      ...(it.data?.baseData||[]).map(x=>x.name + " " + x.note),
+      ...(it.data?.warehouses||[]).map(x=>x.name + " " + x.note),
+      ...(it.systems||[]).map(x=>x.name + " " + x.note),
+      ...(it.ai||[]).map(x=>x.name + " " + x.note),
+    ].join(" ").toLowerCase();
+    return hay.includes(q);
+  };
+
+  const items = LD_INITIATIVES.filter(it=>showByFilter(it) && matchSearch(it));
+  items.forEach(it=>{
+    const div = document.createElement("div");
+    div.className = "initItem" + (LD.selectedId===it.id ? " active pulse" : "");
+    div.onclick = ()=> ldSelect(it.id);
+
+    const badges = (it.tags||[]).map(t=>`<span class="${ldTagBadge(t)}">${esc(t)}</span>`).join("");
+    div.innerHTML = `
+      <div class="initCh">${esc(it.channel)}</div>
+      <div class="initNm">${esc(it.name)}</div>
+      <div class="initMeta">
+        <div class="pct">Progress: <b>${esc(it.progress)}%</b></div>
+        <div class="badges">${badges}</div>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+
+  // if filtered list doesn't include selected, select first
+  if(items.length && (!LD.selectedId || !items.some(x=>x.id===LD.selectedId))){
+    ldSelect(items[0].id, true);
+  }
+  if(!items.length){
+    list.innerHTML = `<div class="small">No results.</div>`;
+  }
+}
+
+function ldCountShared(it){
+  const all = [
+    ...(it.data?.databases||[]),
+    ...(it.data?.baseData||[]),
+    ...(it.data?.warehouses||[]),
+  ];
+  return all.filter(x=>x.shared).length;
+}
+
+function ldNode(title, hint, bullets=[], tags=[], usageType=null){
+  const cnt = usageType ? ldGetUsageCount(usageType, title) : 0;
+  const autoTags = [...(tags||[])];
+  if(cnt >= 2 && !autoTags.includes("Shared")) autoTags.unshift("Shared");
+
+  const tagHtml = autoTags.map(t=>{
+    const cls =
+      t==="Shared" ? "tag2 shared" :
+      t==="Decision" ? "tag2 warn" :
+      t==="Gov" ? "tag2 warn" :
+      t==="Risk" ? "tag2 risk" :
+      "tag2";
+    return `<span class="${cls}">${esc(t)}</span>`;
+  }).join("");
+
+  const li = (bullets||[]).map(x=>`<li>${esc(x)}</li>`).join("");
+  const sharedHint = (cnt >= 2) ? `Shared ×${cnt}` : (hint||"");
+
+  return `
+    <div class="node">
+      <div class="nodeTop">
+        <div class="nodeTitle">${esc(title)}</div>
+        <div class="nodeHint">${esc(sharedHint)}</div>
+      </div>
+      ${tagHtml ? `<div class="tags">${tagHtml}</div>` : ``}
+      <div class="nodeBody">
+        ${bullets?.length ? `<ul>${li}</ul>` : ``}
+      </div>
+    </div>
+  `;
+}
+function ldRenderSwimlanes(it){
+  // header
+  document.getElementById("selId").textContent = it.id;
+  document.getElementById("focusTitle").textContent = it.name;
+  document.getElementById("focusSub").textContent = it.summary;
+
+  // stats
+  document.getElementById("statShared").textContent = String(ldCountShared(it));
+  document.getElementById("statSystems").textContent = String((it.systems||[]).length);
+  document.getElementById("statAI").textContent = String((it.ai||[]).length);
+
+  // Data lane
+  const laneData = document.getElementById("laneData");
+  const laneSystems = document.getElementById("laneSystems");
+  const laneAI = document.getElementById("laneAI");
+  laneData.innerHTML = "";
+  laneSystems.innerHTML = "";
+  laneAI.innerHTML = "";
+
+    // leverage bar
+  ldComputeAssetUsage();
+  ldRenderChips("chipsLocal", ldTopAssetsForInitiative(it, 7), ldShowAssetImpact);
+  ldRenderChips("chipsGlobal", ldTopAssetsGlobal(7), ldShowAssetImpact);
+
+  // Data: databases
+  (it.data?.databases||[]).forEach(d=>{
+    const bullets = [
+      d.note,
+      d.shared ? `Used by: ${(d.usedBy||[]).join(", ")}` : `Used by: ${it.id}`
+    ];
+    laneData.insertAdjacentHTML("beforeend",
+      ldNode(d.name, "Database", bullets, d.shared?["Shared"]:[], "DB")
+    );
+  });
+
+  // Data: base data
+  (it.data?.baseData||[]).forEach(b=>{
+    const bullets = [
+      b.note,
+      b.shared ? `Used by: ${(b.usedBy||[]).join(", ")}` : `Used by: ${it.id}`
+    ];
+    laneData.insertAdjacentHTML("beforeend",
+      ldNode(b.name, "Base data", bullets, b.shared?["Shared"]:[], "DATA")
+    );
+  });
+
+  // Data: warehouses
+  (it.data?.warehouses||[]).forEach(w=>{
+    const bullets = [
+      w.note,
+      w.shared ? `Used by: ${(w.usedBy||[]).join(", ")}` : `Used by: ${it.id}`
+    ];
+    laneData.insertAdjacentHTML("beforeend",
+      ldNode(w.name, "Warehouse link", bullets, w.shared?["Shared","Decision"]:[], "WH")
+    );
+  });
+
+  // Systems
+  (it.systems||[]).forEach(s=>{
+    const bullets = [s.note];
+    laneSystems.insertAdjacentHTML("beforeend",
+      ldNode(s.name, "System", bullets, s.tags||[], "SYS")
+    );
+  });
+
+  // AI
+  (it.ai||[]).forEach(a=>{
+    const bullets = [a.note];
+    laneAI.insertAdjacentHTML("beforeend",
+      ldNode(a.name, "AI app", bullets, a.tags||[], "AI")
+    );
+  });
+}
+
+function ldSelect(id, silent=false){
+  LD.selectedId = id;
+  const it = LD_INITIATIVES.find(x=>x.id===id);
+  if(!it) return;
+
+  // persist
+  localStorage.setItem("lab_leader_focus", id);
+
+  // re-render list to update active states
+  ldApplyFilters();
+
+  // render lanes
+  ldRenderSwimlanes(it);
+
+  if(!silent){
+    // tiny UX: scroll selected into view
+    const list = document.getElementById("initList");
+    if(list){
+      const idx = LD_INITIATIVES.findIndex(x=>x.id===id);
+      // best effort
+      const itemEl = list.children[Math.max(0, Math.min(list.children.length-1, idx))];
+      if(itemEl?.scrollIntoView) itemEl.scrollIntoView({block:"nearest"});
+    }
+  }
+}
+
+/* Hook into existing renderModeUI:
+   when mode==="leadership" call ldInitLeadership()
+*/
+function ldInitLeadership(){
+  // load previous selection
+  LD.selectedId = localStorage.getItem(STORAGE.leaderFocus) || "data_foundation";
+  ldApplyFilters();
+  ldSelect(LD.selectedId, true);
+}
+/* =========================================================
+   Leadership view switch (Cockpit vs Connect • DAS)
+========================================================= */
+const LD_VIEW_KEY = "lab_leadership_view"; // cockpit | connect
+const LD_FOCUS_COMP = "lab_das_focus_comp"; // component id
+const LD_FOCUS_CELL = "lab_das_focus_cell"; // "initiativeId::componentId"
+
+function ldGetView(){
+  return localStorage.getItem(LD_VIEW_KEY) || "cockpit";
+}
+function ldSetView(v){
+  localStorage.setItem(LD_VIEW_KEY, v);
+  // toggle sub-tab buttons
+  const b1 = document.getElementById("btnLdCockpit");
+  const b2 = document.getElementById("btnLdConnect");
+  if(b1 && b2){
+    b1.classList.toggle("active", v==="cockpit");
+    b2.classList.toggle("active", v==="connect");
+  }
+  // show/hide views inside leadership console
+  const cockpitGrid = document.querySelector("#ldConsole .leaderGrid"); // existing cockpit grid
+  const connectView = document.getElementById("ldConnectView");
+  if(cockpitGrid) cockpitGrid.style.display = (v==="cockpit") ? "" : "none";
+  if(connectView) connectView.classList.toggle("hidden", v!=="connect");
+
+  // hint
+  const hint = document.getElementById("ldViewHint");
+  if(hint){
+    hint.textContent = (v==="cockpit")
+      ? "Cockpit shows swimlanes. Connect • DAS shows leverage matrix + leadership asks."
+      : "Connect • DAS: pick component → see leverage matrix and connect plan.";
+  }
+
+  if(v==="connect"){
+    ldInitConnect();
+  }
+}
+
+/* =========================================================
+   Shared Components (DAS) + Matrix (10 initiatives × 8 comps)
+========================================================= */
+
+// 8 shared components (from your portfolio abstraction)
+const DAS_COMPONENTS = [
+  { id:"c1_kpi",   short:"C1", name:"Common Denominator & KPI Standards", why:"Unify definitions, thresholds, and reporting cadence across initiatives." },
+  { id:"c2_data",  short:"C2", name:"Data Foundation & Integration",      why:"Reusable ingestion, RBAC, audit trail, metadata/semantic layer, and curated marts." },
+  { id:"c3_loop",  short:"C3", name:"Closed-loop Execution",              why:"Convert feedback into ownership, prioritization, resolution, and learning." },
+  { id:"c4_model", short:"C4", name:"Decision Intelligence Models",       why:"Scoring, prediction, simulation, risk detection — with explainability & validation." },
+  { id:"c5_auth",  short:"C5", name:"AI Authoring & Structured Content",  why:"Drafting + QC gates + templates; pathway to structured authoring & DDF-ready content." },
+  { id:"c6_gov",   short:"C6", name:"GenAI Platform, Agents & Governance",why:"Unified experience, orchestration, access controls, logging, and policy guardrails." },
+  { id:"c7_front", short:"C7", name:"Product & Front Door Experience",    why:"OMA/portal navigation, role-based views, and “one-stop shop” time saving." },
+  { id:"c8_adopt", short:"C8", name:"Adoption & Change Enablement",       why:"AI literacy, SOPs, vendor readiness, usage metrics and scaled rollout." },
+];
+
+// Matrix roles: P/E/R/G (Primary / Enable / Reuse / Gap)
+// We’ll seed with a pragmatic mapping consistent with your earlier write-up.
+// You can tune cell roles later without touching rendering code.
+const DAS_MATRIX = {
+  // initiativeId: { componentId: "P|E|R|G" }
+  portfolio_mgmt: {
+    c1_kpi:"P", c2_data:"E", c3_loop:"R", c4_model:"R", c5_auth:"", c6_gov:"E", c7_front:"P", c8_adopt:"P"
+  },
+  trial_simulator: {
+    c1_kpi:"R", c2_data:"E", c3_loop:"", c4_model:"P", c5_auth:"", c6_gov:"R", c7_front:"R", c8_adopt:"E"
+  },
+  site_startup: {
+    c1_kpi:"P", c2_data:"E", c3_loop:"P", c4_model:"R", c5_auth:"", c6_gov:"", c7_front:"P", c8_adopt:"P"
+  },
+  site_selection: {
+    c1_kpi:"R", c2_data:"E", c3_loop:"", c4_model:"P", c5_auth:"", c6_gov:"R", c7_front:"R", c8_adopt:"E"
+  },
+  partner_of_choice: {
+    c1_kpi:"R", c2_data:"E", c3_loop:"P", c4_model:"R", c5_auth:"", c6_gov:"", c7_front:"P", c8_adopt:"P"
+  },
+  submission_closeout: {
+    c1_kpi:"R", c2_data:"E", c3_loop:"R", c4_model:"", c5_auth:"P", c6_gov:"E", c7_front:"R", c8_adopt:"P"
+  },
+  rbqm_quality: {
+    c1_kpi:"P", c2_data:"E", c3_loop:"P", c4_model:"P", c5_auth:"", c6_gov:"R", c7_front:"R", c8_adopt:"E"
+  },
+  sourcing_cost: {
+    c1_kpi:"P", c2_data:"E", c3_loop:"R", c4_model:"R", c5_auth:"", c6_gov:"", c7_front:"R", c8_adopt:"P"
+  },
+  data_foundation: {
+    c1_kpi:"R", c2_data:"P", c3_loop:"", c4_model:"R", c5_auth:"R", c6_gov:"P", c7_front:"R", c8_adopt:"E"
+  },
+  e2e_automation_authoring: {
+    c1_kpi:"R", c2_data:"E", c3_loop:"R", c4_model:"R", c5_auth:"P", c6_gov:"P", c7_front:"R", c8_adopt:"P"
+  },
+};
+
+// Per-component leadership connect plan (mock but realistic)
+const DAS_CONNECT_PLAYBOOK = {
+  c1_kpi: {
+    why:"Without KPI standardization, leadership cannot compare progress or steer trade-offs across initiatives.",
+    unblocks:[
+      "One portfolio cadence (same definitions, same thresholds)",
+      "Comparable cycle-time and value reporting",
+      "A single ‘truth’ view for escalations"
+    ],
+    ask:"Approve KPI dictionary + threshold owners; mandate adoption in 6 weeks for all 10 initiatives.",
+    owners:"CDO Ops Analytics • Data Foundation team • Initiative leads",
+    next2w:[
+      "Define KPI dictionary v1 (top 12 KPIs + formulas + refresh)",
+      "Assign owners (one per KPI) and set governance gate",
+      "Pilot with 2 initiatives: Site Startup + Portfolio Mgmt"
+    ],
+    talk:[
+      "We’re not asking for a new tool — we’re asking for a shared language.",
+      "If KPI definitions differ, we lose comparability and waste time debating numbers.",
+      "A single KPI dictionary is the cheapest leverage for Medicine-level strategy."
+    ]
+  },
+  c2_data: {
+    why:"Most initiatives stall not on AI, but on access, lineage, RBAC templates, and reusable curated marts.",
+    unblocks:[
+      "Faster access (days → hours) via standardized request templates",
+      "Reusable marts/semantic layer to prevent duplicate pipelines",
+      "Audit-ready foundation for regulated expansion"
+    ],
+    ask:"Approve shared data product priorities + access SLA; decide the first 3 ‘gold’ marts.",
+    owners:"BDS/CDI4A • Data Catalog owners • Platform/Cloud team",
+    next2w:[
+      "Agree top 3 shared marts (Study registry / Site universe / RBQM signals)",
+      "Define access workflow + RBAC templates",
+      "Publish lineage + data quality checks in catalog"
+    ],
+    talk:[
+      "This is the backbone: every initiative is a car; data foundation is the highway.",
+      "If access is slow, every team builds their own shortcuts — duplication explodes.",
+      "Pick 3 gold marts, and we immediately unlock 6+ initiatives."
+    ]
+  },
+  c3_loop: {
+    why:"Execution excellence requires closed-loop ownership; dashboards without actions do not change outcomes.",
+    unblocks:[
+      "Faster issue resolution via clear owners and SLAs",
+      "Cross-functional learning (patterns vs anecdotes)",
+      "Reduced late surprises via earlier escalation"
+    ],
+    ask:"Approve ‘one closure workflow’: priority rules + owner model + escalation cadence.",
+    owners:"Clinical Ops • CRO/vendor mgmt • Quality/RBQM",
+    next2w:[
+      "Define priority taxonomy + owner mapping",
+      "Set SLA for high-priority closure",
+      "Integrate 2 inputs: site feedback + RBQM signals"
+    ],
+    talk:[
+      "If it’s not owned, it’s not real.",
+      "Closed-loop turns ‘information’ into ‘execution’ — that’s where ROI comes from."
+    ]
+  },
+  c4_model: {
+    why:"Decision intelligence (risk, simulation, scoring) is where speed & quality trade-offs become explicit and measurable.",
+    unblocks:[
+      "Earlier risk detection & prioritization",
+      "Scenario comparison (3–5 options) with explainable assumptions",
+      "Better steering: when to invest, when to de-scope"
+    ],
+    ask:"Approve model governance: validation, monitoring, and what decisions AI can/can’t recommend.",
+    owners:"Data Science • RBQM/QM • Initiative leads",
+    next2w:[
+      "Define evaluation harness + acceptance metrics",
+      "Pick 1 model to validate end-to-end (e.g., activation ETA or risk signal)",
+      "Implement monitoring + drift checks"
+    ],
+    talk:[
+      "Models are not magic — the advantage is disciplined evaluation and explainability.",
+      "Without governance, the org won’t trust model outputs at scale."
+    ]
+  },
+  c5_auth: {
+    why:"Authoring automation is the highest immediate productivity lever, but only scales with QC gates and structured content strategy.",
+    unblocks:[
+      "Faster drafting with consistent templates",
+      "Traceable QC checks (consistency, evidence linking)",
+      "Pathway to structured authoring / DDF-ready content"
+    ],
+    ask:"Approve draft vs regulated boundary + QC gates; decide vendor/tool pilot scope.",
+    owners:"Medical Writing • RA • Quality/Compliance • GenAI platform",
+    next2w:[
+      "Set QC gate checklist (traceability, consistency, formatting)",
+      "Define 2 pilot deliverables (e.g., CSR sections + PN)",
+      "Align vendor readiness + SOP training plan"
+    ],
+    talk:[
+      "We must separate ‘drafting speed’ from ‘regulated output’.",
+      "Quality gates are how we scale without increasing compliance risk."
+    ]
+  },
+  c6_gov: {
+    why:"Without one governed GenAI experience, teams build isolated agents and governance becomes unmanageable.",
+    unblocks:[
+      "Unified access + audit trail",
+      "Reusable agent skills (no reinvention per team)",
+      "Risk controls for regulated contexts"
+    ],
+    ask:"Approve platform direction + minimal guardrails (logging, RBAC, policy library) for the next 12 weeks.",
+    owners:"GenAI platform team • Security/Compliance • Data foundation",
+    next2w:[
+      "Define minimum governance (who/what/logging/retention)",
+      "Publish policy library v1 (allowed vs red-lines)",
+      "Create skill registry (top 8 reusable skills)"
+    ],
+    talk:[
+      "We can’t govern 30 isolated agents; we can govern one platform.",
+      "Platform + guardrails is what makes scaling safe and cheap."
+    ]
+  },
+  c7_front: {
+    why:"A ‘front door’ is how leadership actually gets adoption—if discovery is hard, usage stays low.",
+    unblocks:[
+      "One-stop shop for 5,500+ users (time saving)",
+      "Consistent navigation and role-based views",
+      "Faster stakeholder alignment via shared dashboards"
+    ],
+    ask:"Approve ‘one portal’ principle and mandate that new dashboards/apps publish through it.",
+    owners:"OMA/product team • Analytics owners • Comms/change",
+    next2w:[
+      "Define navigation taxonomy (by role + by lifecycle)",
+      "Pick 5 flagship dashboards and standardize layout",
+      "Set adoption metrics (MAU, time saved, NPS)"
+    ],
+    talk:[
+      "People don’t adopt capabilities; they adopt experiences.",
+      "A portal is the cheapest way to reduce fragmentation."
+    ]
+  },
+  c8_adopt: {
+    why:"Even perfect tools fail without training, SOPs, and measurable adoption plan.",
+    unblocks:[
+      "Faster rollout with less resistance",
+      "Higher quality usage (fewer ‘bad prompts’ / misuse)",
+      "Vendor readiness and SOP alignment"
+    ],
+    ask:"Approve an adoption plan with quarterly targets (training coverage + usage metrics).",
+    owners:"AI Literacy • Function leads • Vendor mgmt",
+    next2w:[
+      "Define target audience segments (CTM/CTL first)",
+      "Create 3 scenario-based training modules",
+      "Set adoption dashboard (coverage, MAU, retention)"
+    ],
+    talk:[
+      "Adoption is a product, not a side effect.",
+      "Measure it like any other KPI: coverage, usage, outcomes."
+    ]
+  },
+};
+
+function dasRoleClass(role){
+  if(role==="P") return "dasCell p";
+  if(role==="E") return "dasCell e";
+  if(role==="R") return "dasCell r";
+  if(role==="G") return "dasCell g";
+  return "dasCell";
+}
+function dasTagClass(role){
+  if(role==="P") return "cellTag p";
+  if(role==="E") return "cellTag e";
+  if(role==="R") return "cellTag r";
+  if(role==="G") return "cellTag g";
+  return "cellTag";
+}
+function dasRoleText(role){
+  if(role==="P") return "Primary driver";
+  if(role==="E") return "Enable (dependency)";
+  if(role==="R") return "Reuse existing";
+  if(role==="G") return "Gap / opportunity";
+  return "—";
+}
+
+function ldInitConnect(){
+  // default focus component
+  const compId = localStorage.getItem(LD_FOCUS_COMP) || "c2_data";
+  localStorage.setItem(LD_FOCUS_COMP, compId);
+
+  ldRenderConnect();
+  ldSelectComponent(compId, true);
+}
+
+function ldSelectComponent(compId, silent=false){
+  localStorage.setItem(LD_FOCUS_COMP, compId);
+  const comp = DAS_COMPONENTS.find(x=>x.id===compId);
+  document.getElementById("selComp").textContent = comp?.short || compId;
+
+  // update list active
+  const list = document.getElementById("compList");
+  if(list){
+    Array.from(list.children).forEach(ch=>{
+      ch.classList.toggle("active", ch.dataset?.id === compId);
+    });
+  }
+
+  // render matrix + panel
+  ldRenderConnectMatrix(compId);
+
+  if(!silent){
+    document.getElementById("dasSubtitle").textContent =
+      `${comp?.name || compId}: ${comp?.why || ""}`;
+  }
+}
+
+function ldRenderConnect(){
+  const q = (document.getElementById("compSearch")?.value || "").trim().toLowerCase();
+  const list = document.getElementById("compList");
+  if(!list) return;
+
+  const focus = localStorage.getItem(LD_FOCUS_COMP) || "c2_data";
+  list.innerHTML = "";
+
+  DAS_COMPONENTS
+    .filter(c=>{
+      if(!q) return true;
+      const hay = (c.id + " " + c.short + " " + c.name + " " + c.why).toLowerCase();
+      return hay.includes(q);
+    })
+    .forEach(c=>{
+      const div = document.createElement("div");
+      div.className = "compCard" + (c.id===focus ? " active" : "");
+      div.dataset.id = c.id;
+      div.onclick = ()=> ldSelectComponent(c.id);
+      div.innerHTML = `
+        <div class="compTitle">${esc(c.short)} • ${esc(c.name)}</div>
+        <div class="compDesc">${esc(c.why)}</div>
+      `;
+      list.appendChild(div);
+    });
+}
+
+function ldRenderConnectMatrix(compFocus){
+  const host = document.getElementById("dasMatrix");
+  if(!host) return;
+
+  // stats: initiatives impacted by focused component (non-empty role)
+  const impacted = HIGHSCORE
+    .filter(it => (DAS_MATRIX[it.id] && DAS_MATRIX[it.id][compFocus]))
+    .map(it=>it.id);
+
+  document.getElementById("dasStatComp").textContent = (DAS_COMPONENTS.find(x=>x.id===compFocus)?.short || "—");
+  document.getElementById("dasStatImpact").textContent = String(impacted.length);
+
+  // top leverage: count of P+E for that component
+  const leverageScore = HIGHSCORE.reduce((acc, it)=>{
+    const r = DAS_MATRIX[it.id]?.[compFocus] || "";
+    return acc + ((r==="P" || r==="E") ? 1 : 0);
+  }, 0);
+  document.getElementById("dasStatLeverage").textContent = String(leverageScore);
+
+  // build table
+  const cols = DAS_COMPONENTS;
+  let html = `<table class="dasTable">
+    <thead><tr>
+      <th>Initiatives</th>
+      ${cols.map(c=>`<th>${esc(c.short)}</th>`).join("")}
+    </tr></thead>
+    <tbody>
+  `;
+
+  HIGHSCORE.forEach(it=>{
+    const row = DAS_MATRIX[it.id] || {};
+    html += `<tr>
+      <td>
+        <div class="dasRowTitle">${esc(it.name)}</div>
+        <div class="dasRowSub">${esc(it.channel)} • <code>${esc(it.id)}</code></div>
+      </td>
+      ${cols.map(c=>{
+        const role = row[c.id] || "";
+        const cellKey = `${it.id}::${c.id}`;
+        const isFocus = (c.id===compFocus);
+        const border = isFocus ? `style="box-shadow: inset 0 0 0 2px rgba(0,228,124,.20)"` : "";
+        const cls = dasRoleClass(role);
+        const badge = role ? `<span class="${dasTagClass(role)}">${role}</span>` : `<span class="cellTag">—</span>`;
+        const mini = role ? `<span class="mini">${esc(dasRoleText(role))}</span>` : ``;
+        return `<td>
+          <div class="${cls}" ${border} onclick="ldPickCell('${esc(it.id)}','${esc(c.id)}')">
+            ${badge}
+            ${mini}
+          </div>
+        </td>`;
+      }).join("")}
+    </tr>`;
+  });
+
+  html += `</tbody></table>`;
+  host.innerHTML = html;
+
+  // render panel for focused component by default
+  ldRenderConnectPanel(compFocus, impacted);
+}
+
+function ldPickCell(initiativeId, componentId){
+  localStorage.setItem(LD_FOCUS_CELL, `${initiativeId}::${componentId}`);
+  // sync focus component
+  localStorage.setItem(LD_FOCUS_COMP, componentId);
+  ldSelectComponent(componentId, true);
+
+  const role = DAS_MATRIX[initiativeId]?.[componentId] || "";
+  const it = HIGHSCORE.find(x=>x.id===initiativeId);
+  const comp = DAS_COMPONENTS.find(x=>x.id===componentId);
+
+  const key = `${initiativeId}::${componentId}`;
+  document.getElementById("dasFocusKey").textContent = key;
+
+  // leadership ask content: component playbook + initiative meta
+  const pb = DAS_CONNECT_PLAYBOOK[componentId] || {};
+  const meta = INIT_META[initiativeId] || {};
+
+  const why = pb.why || comp?.why || "—";
+  const unblocks = (pb.unblocks || []).map(x=>`• ${x}`).join("<br>") || "—";
+  const ask = [
+    meta.ask ? `<b>Initiative ask:</b> ${esc(meta.ask)}` : "",
+    pb.ask ? `<b>Component ask:</b> ${esc(pb.ask)}` : ""
+  ].filter(Boolean).join("<br><br>") || "—";
+
+  const owners = pb.owners || "—";
+  const next2w = (pb.next2w || []).map(x=>`• ${esc(x)}`).join("<br>") || "—";
+
+  document.getElementById("dasWhy").innerHTML = esc(why);
+  document.getElementById("dasUnblocks").innerHTML = unblocks;
+  document.getElementById("dasAsk").innerHTML = ask;
+  document.getElementById("dasOwners").innerHTML = esc(owners);
+  document.getElementById("dasNext2w").innerHTML = next2w;
+
+  const talk = (pb.talk || []).map(x=>`• ${esc(x)}`).join("<br>") || "—";
+  document.getElementById("dasTalk").innerHTML = talk;
+
+  // update subtitle to reflect cell
+  const sub = document.getElementById("dasSubtitle");
+  if(sub){
+    sub.textContent = `${comp?.short || componentId} mapped to ${initiativeId} as ${role || "—"} • Click more cells to drive discussion.`;
+  }
+
+  // Optional: also highlight the Highscore card as leadership focus
+  localStorage.setItem(STORAGE.leaderFocus, initiativeId);
+  setActiveHighscore(initiativeId);
+  // keep cockpit state in sync (if user switches back)
+  LD.selectedId = initiativeId;
+}
+
+function ldRenderConnectPanel(compId, impactedIds){
+  // default panel: component-level (no specific initiative)
+  document.getElementById("dasFocusKey").textContent = compId;
+
+  const pb = DAS_CONNECT_PLAYBOOK[compId] || {};
+  const comp = DAS_COMPONENTS.find(x=>x.id===compId);
+
+  document.getElementById("dasWhy").textContent = pb.why || comp?.why || "—";
+  document.getElementById("dasUnblocks").innerHTML =
+    (pb.unblocks || []).map(x=>`• ${esc(x)}`).join("<br>") || "—";
+  document.getElementById("dasAsk").innerHTML =
+    pb.ask ? esc(pb.ask) : "—";
+  document.getElementById("dasOwners").textContent = pb.owners || "—";
+  document.getElementById("dasNext2w").innerHTML =
+    (pb.next2w || []).map(x=>`• ${esc(x)}`).join("<br>") || "—";
+  document.getElementById("dasTalk").innerHTML =
+    (pb.talk || []).map(x=>`• ${esc(x)}`).join("<br>") || "—";
+
+  const sub = document.getElementById("dasSubtitle");
+  if(sub){
+    const names = (impactedIds||[]).slice(0,5).join(", ");
+    sub.textContent = `${comp?.name || compId}: impacts ${impactedIds?.length || 0} initiatives (e.g., ${names}${(impactedIds?.length||0)>5 ? "…" : ""}). Click a matrix cell to generate a specific leadership ask.`;
+  }
+}
+/* =========================================================
+   Init: token + projects on first switch to PL
+========================================================= */
+(function init(){
+  renderModeUI();   // ✅ 放第一行：等所有函数/常量都已经加载完再渲染
+
+  // restore token into input (session only)
+  const t = getToken();
+  if(t) document.getElementById("plToken").value = t;
+
+  // restore project id
+  const pid = getActiveProjectId();
+  if(pid) document.getElementById("plProjectId").value = pid;
+
+  // lazy load projects when PL mode
+  if(getMode()==="project_lead"){
+    plLoadProjects();
+  }
+
+  // restore leadership focus if leadership mode
+  if(getMode()==="leadership"){
+    ldInitLeadership();
+    ldSetView(ldGetView());
+    const f = localStorage.getItem(STORAGE.leaderFocus) || "";
+    if(f){
+      setActiveHighscore(f);
+      ldSelect(f, true);
+    }
+  }
+
+  // keep api hint updated
+  document.getElementById("apiHint").textContent = getApiHint();
+})();
+</script>
+</body>
+</html>

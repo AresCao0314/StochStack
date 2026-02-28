@@ -36,16 +36,30 @@ export function NotesCapture({ locale, dict }: { locale: Locale; dict: CaptureDi
   const [provider, setProvider] = useState<'qwen' | 'local-fallback' | null>(null);
   const [history, setHistory] = useState<CaptureEntry[]>([]);
   const [loading, setLoading] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(true);
   const [tip, setTip] = useState('');
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) return;
-      setHistory(JSON.parse(stored));
-    } catch {
-      setHistory([]);
-    }
+    const load = async () => {
+      try {
+        const res = await fetch('/api/notes/captures', { cache: 'no-store' });
+        if (!res.ok) throw new Error('cloud fetch failed');
+        const data = await res.json();
+        const items = (data?.items ?? []) as CaptureEntry[];
+        setHistory(items);
+      } catch {
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          setHistory(stored ? JSON.parse(stored) : []);
+        } catch {
+          setHistory([]);
+        }
+      } finally {
+        setHistoryLoading(false);
+      }
+    };
+
+    void load();
   }, []);
 
   function persist(next: CaptureEntry[]) {
@@ -80,7 +94,7 @@ export function NotesCapture({ locale, dict }: { locale: Locale; dict: CaptureDi
     }
   }
 
-  function saveCapture() {
+  async function saveCapture() {
     if (!raw.trim() || bullets.length === 0 || !provider) return;
     const entry: CaptureEntry = {
       id: crypto.randomUUID(),
@@ -90,9 +104,22 @@ export function NotesCapture({ locale, dict }: { locale: Locale; dict: CaptureDi
       provider
     };
 
-    const next = [entry, ...history].slice(0, 20);
-    persist(next);
-    setTip(dict.saved);
+    try {
+      const res = await fetch('/api/notes/captures', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...entry, locale })
+      });
+
+      if (!res.ok) throw new Error('cloud save failed');
+      const next = [entry, ...history].slice(0, 20);
+      setHistory(next);
+      setTip(`${dict.saved} (cloud)`);
+    } catch {
+      const next = [entry, ...history].slice(0, 20);
+      persist(next);
+      setTip(`${dict.saved} (local fallback)`);
+    }
   }
 
   async function copyBullets(items: string[]) {
@@ -188,7 +215,8 @@ export function NotesCapture({ locale, dict }: { locale: Locale; dict: CaptureDi
 
           <div className="noise-border rounded-lg p-3">
             <p className="mb-3 text-sm font-medium">{dict.history}</p>
-            {history.length === 0 ? <p className="text-sm text-ink/65">{dict.empty}</p> : null}
+            {historyLoading ? <p className="text-sm text-ink/65">Loading...</p> : null}
+            {!historyLoading && history.length === 0 ? <p className="text-sm text-ink/65">{dict.empty}</p> : null}
             <div className="space-y-3">
               {history.map((entry) => (
                 <article key={entry.id} className="rounded border border-ink/10 p-2 text-xs">

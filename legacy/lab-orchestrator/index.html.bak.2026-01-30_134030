@@ -1,0 +1,429 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ARES AI Studio Lab</title>
+  <style>
+    :root{
+      --bg:#08312A;
+      --accent:#00E47C;
+      --warm:#E5E3DE;
+      --light:#F6F5F3;
+      --card: rgba(246,245,243,.06);
+      --border: rgba(0,228,124,.22);
+      --border2: rgba(229,227,222,.20);
+      --ink: rgba(246,245,243,.92);
+      --muted: rgba(229,227,222,.78);
+      --shadow: 0 10px 40px rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 800px at 20% 0%, rgba(0,228,124,.14), transparent 60%),
+                  radial-gradient(900px 600px at 90% 10%, rgba(0,228,124,.10), transparent 55%),
+                  var(--bg);
+      color: var(--ink);
+    }
+    .wrap{max-width:1080px;margin:0 auto;padding:56px 18px 72px}
+    .topline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .tag{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid var(--accent);
+      color:var(--accent);
+      padding:6px 12px;border-radius:999px;font-size:12px;
+      background: rgba(0,228,124,.06);
+    }
+    .tag .dot{width:7px;height:7px;border-radius:999px;background:var(--accent)}
+    h1{font-size:44px;letter-spacing:-.5px;margin:14px 0 8px;line-height:1.05}
+    .subtitle{color:var(--muted);max-width:900px;line-height:1.5}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:22px}
+    @media(min-width:980px){ .grid{grid-template-columns: 1.05fr .95fr;} }
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:14px;
+      color: var(--accent);
+      letter-spacing:.5px;
+      text-transform: uppercase;
+    }
+    textarea{
+      width:100%;
+      height:110px;
+      border-radius:14px;
+      border:1px solid var(--border2);
+      background: rgba(0,0,0,.18);
+      color: var(--light);
+      padding:12px 12px;
+      font-size:15px;
+      outline:none;
+    }
+    textarea:focus{border-color: rgba(0,228,124,.55)}
+    .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button{
+      border:none;
+      border-radius:12px;
+      padding:10px 14px;
+      font-weight:800;
+      cursor:pointer;
+      background: var(--accent);
+      color: #06261f;
+    }
+    button.secondary{
+      background: transparent;
+      border: 1px solid rgba(229,227,222,.30);
+      color: var(--warm);
+      font-weight:700;
+    }
+    .small{font-size:12px;color: rgba(229,227,222,.72)}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(0,228,124,.28);
+      background: rgba(0,0,0,.16);
+      padding:6px 10px;border-radius:999px;
+      color: var(--warm);
+      font-size:12px;
+      margin:6px 6px 0 0;
+    }
+    .kv{display:grid;grid-template-columns:160px 1fr;gap:10px 14px;margin-top:10px}
+    .k{color: rgba(229,227,222,.70);font-size:12px}
+    .v{color: var(--light)}
+    code{
+      background: rgba(0,0,0,.22);
+      padding:3px 8px;border-radius:999px;
+      border:1px solid rgba(229,227,222,.14);
+      color: var(--light);
+      font-size:12px;
+    }
+    a{color: var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .divider{height:1px;background: rgba(229,227,222,.14);margin:14px 0}
+    .form{margin-top:10px}
+    label{display:block;font-weight:800;margin:12px 0 6px}
+    input, select{
+      width:100%;height:40px;border-radius:12px;
+      border:1px solid rgba(229,227,222,.22);
+      background: rgba(0,0,0,.16);
+      color: var(--light);
+      padding:8px 10px;
+      outline:none;
+    }
+    input:focus, select:focus{border-color: rgba(0,228,124,.55)}
+    .hint{margin-top:6px;color: rgba(229,227,222,.62);font-size:12px}
+
+    .ok{color: var(--accent);font-weight:900}
+    .warn{color: #ffd03d;font-weight:900}
+    .hidden{display:none}
+
+    details{margin-top:12px}
+    summary{cursor:pointer;color: rgba(229,227,222,.75);font-size:12px}
+    pre{
+      margin:10px 0 0;
+      white-space:pre-wrap;
+      word-break:break-word;
+      background: rgba(0,0,0,.25);
+      border:1px solid rgba(229,227,222,.12);
+      padding:12px;border-radius:14px;
+      color: rgba(246,245,243,.90);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topline">
+      <span class="tag"><span class="dot"></span> Demo • Orchestration Portal</span>
+      <span class="small">State saved in <code>localStorage</code></span>
+    </div>
+
+    <h1>Medicine Data, AI & System</h1>
+    <div class="subtitle">
+      Natural language → skill routing → guided slot filling → route target → execution plan → (optional) external tool / internal DB handoff
+    </div>
+
+    <div class="grid">
+      <!-- Left: input -->
+      <div class="card">
+        <h2>User Input</h2>
+        <textarea id="q" placeholder="e.g., US oncology Phase III site selection with diversity requirement."></textarea>
+        <div class="row">
+          <button onclick="startTurn()">Route & Plan</button>
+          <button class="secondary" onclick="resetState()">Reset state</button>
+          <span class="small">slots: <code id="state">empty</code></span>
+        </div>
+        <div class="small" style="margin-top:10px">API: <code>/api/triage</code></div>
+      </div>
+
+      <!-- Right: output -->
+      <div class="card">
+        <h2>Routing Result</h2>
+        <div id="status" class="small">Waiting…</div>
+        <div id="out" style="margin-top:10px"></div>
+
+        <!-- Tool handoff card -->
+        <div id="tool" class="hidden" style="margin-top:14px">
+          <div class="divider"></div>
+          <div class="small" style="letter-spacing:.5px;text-transform:uppercase;color:var(--accent);font-weight:900">Handoff</div>
+          <div id="toolBody" style="margin-top:10px"></div>
+        </div>
+
+        <!-- Slot form -->
+        <div id="slotForm" class="hidden" style="margin-top:14px">
+          <div class="divider"></div>
+          <div class="small" style="letter-spacing:.5px;text-transform:uppercase;color:var(--accent);font-weight:900">Provide missing fields</div>
+          <div id="slotFields" class="form"></div>
+          <div class="row">
+            <button onclick="submitSlots()">Continue</button>
+            <span class="small">Update slots and re-run triage</span>
+          </div>
+        </div>
+
+        <!-- Debug (collapsed) -->
+        <details>
+          <summary>Show raw JSON (debug)</summary>
+          <pre id="raw">{}</pre>
+        </details>
+      </div>
+    </div>
+  </div>
+
+<script>
+function esc(s){return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");}
+function titleize(key){
+  return (key||"").replaceAll("_"," ").replace(/\b\w/g, m=>m.toUpperCase());
+}
+
+function getSlots(){
+  try { return JSON.parse(localStorage.getItem("lab_slots") || "{}"); }
+  catch(e){ return {}; }
+}
+function setSlots(s){
+  localStorage.setItem("lab_slots", JSON.stringify(s || {}));
+  updateStateBadge();
+}
+function updateStateBadge(){
+  const s = getSlots();
+  const keys = Object.keys(s || {});
+  document.getElementById("state").textContent = keys.length ? keys.join(",") : "empty";
+}
+updateStateBadge();
+
+async function callTriage(utterance){
+  const slots = getSlots();
+  const r = await fetch('/api/triage', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({utterance, slots})
+  });
+  return await r.json();
+}
+
+function show(el, yes){ el.classList.toggle("hidden", !yes); }
+
+function renderToolCard(data){
+  const box = document.getElementById("tool");
+  const body = document.getElementById("toolBody");
+  body.innerHTML = "";
+  const tc = data.tool_card;
+
+  if(!tc){
+    show(box, false);
+    return;
+  }
+
+  const who = (tc.who_can_use || []).map(x=>`<li>${esc(x)}</li>`).join("");
+  const how = (tc.how_to_use || []).map(x=>`<li>${esc(x)}</li>`).join("");
+
+  body.innerHTML = `
+    <div class="kv">
+      <div class="k">Destination</div><div class="v"><b>${esc(tc.title || "External Tool")}</b></div>
+      <div class="k">Why</div><div class="v">${esc(tc.why || "")}</div>
+      <div class="k">Access</div><div class="v">${esc(tc.access_note || "")}</div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <a href="${esc(tc.link)}" target="_blank" rel="noreferrer">
+        <button>Open tool ↗</button>
+      </a>
+      <span class="small">${esc(tc.link)}</span>
+    </div>
+    <div class="divider"></div>
+    <div class="kv">
+      <div class="k">Who can use</div>
+      <div class="v"><ul style="margin:0;padding-left:18px">${who}</ul></div>
+      <div class="k">How to use</div>
+      <div class="v"><ol style="margin:0;padding-left:18px">${how}</ol></div>
+    </div>
+  `;
+  show(box, true);
+}
+
+function renderSlotForm(data){
+  const box = document.getElementById("slotForm");
+  const container = document.getElementById("slotFields");
+  container.innerHTML = "";
+
+  const missing = data.missing_fields || [];
+  const specs = data.field_specs || {};
+  const slots = data.slots || {};
+
+  if(!missing.length){
+    show(box, false);
+    return;
+  }
+
+  missing.forEach(field => {
+    const spec = specs[field] || {type:"string"};
+    const type = spec.type || "string";
+    const options = spec.options || null;
+
+    const label = document.createElement("label");
+    label.textContent = titleize(field);
+    container.appendChild(label);
+
+    let inputEl;
+
+    if(type === "enum" && Array.isArray(options) && options.length){
+      inputEl = document.createElement("select");
+      const ph = document.createElement("option");
+      ph.value = "";
+      ph.textContent = "-- select --";
+      inputEl.appendChild(ph);
+
+      options.forEach(opt => {
+        const o = document.createElement("option");
+        o.value = opt;
+        o.textContent = opt;
+        inputEl.appendChild(o);
+      });
+
+      if(slots[field]) inputEl.value = slots[field];
+    } else {
+      inputEl = document.createElement("input");
+      inputEl.type = "text";
+      inputEl.value = slots[field] ?? "";
+      inputEl.placeholder = (type === "enum_dynamic")
+        ? `type here (resolver: ${spec.resolver || "n/a"})`
+        : "type here";
+    }
+
+    inputEl.id = `slot_${field}`;
+    container.appendChild(inputEl);
+
+    const hint = document.createElement("div");
+    hint.className = "hint";
+    hint.textContent =
+      type === "enum" ? "Choose one option."
+      : type === "enum_dynamic" ? `Dynamic field (resolver: ${spec.resolver || "n/a"}).`
+      : "Free text.";
+    container.appendChild(hint);
+  });
+
+  show(box, true);
+}
+
+function render(data){
+  document.getElementById("raw").textContent = JSON.stringify(data, null, 2);
+
+  const status = document.getElementById("status");
+  const out = document.getElementById("out");
+
+  if(!data.supported){
+    status.innerHTML = `<span class="warn">Not supported yet</span> • captured ✅`;
+    out.innerHTML = `
+      <div class="kv">
+        <div class="k">Request</div><div class="v"><code>${esc(data.utterance)}</code></div>
+        <div class="k">Next</div><div class="v"><code>${esc(data.next_action || "")}</code></div>
+      </div>
+    `;
+    renderToolCard({tool_card:null});
+    renderSlotForm({missing_fields:[]});
+    return;
+  }
+
+  status.innerHTML = `<span class="ok">Routed ✅</span>`;
+
+  const plan = (data.execution_plan || [])
+    .map(x => `<span class="pill">${esc(x.step)} — ${esc(x.app)}</span>`).join("");
+
+  const missing = (data.missing_fields || []);
+  const missingLine = missing.length
+    ? `<div class="row"><span class="warn">Missing:</span> ${missing.map(f=>`<code>${esc(f)}</code>`).join(" ")}</div>`
+    : `<div class="row"><span class="ok">All required fields provided</span></div>`;
+
+  const target = data.target_connector ? `<code>${esc(data.target_connector)}</code>` : `<span class="small">n/a</span>`;
+
+  out.innerHTML = `
+    <div class="kv">
+      <div class="k">Channel</div><div class="v"><b>${esc(data.routed_channel)}</b></div>
+      <div class="k">Initiative</div><div class="v"><b>${esc(data.initiative)}</b></div>
+      <div class="k">Skill / Intent</div><div class="v"><code>${esc(data.intent)}</code> • confidence: <b>${esc(data.confidence)}</b></div>
+      <div class="k">Route target</div><div class="v">${target}</div>
+      <div class="k">Next action</div><div class="v"><code>${esc(data.next_action || "")}</code></div>
+    </div>
+
+    <div class="divider"></div>
+    ${missingLine}
+
+    <div style="margin-top:8px">
+      <div class="k" style="margin-bottom:6px">Execution plan</div>
+      <div>${plan || '<span class="small">n/a</span>'}</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="small">LLM note: ${esc(data.llm?.rationale_short || "")}</div>
+  `;
+
+  renderToolCard(data);
+  renderSlotForm(data);
+}
+
+async function startTurn(){
+  const q = document.getElementById('q').value.trim();
+  if(!q) return;
+  document.getElementById("status").textContent = "Running…";
+  const data = await callTriage(q);
+  setSlots(data.slots || {});
+  render(data);
+}
+
+async function submitSlots(){
+  const dataOut = JSON.parse(document.getElementById("raw").textContent || "{}");
+  const missing = dataOut.missing_fields || [];
+  const current = getSlots();
+
+  missing.forEach(field => {
+    const el = document.getElementById(`slot_${field}`);
+    if(!el) return;
+    const v = (el.value ?? "").trim();
+    if(v) current[field] = v;
+  });
+
+  setSlots(current);
+  document.getElementById("status").textContent = "Continuing…";
+  const follow = missing.map(f => `${f}=${current[f] ?? ""}`).join(", ");
+  const data = await callTriage(follow || "continue");
+  setSlots(data.slots || {});
+  render(data);
+}
+
+function resetState(){
+  localStorage.removeItem("lab_slots");
+  updateStateBadge();
+  document.getElementById("status").textContent = "State reset. Waiting…";
+  document.getElementById("out").innerHTML = "";
+  document.getElementById("raw").textContent = "{}";
+  show(document.getElementById("slotForm"), false);
+  show(document.getElementById("tool"), false);
+}
+</script>
+</body>
+</html>

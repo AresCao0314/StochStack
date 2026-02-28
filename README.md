@@ -51,6 +51,12 @@ npm run dev
 
 If `DASHSCOPE_API_KEY` is missing, the app uses a local fallback summarizer.
 
+## Notes Cloud Sync (Same Alibaba Cloud Instance)
+
+- Notes captures are stored server-side via `GET/POST /api/notes/captures`.
+- In Docker deployment, data persists in the named volume `notes_data` mounted to `/data`.
+- Default file path: `/data/notes-captures.json` (configurable via `NOTES_DATA_FILE`).
+
 ## Project Structure
 
 - `src/app`: App Router pages/layouts
