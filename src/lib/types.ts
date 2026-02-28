@@ -10,6 +10,7 @@ export type Port = {
   description: LocalizedText;
   tags: string[];
   status: PortStatus;
+  archived?: boolean;
   link: string;
   screenshot: string;
   techStack: string[];

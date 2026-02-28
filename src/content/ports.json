@@ -276,7 +276,8 @@
       "en": "Translate protocol complexity into navigable operational states.",
       "zh": "把复杂方案翻译成可导航的运营状态。",
       "de": "Protokollkomplexität in navigierbare Betriebszustände übersetzen."
-    }
+    },
+    "archived": true
   },
   {
     "slug": "signal-note-engine",
@@ -307,7 +308,8 @@
       "en": "Keep writing raw, then recover structure later with semantic indexing.",
       "zh": "先保持原始书写，再用语义索引回收结构。",
       "de": "Roh schreiben, Struktur später semantisch rekonstruieren."
-    }
+    },
+    "archived": true
   },
   {
     "slug": "oncology-risk-radar",
@@ -338,7 +340,8 @@
       "en": "Expose uncertainty ranges before delays become visible in reports.",
       "zh": "在报告显现延迟之前先暴露不确定区间。",
       "de": "Unsicherheitskorridore sichtbar machen, bevor Verzögerungen reportet werden."
-    }
+    },
+    "archived": true
   },
   {
     "slug": "stoch-prompt-workbench",
@@ -369,7 +372,8 @@
       "en": "Treat prompts as evolving operational assets, not static text.",
       "zh": "把提示词视为持续演化的运营资产，而非静态文本。",
       "de": "Prompts als operative Assets statt statischer Texte behandeln."
-    }
+    },
+    "archived": true
   },
   {
     "slug": "tennis-telemetry-log",
@@ -400,7 +404,8 @@
       "en": "Bridge subjective feel and measurable cadence across drills.",
       "zh": "连接主观手感与可度量训练节奏。",
       "de": "Subjektives Gefühl mit messbarer Kadenz in Drills verbinden."
-    }
+    },
+    "archived": true
   },
   {
     "slug": "film-edit-rhythm-lab",
@@ -431,7 +436,8 @@
       "en": "Support narrative pace decisions with measurable cut patterns.",
       "zh": "用可度量的切点模式支撑叙事节奏决策。",
       "de": "Narratives Timing über messbare Schnittmuster unterstützen."
-    }
+    },
+    "archived": true
   },
   {
     "slug": "book-fragment-index",
@@ -462,7 +468,8 @@
       "en": "Compress a year of reading into reusable conceptual vectors.",
       "zh": "把全年阅读压缩为可复用的概念向量。",
       "de": "Ein Lesejahr in wiederverwendbare Konzeptvektoren komprimieren."
-    }
+    },
+    "archived": true
   },
   {
     "slug": "urban-geometry-atlas",
@@ -493,6 +500,7 @@
       "en": "Capture form-language patterns that influence interface composition.",
       "zh": "捕捉影响界面构图的形态语言模式。",
       "de": "Formsprachen erfassen, die Interface-Komposition prägen."
-    }
+    },
+    "archived": true
   }
 ]

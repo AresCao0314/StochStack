@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { HeroSignal } from '@/components/hero-signal';
 import { PortGrid } from '@/components/port-grid';
 import { getDictionary, type Locale } from '@/lib/i18n';
-import { getPorts } from '@/lib/content';
+import { getActivePorts } from '@/lib/content';
 
 const SHOW_POTATO_ON_HERO = true;
 
@@ -26,7 +26,7 @@ export async function generateMetadata({
 
 export default function HomePage({ params }: { params: { locale: Locale } }) {
   const dict = getDictionary(params.locale);
-  const ports = getPorts().slice(0, 6);
+  const ports = getActivePorts().slice(0, 6);
 
   return (
     <div className="space-y-16">

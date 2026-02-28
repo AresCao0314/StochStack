@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
+import { PortGrid } from '@/components/port-grid';
 import { PrototypesBrowser } from '@/components/prototypes-browser';
 import { getDictionary, type Locale } from '@/lib/i18n';
-import { getPorts } from '@/lib/content';
+import { getActivePorts, getArchivedPorts } from '@/lib/content';
 
 export async function generateMetadata({ params }: { params: { locale: Locale } }): Promise<Metadata> {
   const dict = getDictionary(params.locale);
@@ -17,6 +18,8 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
 
 export default function PrototypesPage({ params }: { params: { locale: Locale } }) {
   const dict = getDictionary(params.locale);
+  const activePorts = getActivePorts();
+  const archivedPorts = getArchivedPorts();
 
   return (
     <div className="space-y-8">
@@ -27,12 +30,20 @@ export default function PrototypesPage({ params }: { params: { locale: Locale } 
       </header>
       <PrototypesBrowser
         locale={params.locale}
-        ports={getPorts()}
+        ports={activePorts}
         allLabel={dict.common.all}
         tagLabel={dict.common.filterByTag}
         statusLabel={dict.common.filterByStatus}
         visitLabel={dict.common.visit}
       />
+
+      {archivedPorts.length > 0 ? (
+        <section className="space-y-4 border-t border-ink/15 pt-8">
+          <p className="section-title">archive</p>
+          <h2 className="text-2xl font-semibold">Archived Prototypes</h2>
+          <PortGrid locale={params.locale} ports={archivedPorts} detailPath visitLabel={dict.common.visit} />
+        </section>
+      ) : null}
     </div>
   );
 }

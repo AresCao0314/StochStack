@@ -20,6 +20,14 @@ export function getPorts() {
   return ports as Port[];
 }
 
+export function getActivePorts() {
+  return getPorts().filter((item) => !item.archived);
+}
+
+export function getArchivedPorts() {
+  return getPorts().filter((item) => item.archived);
+}
+
 export function getPortBySlug(slug: string) {
   return getPorts().find((item) => item.slug === slug);
 }
