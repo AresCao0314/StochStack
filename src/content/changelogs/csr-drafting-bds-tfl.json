@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.3.0",
+    "title": {
+      "en": "Data Anchoring and Consistency Validation Added",
+      "zh": "新增数据锚定与一致性校验",
+      "de": "Datenankerung und Konsistenzvalidierung hinzugefuegt"
+    },
+    "changes": {
+      "en": [
+        "Added numeric data-anchor extraction from CSR draft sections with anchor status (exact/approximate/missing).",
+        "Added draft-vs-TFL numeric consistency checks with pass/warn/fail outputs.",
+        "Added validation panel for unresolved anchors and section-level traceability completeness."
+      ],
+      "zh": [
+        "新增 CSR 草稿章节中的数字锚定抽取与锚定状态（exact/approximate/missing）。",
+        "新增草稿数字与 TFL 数字的一致性校验（pass/warn/fail）。",
+        "新增未锚定项与章节追溯完整性的验证面板。"
+      ],
+      "de": [
+        "Numerische Datenanker aus CSR-Abschnitten mit Status (exact/approximate/missing) hinzugefuegt.",
+        "Konsistenzpruefung zwischen Draft- und TFL-Zahlen mit pass/warn/fail integriert.",
+        "Validierungspanel fuer offene Anker und Abschnitts-Traceability erweitert."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.2.0",
     "title": {
       "en": "ICH E3 Assembly + TFL Traceability Added",

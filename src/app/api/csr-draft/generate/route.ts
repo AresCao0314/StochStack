@@ -48,11 +48,33 @@ type TraceabilityItem = {
   tflRefs: string[];
 };
 
+type DataAnchorItem = {
+  sectionId: string;
+  metricText: string;
+  value: string;
+  unit?: string;
+  sentenceExcerpt: string;
+  anchored: boolean;
+  anchorType: 'exact' | 'approximate' | 'missing';
+  tflRefs: string[];
+};
+
+type ConsistencyCheck = {
+  level: 'pass' | 'warn' | 'fail';
+  check: string;
+  detail: string;
+};
+
 type CsrResponse = {
   draft: CsrDraft;
   ichE3Sections: IchSection[];
   tableFigureListing: TableFigureItem[];
   traceability: TraceabilityItem[];
+  dataAnchors: DataAnchorItem[];
+  consistency: {
+    overall: 'pass' | 'warn' | 'fail';
+    checks: ConsistencyCheck[];
+  };
 };
 
 function stripFence(raw: string) {
@@ -135,6 +157,97 @@ function extractTflRefs(text: string) {
     refs.add('Listing 16.2.1');
   }
   return [...refs];
+}
+
+function extractNumericTokens(text: string) {
+  const tokens = new Set<string>();
+  const regex = /(?<![A-Za-z])(\d+(?:\.\d+)?)(%| months| month| days| day| years| year| mg| ml)?/gi;
+  let match: RegExpExecArray | null = null;
+  while (true) {
+    match = regex.exec(text);
+    if (!match) break;
+    const v = String(match[1]).trim();
+    const u = String(match[2] ?? '').trim().toLowerCase();
+    tokens.add(u ? `${v}${u}` : v);
+  }
+  return [...tokens];
+}
+
+function normalizeNumberLike(raw: string) {
+  return raw.toLowerCase().replace(/\s+/g, '');
+}
+
+function buildDataAnchors(draft: CsrDraft, traceability: TraceabilityItem[], tflText: string): DataAnchorItem[] {
+  const tflTokens = extractNumericTokens(tflText).map(normalizeNumberLike);
+  const out: DataAnchorItem[] = [];
+  const targetSections: Array<{ sectionId: string; text: string }> = [
+    { sectionId: '10', text: draft.dataDependent.dispositionAndBaseline },
+    { sectionId: '11', text: draft.dataDependent.efficacyResults },
+    { sectionId: '12', text: draft.dataDependent.safetyResults },
+    { sectionId: '13', text: draft.dataDependent.benefitRisk + ' ' + draft.dataDependent.conclusion }
+  ];
+
+  for (const item of targetSections) {
+    const numbers = extractNumericTokens(item.text);
+    const trace = traceability.find((t) => t.sectionId === item.sectionId);
+    for (const n of numbers) {
+      const norm = normalizeNumberLike(n);
+      const anchoredExact = tflTokens.includes(norm);
+      const anchoredApprox = !anchoredExact && tflTokens.some((x) => x.startsWith(norm) || norm.startsWith(x));
+      out.push({
+        sectionId: item.sectionId,
+        metricText: `Section ${item.sectionId} metric`,
+        value: n.replace(/(months|month|days|day|years|year|mg|ml)$/i, ''),
+        unit: /%$/.test(n)
+          ? '%'
+          : /(months|month|days|day|years|year|mg|ml)$/i.test(n)
+            ? n.match(/(months|month|days|day|years|year|mg|ml)$/i)?.[0]
+            : undefined,
+        sentenceExcerpt: item.text.slice(0, 180),
+        anchored: anchoredExact || anchoredApprox,
+        anchorType: anchoredExact ? 'exact' : anchoredApprox ? 'approximate' : 'missing',
+        tflRefs: trace?.tflRefs ?? []
+      });
+    }
+  }
+
+  return out;
+}
+
+function runConsistencyChecks(draft: CsrDraft, tflText: string, anchors: DataAnchorItem[]): { overall: 'pass' | 'warn' | 'fail'; checks: ConsistencyCheck[] } {
+  const checks: ConsistencyCheck[] = [];
+  const tflTokens = extractNumericTokens(tflText).map(normalizeNumberLike);
+  const draftTokens = extractNumericTokens(
+    `${draft.dataDependent.dispositionAndBaseline} ${draft.dataDependent.efficacyResults} ${draft.dataDependent.safetyResults} ${draft.dataDependent.benefitRisk} ${draft.dataDependent.conclusion}`
+  ).map(normalizeNumberLike);
+
+  const missingAnchors = anchors.filter((x) => !x.anchored);
+  checks.push({
+    level: missingAnchors.length === 0 ? 'pass' : missingAnchors.length <= 2 ? 'warn' : 'fail',
+    check: 'Numeric anchor coverage',
+    detail: missingAnchors.length === 0 ? 'All detected numeric statements are anchored to TFL context.' : `${missingAnchors.length} numeric statements are not anchored.`
+  });
+
+  const absentInTfl = draftTokens.filter((d) => !tflTokens.some((t) => t === d || t.startsWith(d) || d.startsWith(t)));
+  checks.push({
+    level: absentInTfl.length === 0 ? 'pass' : absentInTfl.length <= 2 ? 'warn' : 'fail',
+    check: 'Draft-vs-TFL numeric consistency',
+    detail: absentInTfl.length === 0 ? 'All draft numerics found in TFL payload.' : `Unmatched draft numerics: ${absentInTfl.slice(0, 6).join(', ')}`
+  });
+
+  const sectionsWithoutRefs = ['10', '11', '12', '13'].filter((sid) => !anchors.some((a) => a.sectionId === sid && a.tflRefs.length > 0));
+  checks.push({
+    level: sectionsWithoutRefs.length === 0 ? 'pass' : 'warn',
+    check: 'Section traceability completeness',
+    detail: sectionsWithoutRefs.length === 0 ? 'All key sections include TFL references.' : `Missing refs for sections: ${sectionsWithoutRefs.join(', ')}`
+  });
+
+  const hasFail = checks.some((c) => c.level === 'fail');
+  const hasWarn = checks.some((c) => c.level === 'warn');
+  return {
+    overall: hasFail ? 'fail' : hasWarn ? 'warn' : 'pass',
+    checks
+  };
 }
 
 function toIchE3Sections(draft: CsrDraft, tflRefs: string[]): IchSection[] {
@@ -294,8 +407,14 @@ export async function POST(request: Request) {
       draft,
       ichE3Sections: toIchE3Sections(draft, tflRefs),
       tableFigureListing: toTableFigureListing(tflRefs),
-      traceability: toTraceability(draft, tflRefs)
+      traceability: toTraceability(draft, tflRefs),
+      dataAnchors: [],
+      consistency: { overall: 'pass', checks: [] }
     };
+
+    const anchors = buildDataAnchors(draft, response.traceability, tflOrRtf);
+    response.dataAnchors = anchors;
+    response.consistency = runConsistencyChecks(draft, tflOrRtf, anchors);
 
     return NextResponse.json({
       ok: true,

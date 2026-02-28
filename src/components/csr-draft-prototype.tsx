@@ -51,6 +51,24 @@ type CsrV2 = {
     statement: string;
     tflRefs: string[];
   }>;
+  dataAnchors: Array<{
+    sectionId: string;
+    metricText: string;
+    value: string;
+    unit?: string;
+    sentenceExcerpt: string;
+    anchored: boolean;
+    anchorType: 'exact' | 'approximate' | 'missing';
+    tflRefs: string[];
+  }>;
+  consistency: {
+    overall: 'pass' | 'warn' | 'fail';
+    checks: Array<{
+      level: 'pass' | 'warn' | 'fail';
+      check: string;
+      detail: string;
+    }>;
+  };
 };
 
 const labels: Record<Locale, any> = {
@@ -70,7 +88,9 @@ const labels: Record<Locale, any> = {
     copy: 'Copy JSON',
     ich: 'ICH E3 Section Assembly (9-14)',
     tflList: 'Table/Figure/Listing Placeholders',
-    trace: 'Traceability to TFL IDs'
+    trace: 'Traceability to TFL IDs',
+    consistency: 'Data Consistency Checks',
+    anchors: 'Numeric Data Anchors'
   },
   zh: {
     title: '基于 BDS + TFL/RTF 的 CSR 草稿',
@@ -87,7 +107,9 @@ const labels: Record<Locale, any> = {
     copy: '复制 JSON',
     ich: 'ICH E3 章节自动拼装（9-14）',
     tflList: '表格/图形/列表占位',
-    trace: '到 TFL 编号的追溯'
+    trace: '到 TFL 编号的追溯',
+    consistency: '数据一致性校验',
+    anchors: '数字锚定详情'
   },
   de: {
     title: 'CSR Draft aus BDS + TFL/RTF',
@@ -105,7 +127,9 @@ const labels: Record<Locale, any> = {
     copy: 'JSON kopieren',
     ich: 'ICH E3 Abschnitt-Montage (9-14)',
     tflList: 'Table/Figure/Listing Platzhalter',
-    trace: 'Traceability zu TFL-IDs'
+    trace: 'Traceability zu TFL-IDs',
+    consistency: 'Datenkonsistenz-Checks',
+    anchors: 'Numerische Datenanker'
   }
 };
 
@@ -264,6 +288,32 @@ export function CsrDraftPrototype({ locale, samples }: { locale: Locale; samples
                     <p className="font-medium">Section {x.sectionId}</p>
                     <p className="text-xs text-ink/75">{x.statement}</p>
                     <p className="text-xs text-ink/65">TFL refs: {x.tflRefs.join(', ') || '-'}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+          <div className="grid gap-4 xl:grid-cols-2">
+            <article className="noise-border rounded-lg p-4">
+              <h2 className="mb-2 text-lg font-semibold">{t.consistency}</h2>
+              <p className="mb-2 text-xs text-ink/60">overall: {result.consistency.overall}</p>
+              <div className="space-y-2 text-sm">
+                {result.consistency.checks.map((x, idx) => (
+                  <div key={`${x.check}-${idx}`} className={`rounded border p-2 ${x.level === 'pass' ? 'border-green-300 bg-green-50/60' : x.level === 'warn' ? 'border-amber-300 bg-amber-50/60' : 'border-red-300 bg-red-50/60'}`}>
+                    <p className="font-medium">{x.check}</p>
+                    <p className="text-xs">{x.detail}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+            <article className="noise-border rounded-lg p-4">
+              <h2 className="mb-2 text-lg font-semibold">{t.anchors}</h2>
+              <div className="max-h-[320px] space-y-2 overflow-auto text-sm">
+                {result.dataAnchors.map((a, idx) => (
+                  <div key={`${a.sectionId}-${a.value}-${idx}`} className="rounded border border-ink/15 p-2">
+                    <p className="font-medium">Section {a.sectionId} · {a.value}{a.unit || ''}</p>
+                    <p className="text-xs text-ink/70">anchor: {a.anchorType} · refs: {a.tflRefs.join(', ') || '-'}</p>
+                    <p className="text-xs text-ink/70">{a.sentenceExcerpt}</p>
                   </div>
                 ))}
               </div>
