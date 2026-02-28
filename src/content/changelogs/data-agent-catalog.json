@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.1.0",
+    "title": {
+      "en": "Initial Data Agent Catalog Prototype",
+      "zh": "Data Agent 目录原型首版",
+      "de": "Erste Version des Data-Agent-Katalogs"
+    },
+    "changes": {
+      "en": [
+        "Added enterprise clinical data catalog across internal/external domains.",
+        "Added natural-language query endpoint with dataset matching and confidence score.",
+        "Added access metadata response: owner, access level, storage type, and schema preview."
+      ],
+      "zh": [
+        "新增覆盖内外部域的临床研发数据目录。",
+        "新增自然语言查询接口，返回数据集匹配与置信度。",
+        "新增 access 元数据返回：owner、权限等级、存储形态与 schema 预览。"
+      ],
+      "de": [
+        "Unternehmensweiter klinischer Datenkatalog ueber interne/externe Domaenen hinzugefuegt.",
+        "Natuerlichsprachiger Query-Endpunkt mit Match-Score integriert.",
+        "Access-Metadaten ergaenzt: Owner, Zugriffslevel, Storage-Typ und Schema-Preview."
+      ]
+    }
+  }
+]

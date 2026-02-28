@@ -1,5 +1,36 @@
 [
   {
+    "slug": "data-agent-catalog",
+    "name": {
+      "en": "Data Agent Catalog",
+      "zh": "Data Agent 数据目录",
+      "de": "Data Agent Datenkatalog"
+    },
+    "description": {
+      "en": "Natural-language data discovery across internal and external clinical development datasets, with schema and access metadata.",
+      "zh": "面向临床研发内外部数据资产的自然语言发现能力，返回 schema 与 access 元数据。",
+      "de": "Natuerlichsprachige Datensuche ueber interne und externe Clinical-Development-Daten mit Schema- und Access-Metadaten."
+    },
+    "tags": [
+      "Data",
+      "Catalog",
+      "Agent"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/data-agent-catalog",
+    "screenshot": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "Data Catalog",
+      "NL Router",
+      "Access Metadata"
+    ],
+    "designIntent": {
+      "en": "Expose the enterprise clinical data landscape as a queryable operating surface.",
+      "zh": "把组织级临床数据版图变成可查询、可落地执行的操作界面。",
+      "de": "Die klinische Datenlandschaft des Unternehmens als abfragbare Operationsflaeche verfuegbar machen."
+    }
+  },
+  {
     "slug": "agent-orchestration-highscore",
     "name": {
       "en": "Agent Orchestration Hub",

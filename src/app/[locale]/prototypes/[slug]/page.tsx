@@ -5,6 +5,7 @@ import { MarketIntelligencePrototype } from '@/components/market-intelligence-pr
 import { ProtocolLogicPrototype, type ProtocolRecord } from '@/components/protocol-logic-prototype';
 import { PrototypeChangelog, type LogEntry } from '@/components/prototype-changelog';
 import { AgentOrchestrationPrototype } from '@/components/agent-orchestration-prototype';
+import { DataAgentPrototype } from '@/components/data-agent-prototype';
 import { SiteFeasibilityFeedbackPrototype } from '@/components/site-feasibility-feedback-prototype';
 import { SiteFeasibilityPrototype } from '@/components/site-feasibility-prototype';
 import { getDictionary, locales, type Locale } from '@/lib/i18n';
@@ -15,11 +16,13 @@ import digest from '@/content/market-intelligence/digest.json';
 import feasibilitySites from '@/content/site-feasibility/sites.json';
 import protocolEngineData from '@/content/protocol-engine/protocols.json';
 import orchestrationInitiatives from '@/content/agent-orchestration/initiatives.json';
+import dataAgentDatasets from '@/content/data-agent/datasets.json';
 import marketChangelog from '@/content/changelogs/market-intelligence-highscore.json';
 import siteScoringChangelog from '@/content/changelogs/site-feasibility-scoring.json';
 import siteFeedbackChangelog from '@/content/changelogs/site-feasibility-human-feedback.json';
 import protocolChangelog from '@/content/changelogs/protocol-qa-logic-engine.json';
 import orchestrationChangelog from '@/content/changelogs/agent-orchestration-highscore.json';
+import dataAgentChangelog from '@/content/changelogs/data-agent-catalog.json';
 
 export function generateStaticParams() {
   const ports = getPorts();
@@ -86,6 +89,15 @@ export default function PrototypeDetailPage({ params }: { params: { locale: Loca
       <>
         <AgentOrchestrationPrototype locale={params.locale} initiatives={orchestrationInitiatives} />
         <PrototypeChangelog locale={params.locale} entries={orchestrationChangelog as unknown as LogEntry[]} />
+      </>
+    );
+  }
+
+  if (params.slug === 'data-agent-catalog') {
+    return (
+      <>
+        <DataAgentPrototype locale={params.locale} initial={dataAgentDatasets} />
+        <PrototypeChangelog locale={params.locale} entries={dataAgentChangelog as unknown as LogEntry[]} />
       </>
     );
   }
