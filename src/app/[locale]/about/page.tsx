@@ -4,83 +4,75 @@ import { getDictionary, type Locale } from '@/lib/i18n';
 
 const aboutTimeline = [
   {
-    year: '1988',
+    year: '2006',
     text: {
-      en: 'Born in Shenyang, where winter light and industrial geometry first shaped my sense of structure.',
-      zh: '出生于沈阳，在寒光与工业几何里形成了最早的结构感。',
-      de: 'Geboren in Shenyang: Winterlicht und industrielle Geometrie praegten frueh mein Strukturdenken.'
+      en: 'Moved from consuming narratives to training argument, rhythm, and point-of-view under pressure.',
+      zh: '从接收叙事，转向训练论证、节奏与高压下的观点组织。',
+      de: 'Vom Aufnehmen von Erzaehlungen hin zum Training von Argument, Rhythmus und Haltung unter Druck.'
     }
   },
   {
-    year: '2006',
+    year: '2008',
     text: {
-      en: 'By the Pearl River in Guangzhou, I learned to read fast-changing signals across people, place, and momentum.',
-      zh: '2006 年在广州珠江边，开始学会读取人与场景之间快速变化的信号。',
-      de: '2006 am Perlfluss in Guangzhou: Signale zwischen Menschen, Raum und Dynamik lesen gelernt.'
+      en: 'Shifted from intuition-first thinking to explicit structure: systems, feedback, and composable abstractions.',
+      zh: '从直觉先行，转向显式结构：系统、反馈与可组合的抽象。',
+      de: 'Vom intuitiven Denken zu expliziter Struktur: Systeme, Rueckkopplung und kombinierbare Abstraktion.'
     }
   },
   {
     year: '2011',
     text: {
-      en: 'In Shanghai, studied computational neurobiology and neural conservation across species as a language of patterns.',
-      zh: '2011 年在上海学习计算神经生物学，研究跨物种神经系统的保守性，把“模式”当作语言。',
-      de: '2011 in Shanghai: Computational Neurobiology und konservierte neuronale Muster ueber Spezies hinweg untersucht.'
+      en: 'Started operating in cross-disciplinary space, treating biology and computation as one design language.',
+      zh: '进入交叉学科视角，把生命系统与计算系统视作同一种设计语言。',
+      de: 'Einstieg in interdisziplinaeres Denken: Biologie und Berechnung als eine gemeinsame Designsprache.'
     }
   },
   {
     year: '2014',
     text: {
-      en: 'Entered genomics, moving through technical leadership, product strategy, and general management.',
-      zh: '2014 年进入基因组学，从技术负责人、产品经理到 General Manager，持续跨栈演进。',
-      de: 'Seit 2014 in der Genomik: von technischer Leitung ueber Produktstrategie bis General Management.'
+      en: 'Moved from specialist depth to multi-role synthesis, linking technical truth with product and operating logic.',
+      zh: '从单点专业深挖，转向多角色综合：把技术真相与产品、运营逻辑接起来。',
+      de: 'Vom Spezialistentiefgang zur Rollen-Synthese: technische Wahrheit mit Produkt- und Operating-Logik verbinden.'
     }
   },
   {
     year: '2016',
     text: {
-      en: 'Worked in Europe on market shaping and sales leadership, translating science into adoption.',
-      zh: '2016 年赴欧洲，负责市场与销售团队，把科学语言翻译成真实采用。',
-      de: '2016 in Europa: Marketing- und Vertriebsfuehrung, wissenschaftliche Inhalte in Adoption ueberfuehrt.'
-    }
-  },
-  {
-    year: '2017',
-    text: {
-      en: 'Returned to Shanghai to bridge proteomics, early-stage AI, and enterprise clinical platforms.',
-      zh: '2017 年回到上海，连接蛋白组学、早研 AI 与临床系统落地（CTMS/EDC/PV/RIMS）。',
-      de: '2017 zurueck in Shanghai: Bruecke zwischen Proteomik, frueher AI und klinischen Plattformen (CTMS/EDC/PV/RIMS).'
+      en: 'Learned to align strategy, communication, and execution loops across heterogeneous stakeholders.',
+      zh: '学会在异质协作中对齐战略、沟通与执行闭环。',
+      de: 'Gelernt, Strategie, Kommunikation und Execution-Loops ueber heterogene Stakeholder hinweg auszurichten.'
     }
   },
   {
     year: '2019',
     text: {
-      en: 'Expanded into IRC imaging review and broader trial system implementation at operational depth.',
-      zh: '2019 年进一步进入 IRC 独立影像阅片与临床试验系统实施，深入执行纵深。',
-      de: '2019 Ausbau in IRC-Bildreview und tiefere Umsetzung klinischer Studiensysteme.'
+      en: 'Moved from pure execution to system-level design thinking.',
+      zh: '从执行导向，转向系统级设计思维。',
+      de: 'Vom reinen Umsetzen hin zu systemischem Designdenken.'
     }
   },
   {
     year: '2021',
     text: {
-      en: 'Shifted focus to AI applications across clinical development and clinical operations workflows.',
-      zh: '2021 年起聚焦临床研发与临床运营全流程的 AI 应用。',
-      de: 'Ab 2021 Fokus auf AI-Anwendungen entlang klinischer Entwicklung und Operations.'
+      en: 'Reframed operations as an adaptive control problem: detect drift early, intervene with minimal friction.',
+      zh: '把运营重构为自适应控制问题：提前识别偏移，以最小摩擦完成干预。',
+      de: 'Operations als adaptives Steuerungsproblem neu gerahmt: Drift frueh erkennen, mit minimaler Reibung eingreifen.'
     }
   },
   {
     year: '2023',
     text: {
-      en: 'Started working with large language models, turning tacit operating logic into editable systems.',
-      zh: '2023 年开始系统使用大语言模型，把隐性经验转写为可编辑、可协作的系统逻辑。',
-      de: 'Seit 2023 mit Large Language Models: implizite Betriebslogik in editierbare Systeme ueberfuehrt.'
+      en: 'Started externalizing tacit reasoning into reusable language interfaces and operational memory.',
+      zh: '开始把隐性推理外化为可复用的语言接口与组织记忆。',
+      de: 'Implizites Reasoning in wiederverwendbare Sprachschnittstellen und operative Erinnerung ueberfuehrt.'
     }
   },
   {
-    year: 'Now',
+    year: '2025',
     text: {
-      en: 'StochStack: a signal desk for turning uncertainty into prototypes, and prototypes into decisions.',
-      zh: '现在，随机栈成为一个信号工作台：把不确定性转成原型，再把原型转成决策。',
-      de: 'Heute ist StochStack ein Signal-Desk: Unsicherheit in Prototypen und Prototypen in Entscheidungen uebersetzen.'
+      en: 'Launched StochStack as a signal-driven prototype and editorial lab.',
+      zh: '启动随机栈，作为信号驱动的原型与编辑实验场。',
+      de: 'StochStack als signalgetriebenes Prototyp- und Editorial-Lab gestartet.'
     }
   }
 ];
