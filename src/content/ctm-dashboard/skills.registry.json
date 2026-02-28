@@ -1,6 +1,6 @@
 {
   "registryId": "ctm-sop-skill-registry",
-  "registryVersion": "1.0.0",
+  "registryVersion": "1.1.0",
   "updatedAt": "2026-03-01",
   "skills": [
     {
@@ -8,6 +8,9 @@
       "sopVersion": "1.2.0",
       "status": "active",
       "effectiveDate": "2026-02-15",
+      "reviewer": "Clinical Quality Review Board",
+      "approvedBy": "VP Clinical Operations",
+      "approvalDate": "2026-02-16",
       "owners": ["Global Site Ops Lead", "Country Startup Manager"],
       "intentKeywords": ["site", "startup", "activation", "ssu", "启动", "站点", "aktivierung"],
       "description": "Recover delayed site activation against country-level startup baseline.",
@@ -38,6 +41,9 @@
       "sopVersion": "1.3.0",
       "status": "active",
       "effectiveDate": "2026-02-22",
+      "reviewer": "Clinical Quality Review Board",
+      "approvedBy": "VP Clinical Development",
+      "approvalDate": "2026-02-23",
       "owners": ["Enrollment Director", "Regional CTM"],
       "intentKeywords": ["recruit", "enrollment", "patient", "招募", "入组", "rekrutierung"],
       "description": "Stabilize enrollment trajectory and reduce milestone slippage risk.",
@@ -68,6 +74,9 @@
       "sopVersion": "1.1.0",
       "status": "active",
       "effectiveDate": "2026-02-01",
+      "reviewer": "Clinical Governance Office",
+      "approvedBy": "Head of Trial Finance",
+      "approvalDate": "2026-02-02",
       "owners": ["Trial Finance", "Procurement Partner"],
       "intentKeywords": ["budget", "cost", "spend", "burn", "预算", "kosten"],
       "description": "Contain burn-rate drift while protecting critical milestones.",
@@ -92,6 +101,9 @@
       "sopVersion": "1.0.0",
       "status": "active",
       "effectiveDate": "2026-01-18",
+      "reviewer": "Clinical Delivery Governance",
+      "approvedBy": "Clinical Delivery Director",
+      "approvalDate": "2026-01-19",
       "owners": ["Resource Manager", "Clinical Delivery Lead"],
       "intentKeywords": ["resource", "fte", "capacity", "workload", "资源", "人力", "kapazität"],
       "description": "Balance functional load and prevent operational bottlenecks.",
@@ -108,6 +120,32 @@
           "date": "2026-01-18",
           "author": "Clinical Delivery PMO",
           "summary": "Initial operational release."
+        }
+      ]
+    },
+    {
+      "header": "SOP.SKILL.EXPERIMENTAL_BACKLOG_TRIAGE",
+      "sopVersion": "0.9.0",
+      "status": "draft",
+      "effectiveDate": "2026-03-15",
+      "reviewer": "Innovation PMO",
+      "approvedBy": "",
+      "approvalDate": "",
+      "owners": ["Innovation Analyst"],
+      "intentKeywords": ["exploratory", "backlog", "pilot"],
+      "description": "Draft skill for exploratory backlog triage.",
+      "sopSteps": [
+        "Capture request.",
+        "Tag uncertainty and data gaps.",
+        "Propose pilot scope."
+      ],
+      "outputs": ["Backlog triage note"],
+      "changeLog": [
+        {
+          "version": "0.9.0",
+          "date": "2026-03-01",
+          "author": "Innovation PMO",
+          "summary": "Draft for future governance approval."
         }
       ]
     }

@@ -16,6 +16,9 @@ export type SopSkillPack = {
   sopVersion: string;
   status: SopSkillStatus;
   effectiveDate: string;
+  reviewer: string;
+  approvedBy: string;
+  approvalDate: string;
   owners: string[];
   intentKeywords: string[];
   description: string;
@@ -43,6 +46,9 @@ function normalizeSkill(raw: Partial<SopSkillPack>): SopSkillPack | null {
     sopVersion: raw.sopVersion ?? '0.1.0',
     status: raw.status ?? 'active',
     effectiveDate: raw.effectiveDate ?? '2026-01-01',
+    reviewer: raw.reviewer ?? '',
+    approvedBy: raw.approvedBy ?? '',
+    approvalDate: raw.approvalDate ?? '',
     owners: Array.isArray(raw.owners) ? raw.owners : [],
     intentKeywords: Array.isArray(raw.intentKeywords) ? raw.intentKeywords : [],
     description: raw.description ?? '',
@@ -61,10 +67,20 @@ function normalizeSkill(raw: Partial<SopSkillPack>): SopSkillPack | null {
   };
 }
 
+function isEffectiveSkill(skill: SopSkillPack) {
+  const hasApproval = Boolean(skill.reviewer && skill.approvedBy && skill.approvalDate);
+  if (!hasApproval) return false;
+  if (skill.status !== 'active') return false;
+  const parsedApprovalDate = new Date(skill.approvalDate);
+  if (Number.isNaN(parsedApprovalDate.getTime())) return false;
+  return parsedApprovalDate.getTime() <= Date.now();
+}
+
 function normalizeRegistry(raw: RawRegistry, sourceFormat: 'yaml' | 'json'): SopSkillRegistry {
   const skills = (raw.skills ?? [])
     .map((item) => normalizeSkill(item))
-    .filter((item): item is SopSkillPack => item !== null);
+    .filter((item): item is SopSkillPack => item !== null)
+    .filter((item) => isEffectiveSkill(item));
 
   return {
     registryId: raw.registryId ?? 'ctm-sop-skill-registry',

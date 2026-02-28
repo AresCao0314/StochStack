@@ -85,8 +85,9 @@ python3 scripts/fetch_ctgov_site_feasibility.py --page-size 100 --max-pages 4 --
 
 - Registry path: `src/content/ctm-dashboard/skills.registry.yaml` (primary), fallback: `skills.registry.json`.
 - Loader: `src/lib/ctm-sop-registry.ts` (YAML first, JSON fallback).
-- Required fields per skill: `header`, `sopVersion`, `status`, `effectiveDate`, `owners`, `intentKeywords`, `sopSteps`, `outputs`.
+- Required fields per skill: `header`, `sopVersion`, `status`, `effectiveDate`, `reviewer`, `approvedBy`, `approvalDate`, `owners`, `intentKeywords`, `sopSteps`, `outputs`.
 - Version governance: add a new `changeLog` item for every SOP update (version/date/author/summary).
+- Activation policy: loader only activates skills where `status=active` and approval fields are populated.
 
 Operational note:
 - Update registry file in Git, then deploy.

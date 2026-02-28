@@ -39,6 +39,9 @@ export type SkillPack = {
   sopVersion: string;
   status: 'active' | 'draft' | 'deprecated';
   effectiveDate: string;
+  reviewer: string;
+  approvedBy: string;
+  approvalDate: string;
   owners: string[];
   intentKeywords: string[];
   description: string;
@@ -390,6 +393,9 @@ export function CtmDashboardPrototype({
                 <p className="mt-1 text-sm font-semibold">{route.skill.header}</p>
                 <p className="mt-1 text-xs text-ink/70">
                   v{route.skill.sopVersion} · {route.skill.status} · effective {route.skill.effectiveDate}
+                </p>
+                <p className="mt-1 text-xs text-ink/60">
+                  reviewer: {route.skill.reviewer} · approved by: {route.skill.approvedBy} ({route.skill.approvalDate})
                 </p>
                 <p className="mt-1 text-xs text-ink/70">score: {route.score}</p>
                 <p className="mt-1 text-xs text-ink/70">{route.skill.description}</p>

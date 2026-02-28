@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.3.0",
+    "title": {
+      "en": "Approval workflow fields + active-only policy",
+      "zh": "审批流字段 + 仅加载 active 生效策略",
+      "de": "Freigabefelder + Active-only Policy"
+    },
+    "changes": {
+      "en": [
+        "Added reviewer/approvedBy/approvalDate fields to SOP skill registry schema.",
+        "Registry loader now activates only approved active skills.",
+        "CTM dashboard now shows SOP approval metadata during skill routing."
+      ],
+      "zh": [
+        "SOP skill registry schema 新增 reviewer/approvedBy/approvalDate 审批字段。",
+        "Registry loader 调整为只激活“已审批且 active”的 skill。",
+        "CTM dashboard 在路由结果中展示 SOP 审批元信息。"
+      ],
+      "de": [
+        "SOP-Registry um reviewer/approvedBy/approvalDate erweitert.",
+        "Loader aktiviert jetzt nur genehmigte aktive Skills.",
+        "CTM-Dashboard zeigt Freigabe-Metadaten im Routing-Ergebnis."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.2.0",
     "title": {
       "en": "Configurable SOP skill registry (YAML/JSON)",
