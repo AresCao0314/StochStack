@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-02-28",
+    "version": "v0.2.0",
+    "title": {
+      "en": "Legacy Intelligence Hub Refactored",
+      "zh": "旧版情报首页重构完成",
+      "de": "Legacy-Intelligence-Hub refaktoriert"
+    },
+    "changes": {
+      "en": [
+        "Migrated legacy market-intelligence frontend into StochStack style.",
+        "Added explainable cards, daily digest, and watchlist panels.",
+        "Enabled clickable source links with fallback search routing."
+      ],
+      "zh": [
+        "将 legacy 情报首页迁移为 StochStack 风格。",
+        "新增可解释卡片、daily digest 与 watchlist 面板。",
+        "支持来源可点击，并在缺失链接时自动回退搜索。"
+      ],
+      "de": [
+        "Legacy-Market-Intelligence in StochStack-Design ueberfuehrt.",
+        "Erklaerbare Karten, Daily-Digest und Watchlist-Panel hinzugefuegt.",
+        "Klickbare Quellenlinks mit Fallback-Suche aktiviert."
+      ]
+    }
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.3.0",
+    "title": {
+      "en": "Live ClinicalTrials.gov Sync Connected",
+      "zh": "接入 ClinicalTrials.gov 实时同步",
+      "de": "Live-Sync mit ClinicalTrials.gov verbunden"
+    },
+    "changes": {
+      "en": [
+        "Added nightly ClinicalTrials.gov sync pipeline.",
+        "Upgraded filter model and explainable score breakdown.",
+        "Added export for CSV and JSON shortlist outputs."
+      ],
+      "zh": [
+        "新增 nightly ClinicalTrials.gov 同步链路。",
+        "升级筛选模型与可解释评分分解。",
+        "支持 CSV/JSON 导出候选列表。"
+      ],
+      "de": [
+        "Nightly-Sync-Pipeline zu ClinicalTrials.gov hinzugefuegt.",
+        "Filtermodell und erklaerbare Score-Aufschluesselung erweitert.",
+        "CSV/JSON-Export fuer Shortlist integriert."
+      ]
+    }
+  }
+]

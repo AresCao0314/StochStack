@@ -40,8 +40,14 @@ export default function PrototypesPage({ params }: { params: { locale: Locale } 
       {archivedPorts.length > 0 ? (
         <section className="space-y-4 border-t border-ink/15 pt-8">
           <p className="section-title">archive</p>
-          <h2 className="text-2xl font-semibold">Archived Prototypes</h2>
-          <PortGrid locale={params.locale} ports={archivedPorts} detailPath visitLabel={dict.common.visit} />
+          <details className="noise-border rounded-lg p-4">
+            <summary className="cursor-pointer text-2xl font-semibold">
+              Archived Prototypes ({archivedPorts.length})
+            </summary>
+            <div className="mt-4">
+              <PortGrid locale={params.locale} ports={archivedPorts} detailPath visitLabel={dict.common.visit} />
+            </div>
+          </details>
         </section>
       ) : null}
     </div>

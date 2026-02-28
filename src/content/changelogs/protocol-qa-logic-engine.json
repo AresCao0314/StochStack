@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.4.0",
+    "title": {
+      "en": "PDF Upload and Auto-Structured Extraction",
+      "zh": "新增 PDF 上传与自动结构化抽取",
+      "de": "PDF-Upload und automatische Struktur-Extraktion"
+    },
+    "changes": {
+      "en": [
+        "Added protocol PDF upload and Qwen-based extraction endpoint.",
+        "Injected extracted protocol JSON directly into engine selector.",
+        "Extended eligibility, med-check, and lab-manual evidence tracing."
+      ],
+      "zh": [
+        "新增 protocol PDF 上传与通义抽取接口。",
+        "抽取结果可直接注入协议选择器。",
+        "增强入排、用药、lab manual 的证据追溯。"
+      ],
+      "de": [
+        "Protocol-PDF-Upload und Qwen-Extraktion hinzugefuegt.",
+        "Extrahierte JSON-Protocols direkt im Selector nutzbar.",
+        "Eligibility-, Med- und Lab-Checks mit Evidenz-Trace erweitert."
+      ]
+    }
+  }
+]

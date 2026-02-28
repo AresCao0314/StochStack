@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.2.0",
+    "title": {
+      "en": "Human Feedback Reinforcement Layer Added",
+      "zh": "新增人类反馈强化层",
+      "de": "Human-Feedback-Verstaerkung hinzugefuegt"
+    },
+    "changes": {
+      "en": [
+        "Added before-vs-after ranking comparison.",
+        "Added explicit feedback actions (like/dislike) with reason tags.",
+        "Introduced adaptive weight updates and audit feedback log."
+      ],
+      "zh": [
+        "新增 before-vs-after 排名对比视图。",
+        "新增 like/dislike 与反馈原因标签。",
+        "加入权重自适应更新与可审计反馈日志。"
+      ],
+      "de": [
+        "Before-vs-after Ranking-Vergleich hinzugefuegt.",
+        "Explizite Feedback-Aktionen (like/dislike) mit Gruenden eingebaut.",
+        "Adaptive Gewichtsanpassung plus Audit-Log integriert."
+      ]
+    }
+  }
+]
