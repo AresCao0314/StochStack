@@ -1,0 +1,44 @@
+{
+  "updated_at": "2026-02-24T15:45:34Z",
+  "today": "2026-02-24",
+  "total_signals": 0,
+  "new_since_last_run": 0,
+  "new_published_today": 0,
+  "pipeline": {
+    "attempted_requests": 3,
+    "failed_requests": 3,
+    "providers": [
+      "google",
+      "bing"
+    ]
+  },
+  "watchlist": {
+    "companies": [
+      "OpenAI",
+      "Anthropic",
+      "AWS",
+      "IBM",
+      "Microsoft",
+      "Google"
+    ],
+    "total_hits": 0,
+    "hit_breakdown": {
+      "OpenAI": 0,
+      "Anthropic": 0,
+      "AWS": 0,
+      "IBM": 0,
+      "Microsoft": 0,
+      "Google": 0
+    },
+    "new_hit_breakdown": {
+      "OpenAI": 0,
+      "Anthropic": 0,
+      "AWS": 0,
+      "IBM": 0,
+      "Microsoft": 0,
+      "Google": 0
+    },
+    "highlights": []
+  },
+  "new_items": []
+}

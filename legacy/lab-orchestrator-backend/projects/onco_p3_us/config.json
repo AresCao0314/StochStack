@@ -1,0 +1,42 @@
+{
+  "project_id": "onco_p3_us",
+  "enabled_skills": ["site_selection", "site_startup", "rbqm_quality"],
+  "keyword_fallbacks": {
+    "site_selection": ["site selection", "site", "sites", "footprint", "feasibility", "oncology", "phase 3", "us", "usa", "united states"],
+    "site_startup": ["startup", "activation", "ssu", "irb", "ec submission"],
+    "rbqm_quality": ["rbqm", "risk based quality", "central monitoring", "quality signals"]
+  },
+  "slot_aliases": {
+    "region": {
+      "from": ["country"],
+      "map": {
+        "us": "US",
+        "u.s.": "US",
+        "u.s": "US",
+        "usa": "US",
+        "united states": "US",
+        "unitedstates": "US"
+      }
+    }
+  },
+  "routing_overrides": {
+    "site_selection": [
+      { "if": "region == 'US'", "target": "tool_h1_site_universe" }
+    ]
+  },
+  "tool_cards": {
+    "tool_h1_site_universe": {
+      "type": "external_tool",
+      "title": "H1 Clinical — Site Universe (US site selection)",
+      "link": "https://h1.co/clinical/site-universe/",
+      "why": "Use H1 to shortlist US oncology sites; filter by region={region}, phase={phase}, TA={therapeutic_area}.",
+      "who_can_use": ["Authorized users under H1 subscription"],
+      "how_to_use": ["Set indication", "Filter to US", "Review site signals", "Export shortlist"],
+      "access_note": "Requires org access."
+    }
+  },
+  "admin": {
+    "owner": "project_lead_name",
+    "team": "oncology_ops"
+  }
+}

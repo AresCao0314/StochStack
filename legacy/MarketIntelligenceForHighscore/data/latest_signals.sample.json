@@ -1,0 +1,41 @@
+[
+  {
+    "id": "demo-1",
+    "project_id": "holistic_analytics_qms",
+    "topic": "technology_platform",
+    "title": "Sponsor expands RBQM stack with centralized risk engine",
+    "summary": "A top-20 sponsor reported a new central risk-scoring layer connecting EDC and CTMS to speed data issue detection.",
+    "source": "Industry Journal",
+    "published_at": "2026-02-18",
+    "link": "https://example.com/rbqm-stack",
+    "entities": ["Sponsor", "EDC", "CTMS"],
+    "tags": ["RBQM", "AI", "quality management"],
+    "relevance_score": 0.84
+  },
+  {
+    "id": "demo-2",
+    "project_id": "site_startup",
+    "topic": "vendors",
+    "title": "Global study startup cycle reduced via startup workflow vendor",
+    "summary": "Reported median startup reduction by 21% after applying standardized country package workflows.",
+    "source": "Consulting Insight",
+    "published_at": "2026-02-15",
+    "link": "https://example.com/startup-vendor",
+    "entities": ["Top biopharma", "workflow vendor"],
+    "tags": ["site startup", "cycle time", "vendor"],
+    "relevance_score": 0.79
+  },
+  {
+    "id": "demo-3",
+    "project_id": "ai_authoring_automation",
+    "topic": "academic_literature",
+    "title": "New paper benchmarks LLM-assisted CSR authoring quality",
+    "summary": "Peer-reviewed study compared reviewer effort and found lower revision rounds in controlled authoring workflows.",
+    "source": "Academic Publication",
+    "published_at": "2026-02-10",
+    "link": "https://example.com/llm-csr-paper",
+    "entities": ["LLM", "CSR"],
+    "tags": ["medical writing", "automation", "literature"],
+    "relevance_score": 0.88
+  }
+]

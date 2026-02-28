@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Highscore Daily Update
+
+[Timer]
+OnCalendar=*-*-* 06:30:00
+Persistent=true
+Unit=highscore-update.service
+
+[Install]
+WantedBy=timers.target

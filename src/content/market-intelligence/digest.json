@@ -1,0 +1,59 @@
+{
+  "updated_at": "2026-02-24T14:20:00Z",
+  "today": "2026-02-24",
+  "total_signals": 3,
+  "new_since_last_run": 2,
+  "new_published_today": 1,
+  "pipeline": {
+    "attempted_requests": 80,
+    "failed_requests": 70,
+    "providers": ["google", "bing"]
+  },
+  "watchlist": {
+    "companies": ["OpenAI", "Anthropic", "AWS", "IBM", "Microsoft", "Google"],
+    "total_hits": 2,
+    "hit_breakdown": {
+      "OpenAI": 1,
+      "Anthropic": 0,
+      "AWS": 1,
+      "IBM": 0,
+      "Microsoft": 0,
+      "Google": 0
+    },
+    "new_hit_breakdown": {
+      "OpenAI": 1,
+      "Anthropic": 0,
+      "AWS": 0,
+      "IBM": 0,
+      "Microsoft": 0,
+      "Google": 0
+    },
+    "highlights": [
+      {
+        "title": "Sponsor pilots AI protocol drafting with OpenAI ecosystem tooling",
+        "project_id": "ai_authoring_automation",
+        "published_at": "2026-02-24",
+        "source": "Tech Biopharma Brief",
+        "link": "https://example.com/openai-trial-authoring",
+        "companies": ["OpenAI"]
+      },
+      {
+        "title": "AWS clinical lakehouse partner launches footprint analytics package",
+        "project_id": "data_tech_foundation",
+        "published_at": "2026-02-23",
+        "source": "Cloud Health News",
+        "link": "https://example.com/aws-clinical-lakehouse",
+        "companies": ["AWS"]
+      }
+    ]
+  },
+  "new_items": [
+    {
+      "title": "Sponsor pilots AI protocol drafting with OpenAI ecosystem tooling",
+      "project_id": "ai_authoring_automation",
+      "published_at": "2026-02-24",
+      "source": "Tech Biopharma Brief",
+      "link": "https://example.com/openai-trial-authoring"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "portfolio_mgmt",
+    "name": "Clinical operation portfolio management (milestones, budget, resources)",
+    "keywords": ["clinical operations portfolio management", "trial milestones", "clinical budget", "resource planning"]
+  },
+  {
+    "id": "trial_simulator",
+    "name": "Clinical trial simulator capability",
+    "keywords": ["clinical trial simulation", "digital twin trial", "trial scenario modeling", "protocol simulation"]
+  },
+  {
+    "id": "site_startup",
+    "name": "Optimized site startup capability",
+    "keywords": ["site startup", "site activation", "start-up timelines", "study startup optimization"]
+  },
+  {
+    "id": "footprint_selection",
+    "name": "Data-driven trial footprint and site selection capability",
+    "keywords": ["site selection", "trial footprint", "patient recruitment analytics", "country feasibility"]
+  },
+  {
+    "id": "partner_of_choice",
+    "name": "Differentiated global Partner-of-Choice model",
+    "keywords": ["partner-of-choice", "strategic CRO partnership", "global clinical partnership", "preferred provider model"]
+  },
+  {
+    "id": "submission_closeout",
+    "name": "Submission and close-out acceleration capability",
+    "keywords": ["regulatory submission acceleration", "study close-out", "TMF closeout", "submission timelines"]
+  },
+  {
+    "id": "holistic_analytics_qms",
+    "name": "Holistic analytics/AI-enabled and risk-based trial data quality management",
+    "keywords": ["risk-based quality management", "RBQM", "AI clinical data quality", "central monitoring"]
+  },
+  {
+    "id": "delivery_sourcing",
+    "name": "Simplified clinical delivery and sourcing model to optimize costs",
+    "keywords": ["clinical outsourcing model", "functional service provider", "clinical delivery model", "cost optimization"]
+  },
+  {
+    "id": "data_tech_foundation",
+    "name": "Integrated, scalable data and tech foundation",
+    "keywords": ["clinical data platform", "interoperable clinical systems", "data fabric", "eClinical architecture"]
+  },
+  {
+    "id": "ai_authoring_automation",
+    "name": "AI tools for end-to-end automation (first step: authoring)",
+    "keywords": ["medical writing automation", "AI authoring", "LLM clinical documentation", "end-to-end automation"]
+  }
+]

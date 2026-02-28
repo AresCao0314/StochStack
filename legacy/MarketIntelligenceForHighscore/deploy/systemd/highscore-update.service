@@ -1,0 +1,14 @@
+[Unit]
+Description=Highscore Daily Intelligence Update
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/highscore/HighscoreMarketIntelligence
+ExecStart=/bin/bash /opt/highscore/HighscoreMarketIntelligence/scripts/daily_update.sh
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

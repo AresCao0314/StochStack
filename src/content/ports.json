@@ -161,6 +161,29 @@
     }
   },
   {
+    "slug": "market-intelligence-highscore",
+    "name": {
+      "en": "Market Intelligence Hub",
+      "zh": "市场情报中枢",
+      "de": "Market-Intelligence Hub"
+    },
+    "description": {
+      "en": "Signal radar for clinical development programs, vendor moves, and big-tech watch.",
+      "zh": "聚合临床项目、vendor 变动与科技巨头动态的信号雷达。",
+      "de": "Signalradar fuer klinische Programme, Vendor-Bewegungen und Big-Tech Monitoring."
+    },
+    "tags": ["Clinical", "Intelligence", "Dashboard"],
+    "status": "live",
+    "link": "https://stochstack.com/en/prototypes/market-intelligence-highscore",
+    "screenshot": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80",
+    "techStack": ["Next.js", "TypeScript", "Data Signals"],
+    "designIntent": {
+      "en": "Rebuild a legacy intelligence homepage into a modular AI-native editorial console.",
+      "zh": "将旧版情报首页重构为模块化的 AI-native 编辑型控制台。",
+      "de": "Legacy-Intelligence-Homepage als modulares AI-natives Editorial-Console neu aufbauen."
+    }
+  },
+  {
     "slug": "urban-geometry-atlas",
     "name": {
       "en": "Urban Geometry Atlas",

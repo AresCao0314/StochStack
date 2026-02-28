@@ -1,0 +1,131 @@
+import os, json
+from datetime import datetime
+from fastapi import FastAPI
+from pydantic import BaseModel
+from openai import OpenAI
+
+app = FastAPI()
+
+class Req(BaseModel):
+    utterance: str
+
+# 10 highscore initiatives（从你截图里抠出来的那 10 个）
+INITIATIVES = [
+  {"id":"portfolio_mgmt", "group":"Trial design & planning", "name":"Portfolio management approach for milestones, budget and resources"},
+  {"id":"trial_simulator", "group":"Trial design & planning", "name":"Boehringer specific trial simulator capability"},
+  {"id":"site_startup", "group":"Trial delivery & submissions", "name":"Optimized site startup capability"},
+  {"id":"site_selection", "group":"Trial delivery & submissions", "name":"Data driven trial footprint and site selection capability"},
+  {"id":"partner_of_choice", "group":"Trial delivery & submissions", "name":"Differentiated global \"Partner-of-Choice\" model"},
+  {"id":"submission_closeout", "group":"Trial delivery & submissions", "name":"Submission and close-out acceleration capability"},
+  {"id":"rbqm_quality", "group":"Trial delivery & submissions", "name":"Holistic analytics/AI-enabled and risk based clinical trial (data) quality mgmt approach"},
+  {"id":"sourcing_cost", "group":"Trial delivery & submissions", "name":"Simplified clinical delivery and sourcing model to optimize costs"},
+  {"id":"data_foundation", "group":"Data & AI", "name":"Integrated, scalable data and tech foundation"},
+  {"id":"e2e_automation_authoring", "group":"Data & AI", "name":"AI tools for end-to-end automation, 1st step authoring"},
+]
+
+# 每个 initiative 默认的执行顺序（你后续可以精细化）
+PIPELINES = {
+  "site_selection": ["intent_parser","slot_filler","candidate_builder","ranker","explainability_narrator"],
+  "site_startup": ["intent_parser","slot_filler","timeline_model","risk_flags","deliver"],
+  "submission_closeout": ["intent_parser","doc_ingest","checklist_runner","auto_packager","deliver"],
+  "rbqm_quality": ["intent_parser","signals_extractor","risk_model","rbqm_recommendation","deliver"],
+  "portfolio_mgmt": ["intent_parser","constraints_parser","scenario_builder","optimizer","deliver"],
+  "trial_simulator": ["intent_parser","inputs_mapper","sim_engine","sensitivity_scan","deliver"],
+  "partner_of_choice": ["intent_parser","vendor_data_pull","scorecard","recommendation","deliver"],
+  "sourcing_cost": ["intent_parser","cost_drivers","sourcing_options","optimizer","deliver"],
+  "data_foundation": ["intent_parser","data_catalog_lookup","lineage_view","access_request","deliver"],
+  "e2e_automation_authoring": ["intent_parser","doc_ingest","outline_builder","draft_writer","qc_checker","deliver"],
+}
+
+def qwen_classify(utterance: str) -> dict:
+    base_url = os.getenv("QWEN_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1")
+    model = os.getenv("QWEN_MODEL", "qwen-plus")
+    api_key = os.getenv("DASHSCOPE_API_KEY")
+
+    if not api_key:
+        return {"supported": False, "reason": "missing_api_key"}
+
+    client = OpenAI(api_key=api_key, base_url=base_url)
+
+    system = (
+    "You are an intent router for a Medicine Data & AI portal.\n"
+    "Given a user request, pick the best matching initiative from the provided list.\n"
+    "If none matches, set supported=false and initiative_id=null.\n"
+    "You MUST return ONLY valid JSON.\n"
+    "Output JSON schema:\n"
+    "{\n"
+    '  "supported": boolean,\n'
+    '  "initiative_id": string|null,\n'
+    '  "confidence": number,\n'
+    '  "rationale_short": string,\n'
+    '  "slots": {\n'
+    '     "country": string|null,\n'
+    '     "therapeutic_area": string|null,\n'
+    '     "phase": string|null,\n'
+    '     "objective": string|null,\n'
+    '     "priority": string|null\n'
+    "  },\n"
+    '  "need_clarification": boolean,\n'
+    '  "clarifying_questions": string[]\n'
+    "}\n"
+    "Rules:\n"
+    "- confidence is 0-1.\n"
+    "- If supported=true but key slots are missing, set need_clarification=true and ask 1-4 concise questions.\n"
+    "- If supported=false, need_clarification=false and clarifying_questions=[].\n"
+    )
+
+    initiatives_text = "\n".join([f"- {x['id']}: {x['name']} (group: {x['group']})" for x in INITIATIVES])
+
+    user = (
+      f"User request: {utterance}\n\n"
+      f"Initiatives:\n{initiatives_text}\n\n"
+      "JSON only:"
+    )
+
+    # OpenAI-compatible Chat Completions endpoint on DashScope  [oai_citation:2‡help.aliyun.com](https://help.aliyun.com/zh/model-studio/qwen-api-reference/?utm_source=chatgpt.com)
+    resp = client.chat.completions.create(
+        model=model,
+        messages=[{"role":"system","content":system},{"role":"user","content":user}],
+        temperature=0,
+        response_format={"type": "json_object"},
+    )
+    txt = resp.choices[0].message.content.strip()
+    return json.loads(txt)
+
+@app.post("/api/triage")
+def triage(req: Req):
+    cls = qwen_classify(req.utterance)
+
+    if not cls.get("supported") or not cls.get("initiative_id"):
+        # ✅ 这里写入“需求池”日志：一行一条请求
+        ts = datetime.utcnow().isoformat()
+        with open("/var/log/lab-unsupported.log", "a", encoding="utf-8") as f:
+            f.write(f"{ts}\t{req.utterance.replace(chr(10),' ').replace(chr(9),' ')}\n")
+        
+        return {
+            "utterance": req.utterance,
+            "supported": False,
+            "intent": None,
+            "confidence": float(cls.get("confidence", 0.2) or 0.2),
+            "routed_channel": None,
+            "initiative": None,
+            "execution_plan": [],
+            "next_action": "captured_for_analysis",
+            "llm": cls,
+        }
+
+    iid = cls["initiative_id"]
+    meta = next((x for x in INITIATIVES if x["id"] == iid), None)
+    apps = PIPELINES.get(iid, ["intent_parser","deliver"])
+
+    return {
+        "utterance": req.utterance,
+        "supported": True,
+        "intent": iid,
+        "confidence": float(cls.get("confidence", 0.7) or 0.7),
+        "routed_channel": meta["group"] if meta else "Unknown",
+        "initiative": meta["name"] if meta else iid,
+        "execution_plan": [{"step": i+1, "app": a} for i, a in enumerate(apps)],
+        "next_action": "execute_plan",
+        "llm": cls,
+    }
