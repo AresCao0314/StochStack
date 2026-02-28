@@ -24,6 +24,14 @@ type LaySynopsis = {
   contactAndNextSteps: string;
 };
 
+type TraceEntry = {
+  section: keyof LaySynopsis;
+  layText: string;
+  sourceExcerpt: string;
+  sourceIndex: number;
+  matchScore: number;
+};
+
 const labels: Record<Locale, any> = {
   en: {
     title: 'Lay Language Protocol Synopsis (EU)',
@@ -36,7 +44,11 @@ const labels: Record<Locale, any> = {
     result: 'Generated Lay Synopsis',
     checklist: 'EU Readiness Checklist',
     readability: 'Readability',
-    copy: 'Copy Output JSON'
+    copy: 'Copy Output JSON',
+    review: 'Protocol vs Lay Review',
+    layCol: 'Lay sentence',
+    srcCol: 'Protocol evidence',
+    score: 'Match'
   },
   zh: {
     title: 'Lay Language Protocol Synopsis（EU）',
@@ -48,7 +60,11 @@ const labels: Record<Locale, any> = {
     result: '生成结果',
     checklist: 'EU 检查清单',
     readability: '可读性指标',
-    copy: '复制输出 JSON'
+    copy: '复制输出 JSON',
+    review: 'Protocol vs Lay 对照审阅',
+    layCol: 'Lay 句子',
+    srcCol: 'Protocol 证据',
+    score: '匹配度'
   },
   de: {
     title: 'Lay Language Protocol Synopsis (EU)',
@@ -61,7 +77,11 @@ const labels: Record<Locale, any> = {
     result: 'Generierte Lay-Synopsis',
     checklist: 'EU-Checkliste',
     readability: 'Lesbarkeit',
-    copy: 'Output-JSON kopieren'
+    copy: 'Output-JSON kopieren',
+    review: 'Protocol-vs-Lay Review',
+    layCol: 'Lay-Satz',
+    srcCol: 'Protocol-Evidenz',
+    score: 'Match'
   }
 };
 
@@ -77,6 +97,7 @@ export function LaySynopsisPrototype({ locale, samples }: { locale: Locale; samp
   const [source, setSource] = useState('');
   const [readability, setReadability] = useState<{ avgSentenceWords: number; jargonFlags: string[] } | null>(null);
   const [checklist, setChecklist] = useState<Array<{ item: string; pass: boolean }>>([]);
+  const [traceability, setTraceability] = useState<TraceEntry[]>([]);
 
   function onSampleChange(id: string) {
     setSampleId(id);
@@ -102,6 +123,7 @@ export function LaySynopsisPrototype({ locale, samples }: { locale: Locale; samp
       setSource(String(data.source || ''));
       setReadability(data.readability || null);
       setChecklist(Array.isArray(data.euChecklist) ? data.euChecklist : []);
+      setTraceability(Array.isArray(data.traceability) ? (data.traceability as TraceEntry[]) : []);
     } catch {
       setError('Generation failed.');
     } finally {
@@ -200,6 +222,32 @@ export function LaySynopsisPrototype({ locale, samples }: { locale: Locale; samp
                 </div>
               ) : null}
             </article>
+          </section>
+
+          <section className="noise-border rounded-lg p-4">
+            <h2 className="mb-2 text-lg font-semibold">{t.review}</h2>
+            <div className="space-y-2 text-sm">
+              {traceability.map((x, idx) => (
+                <div key={`${x.section}-${idx}`} className="grid gap-2 rounded border border-ink/15 p-2 md:grid-cols-12">
+                  <div className="md:col-span-1 text-[11px] uppercase tracking-[0.12em] text-ink/60">{x.section}</div>
+                  <div className="md:col-span-4">
+                    <p className="text-xs font-semibold text-ink/65">{t.layCol}</p>
+                    <p className="text-sm">{x.layText}</p>
+                  </div>
+                  <div className="md:col-span-6">
+                    <p className="text-xs font-semibold text-ink/65">{t.srcCol}</p>
+                    <p className="text-sm text-ink/80">{x.sourceExcerpt || '-'}</p>
+                  </div>
+                  <div className="md:col-span-1 text-right">
+                    <p className="text-xs font-semibold text-ink/65">{t.score}</p>
+                    <p className={`text-sm font-semibold ${x.matchScore >= 0.35 ? 'text-green-700' : x.matchScore >= 0.2 ? 'text-amber-700' : 'text-red-700'}`}>
+                      {(x.matchScore * 100).toFixed(0)}%
+                    </p>
+                  </div>
+                </div>
+              ))}
+              {traceability.length === 0 ? <p className="text-xs text-ink/60">No traceability map generated.</p> : null}
+            </div>
           </section>
         </>
       ) : null}

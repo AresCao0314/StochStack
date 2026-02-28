@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.2.0",
+    "title": {
+      "en": "Protocol-vs-Lay Traceability Review Added",
+      "zh": "新增 Protocol 与 Lay 对照追溯审阅",
+      "de": "Protocol-vs-Lay Traceability Review hinzugefuegt"
+    },
+    "changes": {
+      "en": [
+        "Added sentence-level traceability mapping from lay output to source protocol evidence.",
+        "Added side-by-side review panel for lay sentence, source excerpt, and match score.",
+        "Extended generation API response with traceability payload for audit-ready review."
+      ],
+      "zh": [
+        "新增 lay 文案到 protocol 原文证据的句级 traceability 映射。",
+        "新增并排审阅面板：lay 句子、证据片段、匹配分数。",
+        "扩展生成 API 返回 traceability 结构，支持审计式审阅。"
+      ],
+      "de": [
+        "Satzgenaues Traceability-Mapping von Lay-Text zu Protocol-Evidenz integriert.",
+        "Side-by-side Review fuer Lay-Satz, Evidenz-Text und Match-Score hinzugefuegt.",
+        "Generation-API um Traceability-Payload fuer auditierbare Reviews erweitert."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.1.0",
     "title": {
       "en": "Lay Language Synopsis EU Prototype Added",

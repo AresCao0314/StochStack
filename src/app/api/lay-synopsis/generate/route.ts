@@ -22,6 +22,14 @@ type LaySynopsis = {
   contactAndNextSteps: string;
 };
 
+type TraceEntry = {
+  section: keyof LaySynopsis;
+  layText: string;
+  sourceExcerpt: string;
+  sourceIndex: number;
+  matchScore: number;
+};
+
 function splitSentences(text: string) {
   return text
     .replace(/\r/g, '\n')
@@ -80,6 +88,71 @@ function localGenerate(text: string, outputLanguage: 'en' | 'de'): LaySynopsis {
     contactAndNextSteps:
       'Please discuss questions with the study team. You will receive informed consent information before participation.'
   };
+}
+
+function tokenize(text: string) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\u4e00-\u9fff\s]/g, ' ')
+    .split(/\s+/)
+    .map((x) => x.trim())
+    .filter((x) => x.length >= 2);
+}
+
+function overlapScore(a: string, b: string) {
+  const at = new Set(tokenize(a));
+  const bt = new Set(tokenize(b));
+  if (at.size === 0 || bt.size === 0) return 0;
+  let inter = 0;
+  at.forEach((x) => {
+    if (bt.has(x)) inter += 1;
+  });
+  return inter / Math.max(at.size, 1);
+}
+
+function pickBestSource(layText: string, sourceSentences: string[]) {
+  let bestScore = -1;
+  let bestIdx = -1;
+  for (let i = 0; i < sourceSentences.length; i++) {
+    const s = overlapScore(layText, sourceSentences[i]);
+    if (s > bestScore) {
+      bestScore = s;
+      bestIdx = i;
+    }
+  }
+  return {
+    sourceIndex: bestIdx,
+    sourceExcerpt: bestIdx >= 0 ? sourceSentences[bestIdx] : '',
+    matchScore: Number(Math.max(0, bestScore).toFixed(2))
+  };
+}
+
+function buildTraceability(lay: LaySynopsis, sourceText: string): TraceEntry[] {
+  const sourceSentences = splitSentences(sourceText);
+  const entries: TraceEntry[] = [];
+  const pushEntry = (section: keyof LaySynopsis, value: string) => {
+    const text = value.trim();
+    if (!text) return;
+    const best = pickBestSource(text, sourceSentences);
+    entries.push({
+      section,
+      layText: text,
+      sourceExcerpt: best.sourceExcerpt,
+      sourceIndex: best.sourceIndex,
+      matchScore: best.matchScore
+    });
+  };
+
+  pushEntry('plainSummary', lay.plainSummary);
+  pushEntry('whyStudy', lay.whyStudy);
+  pushEntry('whoCanJoin', lay.whoCanJoin);
+  lay.whatWillHappen.forEach((x) => pushEntry('whatWillHappen', x));
+  pushEntry('possibleBenefits', lay.possibleBenefits);
+  lay.possibleRisks.forEach((x) => pushEntry('possibleRisks', x));
+  lay.participantRights.forEach((x) => pushEntry('participantRights', x));
+  pushEntry('dataPrivacy', lay.dataPrivacy);
+  pushEntry('contactAndNextSteps', lay.contactAndNextSteps);
+  return entries;
 }
 
 function normalizeLay(obj: any): LaySynopsis {
@@ -192,7 +265,8 @@ export async function POST(request: Request) {
       data: lay,
       source: qwen ? 'qwen' : 'local-fallback',
       readability,
-      euChecklist
+      euChecklist,
+      traceability: buildTraceability(lay, text)
     });
   } catch {
     return NextResponse.json({ ok: false, error: 'Lay synopsis generation failed.' }, { status: 500 });
