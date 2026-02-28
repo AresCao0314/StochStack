@@ -71,6 +71,15 @@ Manual run:
 python3 scripts/fetch_ctgov_site_feasibility.py --page-size 100 --max-pages 4 --limit-per-profile 220 --timeout 20
 ```
 
+## Protocol PDF Auto-Extraction (Qwen)
+
+- Endpoint: `POST /api/protocol/extract`
+- Input: `multipart/form-data` with `file` (PDF)
+- Output: structured protocol JSON ready for `Protocol Q&A & Logic Engine`
+- Notes:
+  - Requires `DASHSCOPE_API_KEY` on server
+  - Uses `QWEN_MODEL` (default: `qwen-plus`)
+
 ## Project Structure
 
 - `src/app`: App Router pages/layouts

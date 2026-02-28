@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Search, Stethoscope, Pill, FlaskConical, MessageSquare } from 'lucide-react';
+import { Search, Stethoscope, Pill, FlaskConical, MessageSquare, FileUp } from 'lucide-react';
 import type { Locale } from '@/lib/i18n';
 
 type Criterion = { id: string; text: string };
@@ -97,7 +97,14 @@ const copy: Record<Locale, any> = {
       'What is the schedule of activities?',
       'Which medications are prohibited or require caution?',
       'How should ELISA Substrate A be stored?'
-    ]
+    ],
+    uploadTitle: 'Upload Protocol PDF -> Auto Structured JSON',
+    uploadHint:
+      'Upload a protocol PDF. The engine uses Qwen to extract structured schema and inject it into the current protocol selector.',
+    upload: 'Upload & Extract',
+    uploading: 'Extracting...',
+    extracted: 'Extracted protocol added to selector.',
+    extractError: 'Extraction failed.'
   },
   zh: {
     title: 'Protocol 问答与逻辑引擎',
@@ -130,7 +137,13 @@ const copy: Record<Locale, any> = {
       'SoA 访视安排是怎样的？',
       '哪些药是禁用或慎用？',
       'ELISA Substrate A 的存储条件是什么？'
-    ]
+    ],
+    uploadTitle: '上传 Protocol PDF -> 自动结构化 JSON',
+    uploadHint: '上传 protocol PDF 后，会调用通义千问抽取结构化字段，并自动加入当前协议选择列表。',
+    upload: '上传并抽取',
+    uploading: '抽取中...',
+    extracted: '抽取成功，已加入协议列表。',
+    extractError: '抽取失败。'
   },
   de: {
     title: 'Protocol Q&A und Logic Engine',
@@ -163,7 +176,14 @@ const copy: Record<Locale, any> = {
       'Wie sieht die SoA aus?',
       'Welche Medikamente sind verboten oder nur mit Vorsicht erlaubt?',
       'Wie wird ELISA Substrate A gelagert?'
-    ]
+    ],
+    uploadTitle: 'Protocol PDF hochladen -> Strukturierte JSON-Extraktion',
+    uploadHint:
+      'PDF hochladen, per Qwen strukturieren und direkt in den Protocol-Selector uebernehmen.',
+    upload: 'Hochladen & Extrahieren',
+    uploading: 'Extrahiere...',
+    extracted: 'Extraktion erfolgreich, Protocol wurde hinzugefuegt.',
+    extractError: 'Extraktion fehlgeschlagen.'
   }
 };
 
@@ -329,19 +349,26 @@ function findLabStorage(protocol: ProtocolRecord, query: string) {
 
 export function ProtocolLogicPrototype({ locale, protocols }: { locale: Locale; protocols: ProtocolRecord[] }) {
   const t = copy[locale];
+  const [protocolList, setProtocolList] = useState(protocols);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadTip, setUploadTip] = useState('');
+  const [extractedJson, setExtractedJson] = useState<string>('');
 
   const [therapeuticArea, setTherapeuticArea] = useState('All');
   const [selectedId, setSelectedId] = useState(protocols[0]?.id ?? '');
 
-  const areaOptions = useMemo(() => ['All', ...Array.from(new Set(protocols.map((p) => p.therapeuticArea)))], [protocols]);
-
-  const filteredProtocols = useMemo(
-    () => protocols.filter((p) => therapeuticArea === 'All' || p.therapeuticArea === therapeuticArea),
-    [protocols, therapeuticArea]
+  const areaOptions = useMemo(
+    () => ['All', ...Array.from(new Set(protocolList.map((p) => p.therapeuticArea)))],
+    [protocolList]
   );
 
-  const selectedProtocol =
-    filteredProtocols.find((p) => p.id === selectedId) ?? filteredProtocols[0] ?? protocols[0];
+  const filteredProtocols = useMemo(
+    () => protocolList.filter((p) => therapeuticArea === 'All' || p.therapeuticArea === therapeuticArea),
+    [protocolList, therapeuticArea]
+  );
+
+  const selectedProtocol = filteredProtocols.find((p) => p.id === selectedId) ?? filteredProtocols[0] ?? protocolList[0];
 
   const [question, setQuestion] = useState(t.recQuestions[0]);
   const [answer, setAnswer] = useState<{ body: string; refs: string[] } | null>(null);
@@ -367,6 +394,41 @@ export function ProtocolLogicPrototype({ locale, protocols }: { locale: Locale; 
   const [labQuery, setLabQuery] = useState('');
   const [labResult, setLabResult] = useState<ReturnType<typeof findLabStorage> | null>(null);
 
+  async function onExtractProtocol() {
+    if (!uploadFile) return;
+    setUploading(true);
+    setUploadTip('');
+
+    try {
+      const form = new FormData();
+      form.append('file', uploadFile);
+
+      const res = await fetch('/api/protocol/extract', {
+        method: 'POST',
+        body: form
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data?.ok || !data?.protocol) {
+        setUploadTip(data?.error || t.extractError);
+        return;
+      }
+
+      const nextProtocol = data.protocol as ProtocolRecord;
+      const nextList = [nextProtocol, ...protocolList.filter((p) => p.id !== nextProtocol.id)];
+      setProtocolList(nextList);
+      setSelectedId(nextProtocol.id);
+      setTherapeuticArea(nextProtocol.therapeuticArea || 'All');
+      setExtractedJson(JSON.stringify(nextProtocol, null, 2));
+      setUploadTip(t.extracted);
+      setUploadFile(null);
+    } catch {
+      setUploadTip(t.extractError);
+    } finally {
+      setUploading(false);
+    }
+  }
+
   if (!selectedProtocol) return null;
 
   return (
@@ -376,6 +438,36 @@ export function ProtocolLogicPrototype({ locale, protocols }: { locale: Locale; 
         <h1 className="text-4xl font-bold md:text-6xl">{t.title}</h1>
         <p className="max-w-4xl text-ink/75">{t.subtitle}</p>
       </header>
+
+      <section className="noise-border rounded-lg p-4">
+        <h2 className="mb-2 flex items-center gap-2 text-lg font-semibold">
+          <FileUp size={16} /> {t.uploadTitle}
+        </h2>
+        <p className="mb-3 text-sm text-ink/75">{t.uploadHint}</p>
+        <div className="flex flex-wrap items-center gap-3">
+          <input
+            type="file"
+            accept="application/pdf"
+            onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
+            className="max-w-sm text-sm"
+          />
+          <button
+            type="button"
+            onClick={onExtractProtocol}
+            disabled={!uploadFile || uploading}
+            className="scanline rounded border border-ink/20 px-3 py-2 text-sm disabled:opacity-60"
+          >
+            {uploading ? t.uploading : t.upload}
+          </button>
+        </div>
+        {uploadTip ? <p className="mt-2 text-xs text-ink/70">{uploadTip}</p> : null}
+        {extractedJson ? (
+          <details className="mt-3 rounded border border-ink/15 p-2">
+            <summary className="cursor-pointer text-xs uppercase tracking-[0.12em]">Extracted JSON Preview</summary>
+            <pre className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap text-xs">{extractedJson}</pre>
+          </details>
+        ) : null}
+      </section>
 
       <section className="grid gap-4 lg:grid-cols-3">
         <article className="noise-border rounded-lg p-4 lg:col-span-1">
