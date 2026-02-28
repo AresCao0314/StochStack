@@ -1,8 +1,12 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import { MarketIntelligencePrototype } from '@/components/market-intelligence-prototype';
 import { getDictionary, locales, type Locale } from '@/lib/i18n';
 import { getPortBySlug, getPorts } from '@/lib/content';
+import projects from '@/content/market-intelligence/projects.json';
+import signals from '@/content/market-intelligence/signals.json';
+import digest from '@/content/market-intelligence/digest.json';
 
 export function generateStaticParams() {
   const ports = getPorts();
@@ -23,6 +27,17 @@ export async function generateMetadata({ params }: { params: { locale: Locale; s
 }
 
 export default function PrototypeDetailPage({ params }: { params: { locale: Locale; slug: string } }) {
+  if (params.slug === 'market-intelligence-highscore') {
+    return (
+      <MarketIntelligencePrototype
+        locale={params.locale}
+        projects={projects}
+        signals={signals}
+        digest={digest}
+      />
+    );
+  }
+
   const dict = getDictionary(params.locale);
   const port = getPortBySlug(params.slug);
 
