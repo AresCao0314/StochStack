@@ -1,0 +1,11 @@
+[Unit]
+Description=Run StochStack market intelligence refresh daily
+
+[Timer]
+# Server local time (Europe/Berlin on your Frankfurt instance)
+OnCalendar=*-*-* 07:30:00
+Persistent=true
+Unit=stochstack-market-refresh.service
+
+[Install]
+WantedBy=timers.target

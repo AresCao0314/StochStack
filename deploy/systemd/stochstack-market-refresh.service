@@ -1,0 +1,11 @@
+[Unit]
+Description=StochStack daily market intelligence refresh and deploy
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/stochstack-site
+ExecStart=/bin/bash /root/stochstack-site/scripts/refresh_market_intelligence.sh
+User=root
+Group=root
