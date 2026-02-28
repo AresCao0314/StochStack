@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { HeroSignal } from '@/components/hero-signal';
 import { PortGrid } from '@/components/port-grid';
 import { getDictionary, type Locale } from '@/lib/i18n';
 import { getPorts } from '@/lib/content';
+
+const SHOW_POTATO_ON_HERO = true;
 
 export async function generateMetadata({
   params
@@ -30,9 +33,23 @@ export default function HomePage({ params }: { params: { locale: Locale } }) {
       <section className="editorial-grid items-end gap-8">
         <div className="md:col-span-7 space-y-5">
           <p className="section-title">signal / noise / stack</p>
-          <h1 className="font-[var(--font-heading)] text-6xl font-bold leading-[0.9] md:text-8xl">
-            {dict.home.heroTitle}
-          </h1>
+          <div className="relative inline-block">
+            <h1 className="font-[var(--font-heading)] text-6xl font-bold leading-[0.9] md:text-8xl">
+              {dict.home.heroTitle}
+            </h1>
+            {SHOW_POTATO_ON_HERO ? (
+              <div className="pointer-events-none absolute -top-10 right-2 z-10 md:-top-16 md:right-8">
+                <Image
+                  src="/picture/potato.png"
+                  alt="Potato the dog"
+                  width={180}
+                  height={180}
+                  priority
+                  className="h-24 w-auto rotate-[-8deg] drop-shadow-[0_10px_20px_rgba(11,15,20,0.24)] md:h-36"
+                />
+              </div>
+            ) : null}
+          </div>
           <p className="max-w-2xl text-lg text-ink/75 md:text-xl">{dict.slogan}</p>
         </div>
         <div className="md:col-span-5">
