@@ -27,6 +27,34 @@ type CsrDraft = {
   };
 };
 
+type IchSection = {
+  id: string;
+  title: string;
+  content: string;
+  dataType: 'data-independent' | 'data-dependent' | 'mixed';
+};
+
+type TableFigureItem = {
+  id: string;
+  type: 'Table' | 'Figure' | 'Listing';
+  title: string;
+  status: 'available' | 'placeholder';
+  sourceRef: string;
+};
+
+type TraceabilityItem = {
+  sectionId: string;
+  statement: string;
+  tflRefs: string[];
+};
+
+type CsrResponse = {
+  draft: CsrDraft;
+  ichE3Sections: IchSection[];
+  tableFigureListing: TableFigureItem[];
+  traceability: TraceabilityItem[];
+};
+
 function stripFence(raw: string) {
   return raw.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```$/, '').trim();
 }
@@ -42,7 +70,7 @@ function localDraft(input: { protocolSynopsis: string; bdsSummary: string; tflOr
         titlePage: 'Clinical Study Report Entwurf - automatisch aus Protocol/BDS/TFL erstellt.',
         synopsis: `Studienuebersicht (entwurfsweise): ${p}`,
         studyDesign: `Studiendesign und Methodik (vorlaeufig): ${p}`,
-        objectivesEndpoints: 'Primäre und sekundäre Endpunkte werden gemaess Protocol Synopsis beschrieben.',
+        objectivesEndpoints: 'Primaere und sekundaere Endpunkte werden gemaess Protocol Synopsis beschrieben.',
         methodsGeneral: 'Allgemeine Analyseprinzipien und Datensets basieren auf dem dokumentierten Studienplan.'
       },
       dataDependent: {
@@ -90,6 +118,106 @@ function normalizeDraft(obj: any): CsrDraft {
       conclusion: String(obj?.dataDependent?.conclusion ?? '')
     }
   };
+}
+
+function extractTflRefs(text: string) {
+  const refs = new Set<string>();
+  const regex = /\b(Table|Figure|Listing)\s*([A-Za-z0-9.\-_/]+)\b/gi;
+  let match: RegExpExecArray | null = null;
+  while (true) {
+    match = regex.exec(text);
+    if (!match) break;
+    refs.add(`${match[1]} ${match[2]}`);
+  }
+  if (refs.size === 0) {
+    refs.add('Table 14.2.1');
+    refs.add('Figure 14.2.1');
+    refs.add('Listing 16.2.1');
+  }
+  return [...refs];
+}
+
+function toIchE3Sections(draft: CsrDraft, tflRefs: string[]): IchSection[] {
+  return [
+    {
+      id: '9',
+      title: 'Section 9 - Investigational Plan',
+      dataType: 'data-independent',
+      content: `${draft.dataIndependent.studyDesign}\n${draft.dataIndependent.objectivesEndpoints}\n${draft.dataIndependent.methodsGeneral}`
+    },
+    {
+      id: '10',
+      title: 'Section 10 - Study Patients',
+      dataType: 'data-dependent',
+      content: draft.dataDependent.dispositionAndBaseline
+    },
+    {
+      id: '11',
+      title: 'Section 11 - Efficacy Evaluation',
+      dataType: 'data-dependent',
+      content: `${draft.dataDependent.efficacyResults}\nReferenced outputs: ${tflRefs.filter((x) => x.startsWith('Table') || x.startsWith('Figure')).slice(0, 3).join('; ')}`
+    },
+    {
+      id: '12',
+      title: 'Section 12 - Safety Evaluation',
+      dataType: 'data-dependent',
+      content: `${draft.dataDependent.safetyResults}\nReferenced outputs: ${tflRefs.filter((x) => x.startsWith('Table') || x.startsWith('Listing')).slice(0, 3).join('; ')}`
+    },
+    {
+      id: '13',
+      title: 'Section 13 - Discussion and Overall Conclusions',
+      dataType: 'mixed',
+      content: `${draft.dataDependent.benefitRisk}\n${draft.dataDependent.conclusion}`
+    },
+    {
+      id: '14',
+      title: 'Section 14 - Tables, Figures, and Graphs',
+      dataType: 'data-dependent',
+      content: `Placeholders generated from supplied TFL/RTF references (${tflRefs.length} refs detected).`
+    }
+  ];
+}
+
+function toTableFigureListing(tflRefs: string[]): TableFigureItem[] {
+  const items: TableFigureItem[] = tflRefs.slice(0, 12).map((ref, idx) => {
+    const type = ref.startsWith('Figure') ? 'Figure' : ref.startsWith('Listing') ? 'Listing' : 'Table';
+    return {
+      id: `TF-${idx + 1}`,
+      type,
+      title: `${ref} - auto-linked placeholder`,
+      status: 'placeholder',
+      sourceRef: ref
+    };
+  });
+  return items;
+}
+
+function toTraceability(draft: CsrDraft, tflRefs: string[]): TraceabilityItem[] {
+  const tableRefs = tflRefs.filter((x) => x.startsWith('Table'));
+  const figureRefs = tflRefs.filter((x) => x.startsWith('Figure'));
+  const listingRefs = tflRefs.filter((x) => x.startsWith('Listing'));
+  return [
+    {
+      sectionId: '10',
+      statement: draft.dataDependent.dispositionAndBaseline,
+      tflRefs: [...tableRefs.slice(0, 2), ...listingRefs.slice(0, 1)]
+    },
+    {
+      sectionId: '11',
+      statement: draft.dataDependent.efficacyResults,
+      tflRefs: [...tableRefs.slice(0, 2), ...figureRefs.slice(0, 1)]
+    },
+    {
+      sectionId: '12',
+      statement: draft.dataDependent.safetyResults,
+      tflRefs: [...tableRefs.slice(0, 2), ...listingRefs.slice(0, 1)]
+    },
+    {
+      sectionId: '13',
+      statement: `${draft.dataDependent.benefitRisk} ${draft.dataDependent.conclusion}`,
+      tflRefs: [...tableRefs.slice(0, 1), ...figureRefs.slice(0, 1)]
+    }
+  ];
 }
 
 async function generateWithQwen(input: { protocolSynopsis: string; bdsSummary: string; tflOrRtf: string }, outputLanguage: 'en' | 'de') {
@@ -160,11 +288,19 @@ export async function POST(request: Request) {
 
     const qwen = await generateWithQwen({ protocolSynopsis, bdsSummary, tflOrRtf }, outputLanguage).catch(() => null);
     const draft = qwen ?? localDraft({ protocolSynopsis, bdsSummary, tflOrRtf }, outputLanguage);
+    const tflRefs = extractTflRefs(tflOrRtf);
+
+    const response: CsrResponse = {
+      draft,
+      ichE3Sections: toIchE3Sections(draft, tflRefs),
+      tableFigureListing: toTableFigureListing(tflRefs),
+      traceability: toTraceability(draft, tflRefs)
+    };
 
     return NextResponse.json({
       ok: true,
       source: qwen ? 'qwen' : 'local-fallback',
-      data: draft
+      data: response
     });
   } catch {
     return NextResponse.json({ ok: false, error: 'CSR draft generation failed.' }, { status: 500 });

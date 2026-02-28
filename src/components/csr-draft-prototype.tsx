@@ -31,6 +31,28 @@ type CsrDraft = {
   };
 };
 
+type CsrV2 = {
+  draft: CsrDraft;
+  ichE3Sections: Array<{
+    id: string;
+    title: string;
+    content: string;
+    dataType: 'data-independent' | 'data-dependent' | 'mixed';
+  }>;
+  tableFigureListing: Array<{
+    id: string;
+    type: 'Table' | 'Figure' | 'Listing';
+    title: string;
+    status: 'available' | 'placeholder';
+    sourceRef: string;
+  }>;
+  traceability: Array<{
+    sectionId: string;
+    statement: string;
+    tflRefs: string[];
+  }>;
+};
+
 const labels: Record<Locale, any> = {
   en: {
     title: 'CSR Drafting from BDS + TFL/RTF',
@@ -45,7 +67,10 @@ const labels: Record<Locale, any> = {
     result: 'CSR Draft Output',
     independent: 'Data-Independent Draft',
     dependent: 'Data-Dependent Draft',
-    copy: 'Copy JSON'
+    copy: 'Copy JSON',
+    ich: 'ICH E3 Section Assembly (9-14)',
+    tflList: 'Table/Figure/Listing Placeholders',
+    trace: 'Traceability to TFL IDs'
   },
   zh: {
     title: '基于 BDS + TFL/RTF 的 CSR 草稿',
@@ -59,7 +84,10 @@ const labels: Record<Locale, any> = {
     result: 'CSR 草稿输出',
     independent: 'Data-Independent 草稿',
     dependent: 'Data-Dependent 草稿',
-    copy: '复制 JSON'
+    copy: '复制 JSON',
+    ich: 'ICH E3 章节自动拼装（9-14）',
+    tflList: '表格/图形/列表占位',
+    trace: '到 TFL 编号的追溯'
   },
   de: {
     title: 'CSR Draft aus BDS + TFL/RTF',
@@ -74,7 +102,10 @@ const labels: Record<Locale, any> = {
     result: 'CSR Draft Output',
     independent: 'Data-Independent Draft',
     dependent: 'Data-Dependent Draft',
-    copy: 'JSON kopieren'
+    copy: 'JSON kopieren',
+    ich: 'ICH E3 Abschnitt-Montage (9-14)',
+    tflList: 'Table/Figure/Listing Platzhalter',
+    trace: 'Traceability zu TFL-IDs'
   }
 };
 
@@ -89,7 +120,7 @@ export function CsrDraftPrototype({ locale, samples }: { locale: Locale; samples
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [source, setSource] = useState('');
-  const [result, setResult] = useState<CsrDraft | null>(null);
+  const [result, setResult] = useState<CsrV2 | null>(null);
 
   function onSampleChange(id: string) {
     setSampleId(id);
@@ -114,7 +145,7 @@ export function CsrDraftPrototype({ locale, samples }: { locale: Locale; samples
         setError(data?.error || 'Generation failed.');
         return;
       }
-      setResult(data.data as CsrDraft);
+      setResult(data.data as CsrV2);
       setSource(String(data.source || ''));
     } catch {
       setError('Generation failed.');
@@ -180,11 +211,11 @@ export function CsrDraftPrototype({ locale, samples }: { locale: Locale; samples
                 <SplitSquareVertical size={16} /> {t.independent}
               </h2>
               <div className="space-y-2 text-sm">
-                <p><span className="font-semibold">Title page:</span> {result.dataIndependent.titlePage}</p>
-                <p><span className="font-semibold">Synopsis:</span> {result.dataIndependent.synopsis}</p>
-                <p><span className="font-semibold">Study design:</span> {result.dataIndependent.studyDesign}</p>
-                <p><span className="font-semibold">Objectives/endpoints:</span> {result.dataIndependent.objectivesEndpoints}</p>
-                <p><span className="font-semibold">Methods:</span> {result.dataIndependent.methodsGeneral}</p>
+                <p><span className="font-semibold">Title page:</span> {result.draft.dataIndependent.titlePage}</p>
+                <p><span className="font-semibold">Synopsis:</span> {result.draft.dataIndependent.synopsis}</p>
+                <p><span className="font-semibold">Study design:</span> {result.draft.dataIndependent.studyDesign}</p>
+                <p><span className="font-semibold">Objectives/endpoints:</span> {result.draft.dataIndependent.objectivesEndpoints}</p>
+                <p><span className="font-semibold">Methods:</span> {result.draft.dataIndependent.methodsGeneral}</p>
               </div>
             </article>
             <article className="noise-border rounded-lg p-4">
@@ -192,11 +223,49 @@ export function CsrDraftPrototype({ locale, samples }: { locale: Locale; samples
                 <SplitSquareVertical size={16} /> {t.dependent}
               </h2>
               <div className="space-y-2 text-sm">
-                <p><span className="font-semibold">Disposition/baseline:</span> {result.dataDependent.dispositionAndBaseline}</p>
-                <p><span className="font-semibold">Efficacy:</span> {result.dataDependent.efficacyResults}</p>
-                <p><span className="font-semibold">Safety:</span> {result.dataDependent.safetyResults}</p>
-                <p><span className="font-semibold">Benefit-risk:</span> {result.dataDependent.benefitRisk}</p>
-                <p><span className="font-semibold">Conclusion:</span> {result.dataDependent.conclusion}</p>
+                <p><span className="font-semibold">Disposition/baseline:</span> {result.draft.dataDependent.dispositionAndBaseline}</p>
+                <p><span className="font-semibold">Efficacy:</span> {result.draft.dataDependent.efficacyResults}</p>
+                <p><span className="font-semibold">Safety:</span> {result.draft.dataDependent.safetyResults}</p>
+                <p><span className="font-semibold">Benefit-risk:</span> {result.draft.dataDependent.benefitRisk}</p>
+                <p><span className="font-semibold">Conclusion:</span> {result.draft.dataDependent.conclusion}</p>
+              </div>
+            </article>
+          </div>
+          <article className="noise-border rounded-lg p-4">
+            <h2 className="mb-2 text-lg font-semibold">{t.ich}</h2>
+            <div className="space-y-2 text-sm">
+              {result.ichE3Sections.map((s) => (
+                <div key={s.id} className="rounded border border-ink/15 p-2">
+                  <p className="font-medium">
+                    {s.title} <span className="text-xs text-ink/60">[{s.dataType}]</span>
+                  </p>
+                  <p className="text-xs text-ink/75">{s.content}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+          <div className="grid gap-4 xl:grid-cols-2">
+            <article className="noise-border rounded-lg p-4">
+              <h2 className="mb-2 text-lg font-semibold">{t.tflList}</h2>
+              <div className="space-y-2 text-sm">
+                {result.tableFigureListing.map((x) => (
+                  <div key={x.id} className="rounded border border-ink/15 p-2">
+                    <p className="font-medium">{x.type} · {x.title}</p>
+                    <p className="text-xs text-ink/70">sourceRef: {x.sourceRef} · status: {x.status}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+            <article className="noise-border rounded-lg p-4">
+              <h2 className="mb-2 text-lg font-semibold">{t.trace}</h2>
+              <div className="space-y-2 text-sm">
+                {result.traceability.map((x, idx) => (
+                  <div key={`${x.sectionId}-${idx}`} className="rounded border border-ink/15 p-2">
+                    <p className="font-medium">Section {x.sectionId}</p>
+                    <p className="text-xs text-ink/75">{x.statement}</p>
+                    <p className="text-xs text-ink/65">TFL refs: {x.tflRefs.join(', ') || '-'}</p>
+                  </div>
+                ))}
               </div>
             </article>
           </div>

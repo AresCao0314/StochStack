@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.2.0",
+    "title": {
+      "en": "ICH E3 Assembly + TFL Traceability Added",
+      "zh": "新增 ICH E3 自动拼装与 TFL 追溯",
+      "de": "ICH-E3-Montage und TFL-Traceability hinzugefuegt"
+    },
+    "changes": {
+      "en": [
+        "Added auto assembly for ICH E3 Sections 9-14.",
+        "Added table/figure/listing placeholder list from parsed TFL references.",
+        "Added section-level traceability linking CSR statements to TFL identifiers."
+      ],
+      "zh": [
+        "新增 ICH E3 Section 9-14 自动拼装。",
+        "新增基于 TFL 引用解析的 Table/Figure/Listing 占位清单。",
+        "新增章节级 traceability：CSR 语句到 TFL 编号的关联。"
+      ],
+      "de": [
+        "Automatische Montage fuer ICH E3 Abschnitt 9-14 hinzugefuegt.",
+        "Table/Figure/Listing-Platzhalter aus TFL-Referenzen integriert.",
+        "Abschnittsbasierte Traceability von CSR-Aussagen zu TFL-IDs ergaenzt."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.1.0",
     "title": {
       "en": "CSR Drafting Prototype Added",
