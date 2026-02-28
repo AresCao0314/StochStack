@@ -1,0 +1,20 @@
+[
+  {
+    "id": "csr-onc-sample",
+    "title": "BDS/TFL Input - Oncology NSCLC",
+    "therapeuticArea": "Oncology",
+    "indication": "NSCLC",
+    "protocolSynopsis": "Randomized phase 3 multicenter trial in first-line metastatic NSCLC. Objective: compare investigational therapy plus SOC vs SOC alone. Primary endpoint: PFS. Secondary: OS, ORR, safety.",
+    "bdsSummary": "Population: ITT N=612 (Treat=306, Control=306). Median age 62. Male 58%. ECOG 0/1: 44%/56%.",
+    "tflOrRtf": "EFFICACY TABLES: PFS HR=0.76 (95% CI 0.64-0.90), p=0.0018. Median PFS 10.9 vs 8.2 months. ORR 47.1% vs 34.3%.\nSAFETY TABLES: TEAE any grade 92.5% vs 88.9%; Grade>=3 TEAE 46.2% vs 41.7%. Discontinuation due to AE 12.4% vs 9.1%."
+  },
+  {
+    "id": "csr-imm-sample",
+    "title": "BDS/TFL Input - Rheumatoid Arthritis",
+    "therapeuticArea": "Immunology",
+    "indication": "Rheumatoid Arthritis",
+    "protocolSynopsis": "Phase 2 randomized, double-blind trial in moderate-to-severe rheumatoid arthritis. Primary endpoint: change in DAS28 at week 12. Secondary: ACR20/50, safety.",
+    "bdsSummary": "Population: N=238 randomized (Treat=158, Placebo=80). Mean age 54. Female 71%. Disease duration median 6.1 years.",
+    "tflOrRtf": "EFFICACY: Mean DAS28 change -2.1 vs -1.4 at week 12 (difference -0.7; p=0.004). ACR50 response 38% vs 24%.\nSAFETY: Any AE 64% vs 58%; serious AE 3.8% vs 2.5%; discontinuation due to AE 4.4% vs 3.7%."
+  }
+]

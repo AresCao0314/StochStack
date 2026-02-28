@@ -1,5 +1,36 @@
 [
   {
+    "slug": "csr-drafting-bds-tfl",
+    "name": {
+      "en": "CSR Drafting from BDS/TFL",
+      "zh": "基于 BDS/TFL 的 CSR 草稿",
+      "de": "CSR Draft aus BDS/TFL"
+    },
+    "description": {
+      "en": "Generate CSR data-independent and data-dependent draft blocks from protocol synopsis plus BDS and TFL/RTF inputs.",
+      "zh": "从 protocol synopsis + BDS + TFL/RTF 自动生成 CSR 的 data-independent 与 data-dependent 草稿块。",
+      "de": "Data-independent und data-dependent CSR-Entwurfsbloecke aus Protocol Synopsis sowie BDS/TFL/RTF erzeugen."
+    },
+    "tags": [
+      "CSR",
+      "Medical Writing",
+      "BDS/TFL"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/csr-drafting-bds-tfl",
+    "screenshot": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "Draft Generator",
+      "Clinical Reporting",
+      "Data Narrative"
+    ],
+    "designIntent": {
+      "en": "Accelerate CSR authoring by separating reusable narrative scaffolds from data-driven result narratives.",
+      "zh": "通过拆分可复用叙事骨架与数据驱动结果叙事，加速 CSR 撰写。",
+      "de": "CSR-Authoring durch Trennung von wiederverwendbarem Narrativgeruest und datengetriebenen Ergebnistexten beschleunigen."
+    }
+  },
+  {
     "slug": "lay-language-synopsis-eu",
     "name": {
       "en": "Lay Language Synopsis (EU)",

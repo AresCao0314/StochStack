@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.1.0",
+    "title": {
+      "en": "CSR Drafting Prototype Added",
+      "zh": "新增 CSR 草稿原型",
+      "de": "CSR-Drafting-Prototyp hinzugefuegt"
+    },
+    "changes": {
+      "en": [
+        "Added workflow to generate CSR draft sections from protocol synopsis + BDS + TFL/RTF.",
+        "Separated output into data-independent and data-dependent narrative blocks.",
+        "Added JSON export for downstream medical writing and review workflows."
+      ],
+      "zh": [
+        "新增基于 protocol synopsis + BDS + TFL/RTF 的 CSR 草稿生成流程。",
+        "输出拆分为 data-independent 与 data-dependent 叙事块。",
+        "支持 JSON 导出，便于后续医学写作与审阅流程。"
+      ],
+      "de": [
+        "Workflow zur CSR-Entwurfserstellung aus Protocol Synopsis + BDS + TFL/RTF integriert.",
+        "Output in data-independent und data-dependent Narrativbloecke getrennt.",
+        "JSON-Export fuer nachgelagerte Medical-Writing- und Review-Prozesse hinzugefuegt."
+      ]
+    }
+  }
+]

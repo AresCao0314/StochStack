@@ -9,6 +9,7 @@ import { DataAgentPrototype } from '@/components/data-agent-prototype';
 import { DigitalTwinPrototype } from '@/components/digital-twin-prototype';
 import { EnrollmentForecastPrototype } from '@/components/enrollment-forecast-prototype';
 import { LaySynopsisPrototype } from '@/components/lay-synopsis-prototype';
+import { CsrDraftPrototype } from '@/components/csr-draft-prototype';
 import { ProtocolDigitizationPrototype } from '@/components/protocol-digitization-prototype';
 import { SiteFeasibilityFeedbackPrototype } from '@/components/site-feasibility-feedback-prototype';
 import { SiteFeasibilityPrototype } from '@/components/site-feasibility-prototype';
@@ -25,6 +26,7 @@ import enrollmentTrials from '@/content/enrollment-forecast/trials.json';
 import digitalTwinScenarios from '@/content/digital-twin/scenarios.json';
 import protocolDigitizationSamples from '@/content/protocol-digitization/samples.json';
 import laySynopsisSamples from '@/content/lay-synopsis/samples.json';
+import csrDraftSamples from '@/content/csr-drafting/samples.json';
 import marketChangelog from '@/content/changelogs/market-intelligence-highscore.json';
 import siteScoringChangelog from '@/content/changelogs/site-feasibility-scoring.json';
 import siteFeedbackChangelog from '@/content/changelogs/site-feasibility-human-feedback.json';
@@ -35,6 +37,7 @@ import enrollmentChangelog from '@/content/changelogs/enrollment-forecast-monte-
 import digitalTwinChangelog from '@/content/changelogs/digital-twin-synthetic-control.json';
 import protocolDigitizationChangelog from '@/content/changelogs/historical-protocol-digitizer.json';
 import laySynopsisChangelog from '@/content/changelogs/lay-language-synopsis-eu.json';
+import csrDraftChangelog from '@/content/changelogs/csr-drafting-bds-tfl.json';
 
 export function generateStaticParams() {
   const ports = getPorts();
@@ -146,6 +149,15 @@ export default function PrototypeDetailPage({ params }: { params: { locale: Loca
       <>
         <LaySynopsisPrototype locale={params.locale} samples={laySynopsisSamples} />
         <PrototypeChangelog locale={params.locale} entries={laySynopsisChangelog as unknown as LogEntry[]} />
+      </>
+    );
+  }
+
+  if (params.slug === 'csr-drafting-bds-tfl') {
+    return (
+      <>
+        <CsrDraftPrototype locale={params.locale} samples={csrDraftSamples} />
+        <PrototypeChangelog locale={params.locale} entries={csrDraftChangelog as unknown as LogEntry[]} />
       </>
     );
   }
