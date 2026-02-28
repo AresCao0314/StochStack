@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.3.0",
+    "title": {
+      "en": "Team Policy Persistence and Consensus Aggregation",
+      "zh": "新增团队策略持久化与共识聚合",
+      "de": "Team-Policy-Persistenz und Konsens-Aggregation"
+    },
+    "changes": {
+      "en": [
+        "Added persistent team profiles and server-side feedback event store.",
+        "Added multi-user consensus aggregation for effective weight updates.",
+        "Added anti-abuse controls: single-user daily cap, repeated action decay, and max per-reason shift."
+      ],
+      "zh": [
+        "新增团队 profile 持久化与服务端反馈事件存储。",
+        "新增多人共识聚合，按团队策略计算生效权重。",
+        "新增防刷机制：单用户日上限、连续同向反馈衰减、单维度最大偏移限制。"
+      ],
+      "de": [
+        "Persistente Team-Profile und serverseitiger Feedback-Event-Store hinzugefuegt.",
+        "Multi-User-Konsens-Aggregation fuer aktive Gewichtsanpassung integriert.",
+        "Anti-Missbrauchsregeln ergaenzt: Tages-Cap pro User, Abklingfaktor bei Serienfeedback, max. Shift pro Dimension."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.2.0",
     "title": {
       "en": "Human Feedback Reinforcement Layer Added",
