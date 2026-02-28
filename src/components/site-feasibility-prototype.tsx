@@ -318,7 +318,7 @@ export function SiteFeasibilityPrototype({ locale, sites }: { locale: Locale; si
   const [indication, setIndication] = useState('NSCLC');
   const [phase, setPhase] = useState('Phase 3');
   const [country, setCountry] = useState(copy.all);
-  const [studyType, setStudyType] = useState(copy.interventional);
+  const [studyType, setStudyType] = useState<'all' | 'Interventional' | 'Observational'>('Interventional');
   const [enrollmentRange, setEnrollmentRange] = useState('all');
   const [timeWindow, setTimeWindow] = useState('5');
   const [sponsorPreference, setSponsorPreference] = useState('none');
@@ -337,7 +337,7 @@ export function SiteFeasibilityPrototype({ locale, sites }: { locale: Locale; si
           const indicationPass = indication === copy.all || profile.indication === indication;
           const phasePass = phase === copy.all || profile.phase === phase;
           const countryPass = country === copy.all || site.country === country;
-          const studyPass = studyType === copy.all || profile.studyType === studyType;
+          const studyPass = studyType === 'all' || profile.studyType === studyType;
           const timePass = site.recentTrialYears.some((y) => y >= currentYear - years + 1);
 
           const enrollmentPass =
@@ -519,10 +519,14 @@ export function SiteFeasibilityPrototype({ locale, sites }: { locale: Locale; si
           </label>
           <label className="text-sm">
             {copy.studyType}
-            <select className="mt-1 w-full rounded border border-ink/20 bg-transparent px-2 py-2" value={studyType} onChange={(e) => setStudyType(e.target.value)}>
-              <option value={copy.all}>{copy.all}</option>
-              <option value={copy.interventional}>{copy.interventional}</option>
-              <option value={copy.observational}>{copy.observational}</option>
+            <select
+              className="mt-1 w-full rounded border border-ink/20 bg-transparent px-2 py-2"
+              value={studyType}
+              onChange={(e) => setStudyType(e.target.value as 'all' | 'Interventional' | 'Observational')}
+            >
+              <option value="all">{copy.all}</option>
+              <option value="Interventional">{copy.interventional}</option>
+              <option value="Observational">{copy.observational}</option>
             </select>
           </label>
           <label className="text-sm">

@@ -57,6 +57,20 @@ If `DASHSCOPE_API_KEY` is missing, the app uses a local fallback summarizer.
 - In Docker deployment, data persists in the named volume `notes_data` mounted to `/data`.
 - Default file path: `/data/notes-captures.json` (configurable via `NOTES_DATA_FILE`).
 
+## Nightly ClinicalTrials.gov Sync (Site Feasibility)
+
+- Script: `scripts/fetch_ctgov_site_feasibility.py`
+- Output:
+  - `src/content/site-feasibility/sites.json`
+  - `src/content/site-feasibility/ctgov-sync-meta.json`
+- The existing daily refresh job (`scripts/refresh_market_intelligence.sh`) now also runs this sync before rebuild.
+
+Manual run:
+
+```bash
+python3 scripts/fetch_ctgov_site_feasibility.py --page-size 100 --max-pages 4 --limit-per-profile 220 --timeout 20
+```
+
 ## Project Structure
 
 - `src/app`: App Router pages/layouts
