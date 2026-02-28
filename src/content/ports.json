@@ -1,5 +1,36 @@
 [
   {
+    "slug": "market-intelligence-highscore",
+    "name": {
+      "en": "Market Intelligence Hub",
+      "zh": "市场情报中枢",
+      "de": "Market-Intelligence Hub"
+    },
+    "description": {
+      "en": "Signal radar for clinical development programs, vendor moves, and big-tech watch.",
+      "zh": "聚合临床项目、vendor 变动与科技巨头动态的信号雷达。",
+      "de": "Signalradar fuer klinische Programme, Vendor-Bewegungen und Big-Tech Monitoring."
+    },
+    "tags": [
+      "Clinical",
+      "Intelligence",
+      "Dashboard"
+    ],
+    "status": "live",
+    "link": "https://stochstack.com/en/prototypes/market-intelligence-highscore",
+    "screenshot": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "Next.js",
+      "TypeScript",
+      "Data Signals"
+    ],
+    "designIntent": {
+      "en": "Rebuild a legacy intelligence homepage into a modular AI-native editorial console.",
+      "zh": "将旧版情报首页重构为模块化的 AI-native 编辑型控制台。",
+      "de": "Legacy-Intelligence-Homepage als modulares AI-natives Editorial-Console neu aufbauen."
+    }
+  },
+  {
     "slug": "trial-flow-studio",
     "name": {
       "en": "TrialFlow Studio",
@@ -11,11 +42,19 @@
       "zh": "将方案到执行阶段串联为可视化临床流程。",
       "de": "Visuelle Orchestrierung klinischer Abläufe von Protokoll bis Execution."
     },
-    "tags": ["AI", "Clinical", "Workflow"],
+    "tags": [
+      "AI",
+      "Clinical",
+      "Workflow"
+    ],
     "status": "beta",
     "link": "https://example.com/trialflow",
     "screenshot": "https://images.unsplash.com/photo-1551281044-8f5f9f6f5f1f?auto=format&fit=crop&w=1200&q=80",
-    "techStack": ["Next.js", "TypeScript", "Graph"],
+    "techStack": [
+      "Next.js",
+      "TypeScript",
+      "Graph"
+    ],
     "designIntent": {
       "en": "Translate protocol complexity into navigable operational states.",
       "zh": "把复杂方案翻译成可导航的运营状态。",
@@ -34,11 +73,19 @@
       "zh": "把碎片化笔记组织成可读的信号地图。",
       "de": "Fragmentierte Notizen in konsistente Signal-Maps umformen."
     },
-    "tags": ["AI", "Notes", "Knowledge"],
+    "tags": [
+      "AI",
+      "Notes",
+      "Knowledge"
+    ],
     "status": "alpha",
     "link": "https://example.com/signal-notes",
     "screenshot": "https://images.unsplash.com/photo-1516387938699-a93567ec168e?auto=format&fit=crop&w=1200&q=80",
-    "techStack": ["MDX", "Embeddings", "RAG"],
+    "techStack": [
+      "MDX",
+      "Embeddings",
+      "RAG"
+    ],
     "designIntent": {
       "en": "Keep writing raw, then recover structure later with semantic indexing.",
       "zh": "先保持原始书写，再用语义索引回收结构。",
@@ -57,11 +104,19 @@
       "zh": "用于肿瘤项目时间线的早期风险感知层。",
       "de": "Frühe Risikoerkennung für Onkologie-Zeitpläne."
     },
-    "tags": ["Clinical", "Analytics", "Dashboard"],
+    "tags": [
+      "Clinical",
+      "Analytics",
+      "Dashboard"
+    ],
     "status": "live",
     "link": "https://example.com/risk-radar",
     "screenshot": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1200&q=80",
-    "techStack": ["Charts", "Scoring", "Scenario"],
+    "techStack": [
+      "Charts",
+      "Scoring",
+      "Scenario"
+    ],
     "designIntent": {
       "en": "Expose uncertainty ranges before delays become visible in reports.",
       "zh": "在报告显现延迟之前先暴露不确定区间。",
@@ -80,11 +135,19 @@
       "zh": "用于提示轨迹、评估日志与操作模式复用。",
       "de": "Prompt-Traces, Evaluationslogs und wiederverwendbare Operator-Patterns."
     },
-    "tags": ["AI", "Prompt", "Ops"],
+    "tags": [
+      "AI",
+      "Prompt",
+      "Ops"
+    ],
     "status": "beta",
     "link": "https://example.com/prompt-workbench",
     "screenshot": "https://images.unsplash.com/photo-1483478550801-ceba5fe50e8e?auto=format&fit=crop&w=1200&q=80",
-    "techStack": ["PromptOps", "Versioning", "Bench"],
+    "techStack": [
+      "PromptOps",
+      "Versioning",
+      "Bench"
+    ],
     "designIntent": {
       "en": "Treat prompts as evolving operational assets, not static text.",
       "zh": "把提示词视为持续演化的运营资产，而非静态文本。",
@@ -103,11 +166,19 @@
       "zh": "记录发球与步伐在单次训练中的节奏一致性。",
       "de": "Rhythmus-Tracking pro Session für Aufschlag und Fußarbeit."
     },
-    "tags": ["Tennis", "Tracking", "Life"],
+    "tags": [
+      "Tennis",
+      "Tracking",
+      "Life"
+    ],
     "status": "alpha",
     "link": "https://example.com/tennis-log",
     "screenshot": "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=1200&q=80",
-    "techStack": ["Mobile", "Stats", "Review"],
+    "techStack": [
+      "Mobile",
+      "Stats",
+      "Review"
+    ],
     "designIntent": {
       "en": "Bridge subjective feel and measurable cadence across drills.",
       "zh": "连接主观手感与可度量训练节奏。",
@@ -126,11 +197,19 @@
       "zh": "短视频剪辑的切点密度与转场节奏分析器。",
       "de": "Analyse von Schnittdichte und Übergangs-Timing für Kurzformate."
     },
-    "tags": ["Editing", "Video", "Experiment"],
+    "tags": [
+      "Editing",
+      "Video",
+      "Experiment"
+    ],
     "status": "beta",
     "link": "https://example.com/edit-rhythm",
     "screenshot": "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1200&q=80",
-    "techStack": ["Timeline", "Computer Vision", "Metrics"],
+    "techStack": [
+      "Timeline",
+      "Computer Vision",
+      "Metrics"
+    ],
     "designIntent": {
       "en": "Support narrative pace decisions with measurable cut patterns.",
       "zh": "用可度量的切点模式支撑叙事节奏决策。",
@@ -149,38 +228,23 @@
       "zh": "跨书概念聚类与短摘要快照。",
       "de": "Konzept-Clustering über Bücher mit kompakten Synthese-Snapshots."
     },
-    "tags": ["Books", "Thinking", "Index"],
+    "tags": [
+      "Books",
+      "Thinking",
+      "Index"
+    ],
     "status": "live",
     "link": "https://example.com/book-index",
     "screenshot": "https://images.unsplash.com/photo-1455885666463-9f41d1f2f6b8?auto=format&fit=crop&w=1200&q=80",
-    "techStack": ["Graph", "Embeddings", "Summarization"],
+    "techStack": [
+      "Graph",
+      "Embeddings",
+      "Summarization"
+    ],
     "designIntent": {
       "en": "Compress a year of reading into reusable conceptual vectors.",
       "zh": "把全年阅读压缩为可复用的概念向量。",
       "de": "Ein Lesejahr in wiederverwendbare Konzeptvektoren komprimieren."
-    }
-  },
-  {
-    "slug": "market-intelligence-highscore",
-    "name": {
-      "en": "Market Intelligence Hub",
-      "zh": "市场情报中枢",
-      "de": "Market-Intelligence Hub"
-    },
-    "description": {
-      "en": "Signal radar for clinical development programs, vendor moves, and big-tech watch.",
-      "zh": "聚合临床项目、vendor 变动与科技巨头动态的信号雷达。",
-      "de": "Signalradar fuer klinische Programme, Vendor-Bewegungen und Big-Tech Monitoring."
-    },
-    "tags": ["Clinical", "Intelligence", "Dashboard"],
-    "status": "live",
-    "link": "https://stochstack.com/en/prototypes/market-intelligence-highscore",
-    "screenshot": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80",
-    "techStack": ["Next.js", "TypeScript", "Data Signals"],
-    "designIntent": {
-      "en": "Rebuild a legacy intelligence homepage into a modular AI-native editorial console.",
-      "zh": "将旧版情报首页重构为模块化的 AI-native 编辑型控制台。",
-      "de": "Legacy-Intelligence-Homepage als modulares AI-natives Editorial-Console neu aufbauen."
     }
   },
   {
@@ -195,11 +259,19 @@
       "zh": "建筑形态采样库，关联空间情绪注记。",
       "de": "Katalog architektonischer Motive mit räumlichen Emotionsnotizen."
     },
-    "tags": ["Architecture", "Atlas", "Visual"],
+    "tags": [
+      "Architecture",
+      "Atlas",
+      "Visual"
+    ],
     "status": "live",
     "link": "https://example.com/urban-atlas",
     "screenshot": "https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?auto=format&fit=crop&w=1200&q=80",
-    "techStack": ["Map", "Vision", "Taxonomy"],
+    "techStack": [
+      "Map",
+      "Vision",
+      "Taxonomy"
+    ],
     "designIntent": {
       "en": "Capture form-language patterns that influence interface composition.",
       "zh": "捕捉影响界面构图的形态语言模式。",
