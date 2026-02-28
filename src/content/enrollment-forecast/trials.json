@@ -1,0 +1,108 @@
+[
+  {
+    "id": "onc-nsclc-ph3-301",
+    "trialCode": "ONC-NSCLC-301",
+    "therapeuticArea": "Oncology",
+    "indication": "NSCLC",
+    "phase": "Phase 3",
+    "targetEnrollment": 620,
+    "plannedEndDate": "2026-12-31",
+    "historyWeeks": [
+      { "week": 1, "planned": 18, "actual": 14 },
+      { "week": 2, "planned": 36, "actual": 27 },
+      { "week": 3, "planned": 54, "actual": 39 },
+      { "week": 4, "planned": 72, "actual": 52 },
+      { "week": 5, "planned": 90, "actual": 63 },
+      { "week": 6, "planned": 108, "actual": 74 },
+      { "week": 7, "planned": 126, "actual": 88 },
+      { "week": 8, "planned": 144, "actual": 101 },
+      { "week": 9, "planned": 162, "actual": 114 },
+      { "week": 10, "planned": 180, "actual": 127 },
+      { "week": 11, "planned": 198, "actual": 141 },
+      { "week": 12, "planned": 216, "actual": 154 },
+      { "week": 13, "planned": 234, "actual": 169 },
+      { "week": 14, "planned": 252, "actual": 183 },
+      { "week": 15, "planned": 270, "actual": 197 },
+      { "week": 16, "planned": 288, "actual": 212 },
+      { "week": 17, "planned": 306, "actual": 226 },
+      { "week": 18, "planned": 324, "actual": 241 },
+      { "week": 19, "planned": 342, "actual": 256 },
+      { "week": 20, "planned": 360, "actual": 270 }
+    ],
+    "historicalBasis": [
+      { "sourceTrial": "ONC-NSCLC-214", "region": "US/EU", "sites": 74, "meanWeeklyEnrollment": 14.6, "stdWeeklyEnrollment": 4.9, "startupDelayDaysP50": 32 },
+      { "sourceTrial": "ONC-NSCLC-198", "region": "APAC", "sites": 41, "meanWeeklyEnrollment": 9.8, "stdWeeklyEnrollment": 3.7, "startupDelayDaysP50": 41 },
+      { "sourceTrial": "ONC-LU-177", "region": "Global", "sites": 88, "meanWeeklyEnrollment": 16.2, "stdWeeklyEnrollment": 5.4, "startupDelayDaysP50": 35 }
+    ]
+  },
+  {
+    "id": "imm-ra-ph3-122",
+    "trialCode": "IMM-RA-122",
+    "therapeuticArea": "Immunology",
+    "indication": "Rheumatoid Arthritis",
+    "phase": "Phase 3",
+    "targetEnrollment": 540,
+    "plannedEndDate": "2026-11-30",
+    "historyWeeks": [
+      { "week": 1, "planned": 16, "actual": 15 },
+      { "week": 2, "planned": 32, "actual": 30 },
+      { "week": 3, "planned": 48, "actual": 46 },
+      { "week": 4, "planned": 64, "actual": 62 },
+      { "week": 5, "planned": 80, "actual": 77 },
+      { "week": 6, "planned": 96, "actual": 93 },
+      { "week": 7, "planned": 112, "actual": 108 },
+      { "week": 8, "planned": 128, "actual": 124 },
+      { "week": 9, "planned": 144, "actual": 141 },
+      { "week": 10, "planned": 160, "actual": 157 },
+      { "week": 11, "planned": 176, "actual": 172 },
+      { "week": 12, "planned": 192, "actual": 188 },
+      { "week": 13, "planned": 208, "actual": 205 },
+      { "week": 14, "planned": 224, "actual": 221 },
+      { "week": 15, "planned": 240, "actual": 238 },
+      { "week": 16, "planned": 256, "actual": 254 },
+      { "week": 17, "planned": 272, "actual": 270 },
+      { "week": 18, "planned": 288, "actual": 287 },
+      { "week": 19, "planned": 304, "actual": 302 },
+      { "week": 20, "planned": 320, "actual": 318 }
+    ],
+    "historicalBasis": [
+      { "sourceTrial": "IMM-RA-099", "region": "Global", "sites": 68, "meanWeeklyEnrollment": 12.9, "stdWeeklyEnrollment": 3.8, "startupDelayDaysP50": 29 },
+      { "sourceTrial": "IMM-SLE-042", "region": "US/EU", "sites": 52, "meanWeeklyEnrollment": 10.6, "stdWeeklyEnrollment": 3.2, "startupDelayDaysP50": 27 }
+    ]
+  },
+  {
+    "id": "cvot-hf-ph3-490",
+    "trialCode": "CVOT-HF-490",
+    "therapeuticArea": "Cardiovascular",
+    "indication": "Heart Failure",
+    "phase": "Phase 3",
+    "targetEnrollment": 820,
+    "plannedEndDate": "2027-02-28",
+    "historyWeeks": [
+      { "week": 1, "planned": 22, "actual": 16 },
+      { "week": 2, "planned": 44, "actual": 31 },
+      { "week": 3, "planned": 66, "actual": 47 },
+      { "week": 4, "planned": 88, "actual": 63 },
+      { "week": 5, "planned": 110, "actual": 79 },
+      { "week": 6, "planned": 132, "actual": 95 },
+      { "week": 7, "planned": 154, "actual": 111 },
+      { "week": 8, "planned": 176, "actual": 128 },
+      { "week": 9, "planned": 198, "actual": 144 },
+      { "week": 10, "planned": 220, "actual": 161 },
+      { "week": 11, "planned": 242, "actual": 178 },
+      { "week": 12, "planned": 264, "actual": 195 },
+      { "week": 13, "planned": 286, "actual": 213 },
+      { "week": 14, "planned": 308, "actual": 230 },
+      { "week": 15, "planned": 330, "actual": 247 },
+      { "week": 16, "planned": 352, "actual": 265 },
+      { "week": 17, "planned": 374, "actual": 283 },
+      { "week": 18, "planned": 396, "actual": 301 },
+      { "week": 19, "planned": 418, "actual": 319 },
+      { "week": 20, "planned": 440, "actual": 336 }
+    ],
+    "historicalBasis": [
+      { "sourceTrial": "CVOT-HF-302", "region": "Global", "sites": 101, "meanWeeklyEnrollment": 18.4, "stdWeeklyEnrollment": 6.8, "startupDelayDaysP50": 36 },
+      { "sourceTrial": "CVOT-AF-180", "region": "US/EU", "sites": 84, "meanWeeklyEnrollment": 15.1, "stdWeeklyEnrollment": 5.1, "startupDelayDaysP50": 33 }
+    ]
+  }
+]

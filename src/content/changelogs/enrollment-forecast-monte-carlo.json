@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.1.0",
+    "title": {
+      "en": "Monte Carlo Enrollment Forecast UI Added",
+      "zh": "新增蒙特卡罗入组预测界面",
+      "de": "Monte-Carlo-Enrollment-Forecast UI hinzugefuegt"
+    },
+    "changes": {
+      "en": [
+        "Added XY-style enrollment chart for planned, actual, and forecast trajectories.",
+        "Added forecast uncertainty band (P10-P90) and P50 line from Monte Carlo simulation.",
+        "Added delay risk alert with mitigation plan and transparent simulation methodology."
+      ],
+      "zh": [
+        "新增 planned / actual / forecast 的坐标轴式入组轨迹图。",
+        "新增基于蒙特卡罗模拟的 P10-P90 区间与 P50 中位预测线。",
+        "新增延迟风险预警、缓解行动计划与可解释计算方法展示。"
+      ],
+      "de": [
+        "XY-Chart fuer Plan-, Ist- und Forecast-Verlauf hinzugefuegt.",
+        "Unsicherheitsband (P10-P90) und P50-Prognose aus Monte-Carlo-Simulation integriert.",
+        "Delay-Risikoalarm mit Mitigation-Plan und transparenter Berechnungslogik hinzugefuegt."
+      ]
+    }
+  }
+]

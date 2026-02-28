@@ -6,6 +6,7 @@ import { ProtocolLogicPrototype, type ProtocolRecord } from '@/components/protoc
 import { PrototypeChangelog, type LogEntry } from '@/components/prototype-changelog';
 import { AgentOrchestrationPrototype } from '@/components/agent-orchestration-prototype';
 import { DataAgentPrototype } from '@/components/data-agent-prototype';
+import { EnrollmentForecastPrototype } from '@/components/enrollment-forecast-prototype';
 import { SiteFeasibilityFeedbackPrototype } from '@/components/site-feasibility-feedback-prototype';
 import { SiteFeasibilityPrototype } from '@/components/site-feasibility-prototype';
 import { getDictionary, locales, type Locale } from '@/lib/i18n';
@@ -17,12 +18,14 @@ import feasibilitySites from '@/content/site-feasibility/sites.json';
 import protocolEngineData from '@/content/protocol-engine/protocols.json';
 import orchestrationInitiatives from '@/content/agent-orchestration/initiatives.json';
 import dataAgentDatasets from '@/content/data-agent/datasets.json';
+import enrollmentTrials from '@/content/enrollment-forecast/trials.json';
 import marketChangelog from '@/content/changelogs/market-intelligence-highscore.json';
 import siteScoringChangelog from '@/content/changelogs/site-feasibility-scoring.json';
 import siteFeedbackChangelog from '@/content/changelogs/site-feasibility-human-feedback.json';
 import protocolChangelog from '@/content/changelogs/protocol-qa-logic-engine.json';
 import orchestrationChangelog from '@/content/changelogs/agent-orchestration-highscore.json';
 import dataAgentChangelog from '@/content/changelogs/data-agent-catalog.json';
+import enrollmentChangelog from '@/content/changelogs/enrollment-forecast-monte-carlo.json';
 
 export function generateStaticParams() {
   const ports = getPorts();
@@ -98,6 +101,15 @@ export default function PrototypeDetailPage({ params }: { params: { locale: Loca
       <>
         <DataAgentPrototype locale={params.locale} initial={dataAgentDatasets} />
         <PrototypeChangelog locale={params.locale} entries={dataAgentChangelog as unknown as LogEntry[]} />
+      </>
+    );
+  }
+
+  if (params.slug === 'enrollment-forecast-monte-carlo') {
+    return (
+      <>
+        <EnrollmentForecastPrototype locale={params.locale} trials={enrollmentTrials} />
+        <PrototypeChangelog locale={params.locale} entries={enrollmentChangelog as unknown as LogEntry[]} />
       </>
     );
   }
