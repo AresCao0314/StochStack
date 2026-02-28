@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.2.0",
+    "title": {
+      "en": "Configurable SOP skill registry (YAML/JSON)",
+      "zh": "可配置 SOP Skill 注册表（YAML/JSON）",
+      "de": "Konfigurierbares SOP Skill Registry (YAML/JSON)"
+    },
+    "changes": {
+      "en": [
+        "Added versioned SOP registry loader with YAML-first and JSON fallback support.",
+        "Upgraded skill definitions with sopVersion/status/effectiveDate/owners/changeLog fields.",
+        "UI now displays active registry version, source format, and latest skill-change metadata."
+      ],
+      "zh": [
+        "新增版本化 SOP registry 读取器：优先 YAML，回退 JSON。",
+        "Skill 定义升级为带 sopVersion/status/effectiveDate/owners/changeLog 的配置结构。",
+        "界面新增 registry 版本、来源格式与最新变更元信息展示。"
+      ],
+      "de": [
+        "Versionierter SOP-Registry-Loader mit YAML-Prioritaet und JSON-Fallback hinzugefuegt.",
+        "Skill-Definitionen um sopVersion/status/effectiveDate/owners/changeLog erweitert.",
+        "UI zeigt jetzt Registry-Version, Quellenformat und neueste Skill-Change-Metadaten."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.1.0",
     "title": {
       "en": "CTM daily control panel baseline",

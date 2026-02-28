@@ -36,10 +36,20 @@ export type TrialRecord = {
 
 export type SkillPack = {
   header: string;
+  sopVersion: string;
+  status: 'active' | 'draft' | 'deprecated';
+  effectiveDate: string;
+  owners: string[];
   intentKeywords: string[];
   description: string;
   sopSteps: string[];
   outputs: string[];
+  changeLog?: Array<{
+    version: string;
+    date: string;
+    author: string;
+    summary: string;
+  }>;
 };
 
 type ActionPlan = {
@@ -165,11 +175,18 @@ function findBestSkill(skills: SkillPack[], query: string) {
 export function CtmDashboardPrototype({
   locale,
   trials,
-  skills
+  skills,
+  registryMeta
 }: {
   locale: Locale;
   trials: TrialRecord[];
   skills: SkillPack[];
+  registryMeta: {
+    registryId: string;
+    registryVersion: string;
+    updatedAt: string;
+    sourceFormat: 'yaml' | 'json';
+  };
 }) {
   const t = labels[locale];
   const [trialId, setTrialId] = useState(trials[0]?.id ?? '');
@@ -252,6 +269,10 @@ export function CtmDashboardPrototype({
           <span className="rounded border border-ink/15 px-2 py-1 text-xs uppercase tracking-[0.12em]">
             {trial.therapeuticArea} · {trial.indication} · {trial.phase} · {trial.region}
           </span>
+          <span className="rounded border border-ink/15 px-2 py-1 text-xs uppercase tracking-[0.12em]">
+            SOP Registry {registryMeta.registryVersion} ({registryMeta.sourceFormat})
+          </span>
+          <span className="text-xs text-ink/60">updated: {registryMeta.updatedAt}</span>
         </div>
       </section>
 
@@ -367,6 +388,9 @@ export function CtmDashboardPrototype({
             {route ? (
               <>
                 <p className="mt-1 text-sm font-semibold">{route.skill.header}</p>
+                <p className="mt-1 text-xs text-ink/70">
+                  v{route.skill.sopVersion} · {route.skill.status} · effective {route.skill.effectiveDate}
+                </p>
                 <p className="mt-1 text-xs text-ink/70">score: {route.score}</p>
                 <p className="mt-1 text-xs text-ink/70">{route.skill.description}</p>
               </>
@@ -393,6 +417,12 @@ export function CtmDashboardPrototype({
             </ul>
             <p className="mt-3 text-xs uppercase tracking-[0.12em] text-ink/60">{t.output}</p>
             <p className="mt-1 text-xs text-ink/75">{(route?.skill.outputs ?? []).join(' · ') || 'Backlog intake record'}</p>
+            {route?.skill.changeLog?.[0] ? (
+              <p className="mt-2 text-xs text-ink/60">
+                latest change: v{route.skill.changeLog[0].version} ({route.skill.changeLog[0].date}) by{' '}
+                {route.skill.changeLog[0].author}
+              </p>
+            ) : null}
           </article>
         </div>
       </section>

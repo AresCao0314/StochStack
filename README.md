@@ -80,6 +80,18 @@ python3 scripts/fetch_ctgov_site_feasibility.py --page-size 100 --max-pages 4 --
   - Requires `DASHSCOPE_API_KEY` on server
   - Uses `QWEN_MODEL` (default: `qwen-plus`)
 
+
+## CTM SOP Skill Registry (YAML/JSON)
+
+- Registry path: `src/content/ctm-dashboard/skills.registry.yaml` (primary), fallback: `skills.registry.json`.
+- Loader: `src/lib/ctm-sop-registry.ts` (YAML first, JSON fallback).
+- Required fields per skill: `header`, `sopVersion`, `status`, `effectiveDate`, `owners`, `intentKeywords`, `sopSteps`, `outputs`.
+- Version governance: add a new `changeLog` item for every SOP update (version/date/author/summary).
+
+Operational note:
+- Update registry file in Git, then deploy.
+- The CTM dashboard will display active registry version + source format + latest change metadata automatically.
+
 ## Project Structure
 
 - `src/app`: App Router pages/layouts

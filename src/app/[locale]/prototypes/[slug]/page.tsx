@@ -16,6 +16,7 @@ import { SiteFeasibilityPrototype } from '@/components/site-feasibility-prototyp
 import { CtmDashboardPrototype, type TrialRecord, type SkillPack } from '@/components/ctm-dashboard-prototype';
 import { getDictionary, locales, type Locale } from '@/lib/i18n';
 import { getPortBySlug, getPorts } from '@/lib/content';
+import { loadCtmSopRegistry } from '@/lib/ctm-sop-registry';
 import projects from '@/content/market-intelligence/projects.json';
 import signals from '@/content/market-intelligence/signals.json';
 import digest from '@/content/market-intelligence/digest.json';
@@ -29,7 +30,6 @@ import protocolDigitizationSamples from '@/content/protocol-digitization/samples
 import laySynopsisSamples from '@/content/lay-synopsis/samples.json';
 import csrDraftSamples from '@/content/csr-drafting/samples.json';
 import ctmDashboardTrials from '@/content/ctm-dashboard/trials.json';
-import ctmDashboardSkills from '@/content/ctm-dashboard/skills.json';
 import marketChangelog from '@/content/changelogs/market-intelligence-highscore.json';
 import siteScoringChangelog from '@/content/changelogs/site-feasibility-scoring.json';
 import siteFeedbackChangelog from '@/content/changelogs/site-feasibility-human-feedback.json';
@@ -63,12 +63,19 @@ export async function generateMetadata({ params }: { params: { locale: Locale; s
 
 export default function PrototypeDetailPage({ params }: { params: { locale: Locale; slug: string } }) {
   if (params.slug === 'ctm-ops-daily-dashboard') {
+    const registry = loadCtmSopRegistry();
     return (
       <>
         <CtmDashboardPrototype
           locale={params.locale}
           trials={ctmDashboardTrials as unknown as TrialRecord[]}
-          skills={ctmDashboardSkills as unknown as SkillPack[]}
+          skills={registry.skills as unknown as SkillPack[]}
+          registryMeta={{
+            registryId: registry.registryId,
+            registryVersion: registry.registryVersion,
+            updatedAt: registry.updatedAt,
+            sourceFormat: registry.sourceFormat
+          }}
         />
         <PrototypeChangelog locale={params.locale} entries={ctmDashboardChangelog as unknown as LogEntry[]} />
       </>
