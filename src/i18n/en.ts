@@ -38,7 +38,23 @@ const en = {
   notes: {
     title: 'Signal Logs',
     subtitle: 'Fragments, models, and editorial traces from ongoing work.',
-    topics: ['AI', 'Clinical', 'Books', 'Thinking']
+    topics: ['AI', 'Clinical', 'Books', 'Thinking'],
+    capture: {
+      title: 'Quick Capture',
+      subtitle: 'Drop raw notes from phone or web, then condense into usable bullets.',
+      placeholder:
+        'Write in English or Chinese. Example: meeting highlights, idea fragments, reading notes, clinical workflow observations...',
+      summarize: 'Summarize',
+      save: 'Save to local log',
+      clear: 'Clear',
+      copy: 'Copy bullets',
+      history: 'Recent captures',
+      empty: 'No local captures yet.',
+      usingQwen: 'Summarized by Qwen',
+      usingFallback: 'Summarized by local fallback',
+      error: 'Summarization failed. Try again.',
+      saved: 'Saved locally on this device.'
+    }
   },
   life: {
     title: 'Life Index',

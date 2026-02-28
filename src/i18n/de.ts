@@ -38,7 +38,23 @@ const de = {
   notes: {
     title: 'Signal Logs',
     subtitle: 'Analytische Fragmente aus AI, Klinischer Entwicklung und Denken.',
-    topics: ['AI', 'Klinik', 'Bücher', 'Denken']
+    topics: ['AI', 'Klinik', 'Bücher', 'Denken'],
+    capture: {
+      title: 'Quick Capture',
+      subtitle: 'Notizen mobil oder im Web erfassen und direkt in Bullet Points verdichten.',
+      placeholder:
+        'Deutsch, Englisch oder Chinesisch. Beispiel: Meeting-Notizen, Ideenfragmente, Lese-Highlights, Beobachtungen aus Clinical Workflows...',
+      summarize: 'Zusammenfassen',
+      save: 'Lokal speichern',
+      clear: 'Leeren',
+      copy: 'Bullets kopieren',
+      history: 'Letzte Einträge',
+      empty: 'Noch keine lokalen Einträge.',
+      usingQwen: 'Mit Qwen zusammengefasst',
+      usingFallback: 'Mit lokalem Fallback zusammengefasst',
+      error: 'Zusammenfassung fehlgeschlagen. Bitte erneut versuchen.',
+      saved: 'Lokal auf diesem Gerät gespeichert.'
+    }
   },
   life: {
     title: 'Life Index',

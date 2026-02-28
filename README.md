@@ -32,6 +32,25 @@ npm run format
 npm run typecheck
 ```
 
+## Optional LLM Setup (Qwen)
+
+The Notes page includes a `Quick Capture` summarizer.
+
+1. Create `.env.local` in project root:
+
+```bash
+DASHSCOPE_API_KEY=your_dashscope_api_key
+QWEN_MODEL=qwen-plus
+```
+
+2. Restart app:
+
+```bash
+npm run dev
+```
+
+If `DASHSCOPE_API_KEY` is missing, the app uses a local fallback summarizer.
+
 ## Project Structure
 
 - `src/app`: App Router pages/layouts

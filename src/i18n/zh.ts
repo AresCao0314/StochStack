@@ -38,7 +38,22 @@ const zh = {
   notes: {
     title: '信号日志',
     subtitle: '来自日常研究与构建过程的片段、模型与注记。',
-    topics: ['AI', '临床', '阅读', '思考']
+    topics: ['AI', '临床', '阅读', '思考'],
+    capture: {
+      title: '随手记录',
+      subtitle: '在手机或网页端快速写下原始想法，一键整理成可用要点。',
+      placeholder: '中英文都可以。可记录：会议纪要、灵感片段、读书摘记、临床工作流观察等...',
+      summarize: '整理要点',
+      save: '保存到本地记录',
+      clear: '清空',
+      copy: '复制要点',
+      history: '最近记录',
+      empty: '还没有本地记录。',
+      usingQwen: '由通义千问整理',
+      usingFallback: '由本地兜底整理',
+      error: '整理失败，请重试。',
+      saved: '已保存到当前设备本地。'
+    }
   },
   life: {
     title: '生活索引',

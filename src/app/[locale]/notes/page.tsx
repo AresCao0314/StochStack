@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { NotesBrowser } from '@/components/notes-browser';
+import { NotesCapture } from '@/components/notes-capture';
 import { getDictionary, type Locale } from '@/lib/i18n';
 import { getNotes } from '@/lib/content';
 
@@ -32,6 +33,8 @@ export default function NotesPage({ params }: { params: { locale: Locale } }) {
         allLabel={dict.common.all}
         topicLabel={dict.common.filterByTag}
       />
+
+      <NotesCapture locale={params.locale} dict={dict.notes.capture} />
     </div>
   );
 }
