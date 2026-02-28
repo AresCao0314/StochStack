@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { MarketIntelligencePrototype } from '@/components/market-intelligence-prototype';
+import { ProtocolLogicPrototype, type ProtocolRecord } from '@/components/protocol-logic-prototype';
 import { SiteFeasibilityPrototype } from '@/components/site-feasibility-prototype';
 import { getDictionary, locales, type Locale } from '@/lib/i18n';
 import { getPortBySlug, getPorts } from '@/lib/content';
@@ -9,6 +10,7 @@ import projects from '@/content/market-intelligence/projects.json';
 import signals from '@/content/market-intelligence/signals.json';
 import digest from '@/content/market-intelligence/digest.json';
 import feasibilitySites from '@/content/site-feasibility/sites.json';
+import protocolEngineData from '@/content/protocol-engine/protocols.json';
 
 export function generateStaticParams() {
   const ports = getPorts();
@@ -42,6 +44,10 @@ export default function PrototypeDetailPage({ params }: { params: { locale: Loca
 
   if (params.slug === 'site-feasibility-scoring-ctgov') {
     return <SiteFeasibilityPrototype locale={params.locale} sites={feasibilitySites} />;
+  }
+
+  if (params.slug === 'protocol-qa-logic-engine') {
+    return <ProtocolLogicPrototype locale={params.locale} protocols={protocolEngineData as unknown as ProtocolRecord[]} />;
   }
 
   const dict = getDictionary(params.locale);

@@ -1,0 +1,198 @@
+[
+  {
+    "id": "onc-nsclc-p3-001",
+    "trialId": "NCT-ONC-NSCLC-001",
+    "title": "Phase 3 First-line NSCLC Combination Therapy",
+    "therapeuticArea": "Oncology",
+    "indication": "NSCLC",
+    "phase": "Phase 3",
+    "summary": "Randomized Phase 3 trial comparing SOC vs investigational combo in first-line metastatic NSCLC.",
+    "inclusionCriteria": [
+      { "id": "I1", "text": "Age 18-75 years" },
+      { "id": "I2", "text": "Histologically confirmed stage IV NSCLC" },
+      { "id": "I3", "text": "ECOG performance status 0-1" },
+      { "id": "I4", "text": "ANC >= 1.5 x10^9/L, Platelets >= 100 x10^9/L" },
+      { "id": "I5", "text": "ALT/AST <= 2.5 x ULN (<=5 x ULN if liver metastases)" },
+      { "id": "I6", "text": "Creatinine clearance >= 50 mL/min" }
+    ],
+    "exclusionCriteria": [
+      { "id": "E1", "text": "Untreated or symptomatic CNS metastases" },
+      { "id": "E2", "text": "Active uncontrolled infection" },
+      { "id": "E3", "text": "Pregnancy or breastfeeding" },
+      { "id": "E4", "text": "Prior anti-PD-1/PD-L1 treatment in metastatic setting" }
+    ],
+    "eligibilityRules": {
+      "age": { "min": 18, "max": 75, "evidence": "I1" },
+      "ecog": { "max": 1, "evidence": "I3" },
+      "ancMin": { "value": 1.5, "evidence": "I4" },
+      "plateletsMin": { "value": 100, "evidence": "I4" },
+      "altUlnMax": { "value": 2.5, "evidence": "I5" },
+      "creatinineClearanceMin": { "value": 50, "evidence": "I6" }
+    },
+    "medicationRestrictions": [
+      {
+        "name": "Strong CYP3A4 inhibitors",
+        "aliases": ["ketoconazole", "itraconazole", "clarithromycin", "ritonavir"],
+        "level": "prohibited",
+        "reason": "May significantly increase investigational drug exposure.",
+        "evidence": "Section 6.3.1",
+        "washoutDays": 14
+      },
+      {
+        "name": "Systemic corticosteroid >10 mg prednisone equivalent",
+        "aliases": ["prednisone", "dexamethasone", "methylprednisolone"],
+        "level": "caution",
+        "reason": "Potential impact on immune-related endpoints.",
+        "evidence": "Section 6.3.2",
+        "washoutDays": 7
+      },
+      {
+        "name": "Live attenuated vaccines",
+        "aliases": ["live vaccine", "MMR", "varicella vaccine"],
+        "level": "prohibited",
+        "reason": "Immune modulation risk during investigational treatment.",
+        "evidence": "Section 6.3.4",
+        "washoutDays": 30
+      }
+    ],
+    "soa": [
+      { "visit": "Screening", "window": "Day -28 to Day -1", "activities": ["Informed consent", "Eligibility labs", "Tumor tissue confirmation"] },
+      { "visit": "Cycle 1 Day 1", "window": "Day 1", "activities": ["Dosing", "Safety labs", "Concomitant meds review"] },
+      { "visit": "Cycle 2+", "window": "Every 21 days", "activities": ["Dose administration", "AE review", "Hematology/Chemistry"] },
+      { "visit": "Tumor assessment", "window": "Every 6 weeks", "activities": ["RECIST imaging", "Response adjudication"] }
+    ],
+    "labManual": {
+      "specimens": [
+        {
+          "name": "PK Plasma",
+          "storage": "-80°C",
+          "stability": "6 months",
+          "handling": "Centrifuge within 30 minutes, avoid repeated freeze-thaw cycles.",
+          "evidence": "Lab Manual 4.1"
+        },
+        {
+          "name": "PBMC",
+          "storage": "Liquid nitrogen vapor phase",
+          "stability": "12 months",
+          "handling": "Cryopreserve within 4 hours of collection.",
+          "evidence": "Lab Manual 5.2"
+        }
+      ],
+      "reagents": [
+        {
+          "name": "ELISA Substrate A",
+          "storage": "2-8°C, protected from light",
+          "afterOpen": "Use within 30 days",
+          "evidence": "Lab Manual 7.3"
+        },
+        {
+          "name": "Flow Antibody Panel X",
+          "storage": "-20°C",
+          "afterOpen": "Avoid >3 freeze-thaw cycles",
+          "evidence": "Lab Manual 8.1"
+        }
+      ]
+    },
+    "graph": {
+      "nodes": [
+        { "id": "patient", "label": "Patient Profile" },
+        { "id": "ie", "label": "I/E Criteria" },
+        { "id": "med", "label": "Medication Rules" },
+        { "id": "soa", "label": "Schedule of Activities" },
+        { "id": "lab", "label": "Lab Manual" }
+      ],
+      "edges": [
+        { "from": "patient", "to": "ie", "label": "eligibility check" },
+        { "from": "patient", "to": "med", "label": "restriction check" },
+        { "from": "ie", "to": "soa", "label": "on-study workflow" },
+        { "from": "soa", "to": "lab", "label": "sample handling" }
+      ]
+    }
+  },
+  {
+    "id": "immun-ra-p2-007",
+    "trialId": "NCT-IMM-RA-007",
+    "title": "Phase 2 RA JAK-inhibitor Combination Study",
+    "therapeuticArea": "Immunology",
+    "indication": "Rheumatoid Arthritis",
+    "phase": "Phase 2",
+    "summary": "Dose-finding Phase 2 trial in moderate-to-severe RA with background methotrexate.",
+    "inclusionCriteria": [
+      { "id": "I1", "text": "Age 18-70 years" },
+      { "id": "I2", "text": "Diagnosis of RA for >= 6 months" },
+      { "id": "I3", "text": "DAS28-CRP >= 3.2" },
+      { "id": "I4", "text": "ANC >= 1.8 x10^9/L, Platelets >= 120 x10^9/L" },
+      { "id": "I5", "text": "ALT/AST <= 2.0 x ULN" }
+    ],
+    "exclusionCriteria": [
+      { "id": "E1", "text": "Active tuberculosis or untreated latent TB" },
+      { "id": "E2", "text": "Recent serious cardiovascular event (<6 months)" },
+      { "id": "E3", "text": "Pregnancy or breastfeeding" }
+    ],
+    "eligibilityRules": {
+      "age": { "min": 18, "max": 70, "evidence": "I1" },
+      "ecog": { "max": 2, "evidence": "I3" },
+      "ancMin": { "value": 1.8, "evidence": "I4" },
+      "plateletsMin": { "value": 120, "evidence": "I4" },
+      "altUlnMax": { "value": 2.0, "evidence": "I5" },
+      "creatinineClearanceMin": { "value": 45, "evidence": "I5" }
+    },
+    "medicationRestrictions": [
+      {
+        "name": "Biologic DMARD within washout",
+        "aliases": ["adalimumab", "etanercept", "tocilizumab", "abatacept"],
+        "level": "prohibited",
+        "reason": "Overlapping immunosuppressive effects may confound safety profile.",
+        "evidence": "Section 7.2",
+        "washoutDays": 28
+      },
+      {
+        "name": "NSAID chronic high-dose",
+        "aliases": ["ibuprofen", "naproxen", "diclofenac"],
+        "level": "caution",
+        "reason": "May mask symptomatic endpoints and increase GI risk.",
+        "evidence": "Section 7.4",
+        "washoutDays": 3
+      }
+    ],
+    "soa": [
+      { "visit": "Screening", "window": "Day -21 to Day -1", "activities": ["TB test", "Baseline disease activity", "Safety labs"] },
+      { "visit": "Baseline", "window": "Day 1", "activities": ["Randomization", "Dose initiation", "Concomitant med check"] },
+      { "visit": "Follow-up", "window": "Weeks 2, 4, 8, 12", "activities": ["DAS28", "CRP/ESR", "AE review"] }
+    ],
+    "labManual": {
+      "specimens": [
+        {
+          "name": "Serum Cytokine Panel",
+          "storage": "-80°C",
+          "stability": "9 months",
+          "handling": "Allow clotting 30 minutes then centrifuge; aliquot immediately.",
+          "evidence": "Lab Manual 3.4"
+        }
+      ],
+      "reagents": [
+        {
+          "name": "CRP Calibrator Mix",
+          "storage": "2-8°C",
+          "afterOpen": "Use within 14 days",
+          "evidence": "Lab Manual 6.1"
+        }
+      ]
+    },
+    "graph": {
+      "nodes": [
+        { "id": "patient", "label": "Patient Profile" },
+        { "id": "ie", "label": "I/E Criteria" },
+        { "id": "med", "label": "Medication Rules" },
+        { "id": "soa", "label": "Visit Schedule" },
+        { "id": "lab", "label": "Lab Manual" }
+      ],
+      "edges": [
+        { "from": "patient", "to": "ie", "label": "fit check" },
+        { "from": "patient", "to": "med", "label": "concomitant meds" },
+        { "from": "ie", "to": "soa", "label": "assessment cadence" },
+        { "from": "soa", "to": "lab", "label": "sample collection" }
+      ]
+    }
+  }
+]
