@@ -67,7 +67,8 @@ const text = {
     watch: 'Big-Tech Watch',
     radar: 'Program Radar',
     map: 'Program Map',
-    source: 'source'
+    source: 'source',
+    open: 'open'
   },
   zh: {
     title: '市场情报控制台',
@@ -79,7 +80,8 @@ const text = {
     watch: '科技巨头动向',
     radar: '项目雷达',
     map: '项目地图',
-    source: '来源'
+    source: '来源',
+    open: '打开'
   },
   de: {
     title: 'Market Intelligence Konsole',
@@ -91,7 +93,8 @@ const text = {
     watch: 'Big-Tech Watch',
     radar: 'Programm-Radar',
     map: 'Projektkarte',
-    source: 'Quelle'
+    source: 'Quelle',
+    open: 'oeffnen'
   }
 } as const;
 
@@ -100,6 +103,14 @@ function inWindow(dateStr: string, days: number) {
   const ts = new Date(dateStr).getTime();
   const span = days * 24 * 60 * 60 * 1000;
   return now - ts <= span;
+}
+
+function resolveExternalLink(link: string | undefined, title: string) {
+  if (link && /^https?:\/\//.test(link)) {
+    return link;
+  }
+
+  return `https://www.google.com/search?q=${encodeURIComponent(title)}`;
 }
 
 export function MarketIntelligencePrototype({ locale, projects, signals, digest }: Props) {
@@ -206,7 +217,12 @@ export function MarketIntelligencePrototype({ locale, projects, signals, digest 
               <p className="mt-2 text-sm text-ink/75">{signal.summary}</p>
               <div className="mt-3 flex items-center justify-between text-xs text-ink/65">
                 <span>{signal.published_at} · {signal.source}</span>
-                <a href={signal.link} target="_blank" rel="noreferrer" className="glitch-link">
+                <a
+                  href={resolveExternalLink(signal.link, signal.title)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="glitch-link"
+                >
                   {copy.source}
                 </a>
               </div>
@@ -221,7 +237,14 @@ export function MarketIntelligencePrototype({ locale, projects, signals, digest 
           <div className="space-y-3 text-sm">
             {digest.new_items.map((item) => (
               <div key={item.title}>
-                <p className="font-medium">{item.title}</p>
+                <a
+                  href={resolveExternalLink(item.link, item.title)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="glitch-link font-medium"
+                >
+                  {item.title}
+                </a>
                 <p className="text-ink/65">{item.published_at} · {projectName(item.project_id)}</p>
               </div>
             ))}
@@ -233,7 +256,14 @@ export function MarketIntelligencePrototype({ locale, projects, signals, digest 
           <div className="space-y-3 text-sm">
             {digest.watchlist.highlights.map((item) => (
               <div key={item.title}>
-                <p className="font-medium">{item.title}</p>
+                <a
+                  href={resolveExternalLink(item.link, item.title)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="glitch-link font-medium"
+                >
+                  {item.title}
+                </a>
                 <p className="text-ink/65">{item.companies.join(', ')} · {item.published_at}</p>
               </div>
             ))}
