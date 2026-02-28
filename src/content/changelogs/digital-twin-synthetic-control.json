@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.1.0",
+    "title": {
+      "en": "Synthetic Control + ProCOVA Demo Added",
+      "zh": "新增 Synthetic Control + ProCOVA Demo",
+      "de": "Synthetic-Control + ProCOVA-Demo hinzugefuegt"
+    },
+    "changes": {
+      "en": [
+        "Added historical EDC driven synthetic control simulation with control-arm reduction estimate.",
+        "Added endpoint trajectory view for treated, observed control, and synthetic control.",
+        "Added ProCOVA-style sample-size reduction calculator with transparent formulas."
+      ],
+      "zh": [
+        "新增基于历史 EDC 的 synthetic control 仿真与对照组缩减估算。",
+        "新增 treated / observed control / synthetic control 终点轨迹对比。",
+        "新增 ProCOVA 风格样本量降低计算器，并展示可解释公式。"
+      ],
+      "de": [
+        "Historisch EDC-basierte Synthetic-Control-Simulation mit Kontrollarm-Reduktionsschaetzung integriert.",
+        "Endpoint-Verlauf fuer Treatment, beobachtete Kontrolle und Synthetic Control hinzugefuegt.",
+        "ProCOVA-aehnlicher Sample-Size-Calculator mit transparenten Formeln ergaenzt."
+      ]
+    }
+  }
+]

@@ -6,6 +6,7 @@ import { ProtocolLogicPrototype, type ProtocolRecord } from '@/components/protoc
 import { PrototypeChangelog, type LogEntry } from '@/components/prototype-changelog';
 import { AgentOrchestrationPrototype } from '@/components/agent-orchestration-prototype';
 import { DataAgentPrototype } from '@/components/data-agent-prototype';
+import { DigitalTwinPrototype } from '@/components/digital-twin-prototype';
 import { EnrollmentForecastPrototype } from '@/components/enrollment-forecast-prototype';
 import { SiteFeasibilityFeedbackPrototype } from '@/components/site-feasibility-feedback-prototype';
 import { SiteFeasibilityPrototype } from '@/components/site-feasibility-prototype';
@@ -19,6 +20,7 @@ import protocolEngineData from '@/content/protocol-engine/protocols.json';
 import orchestrationInitiatives from '@/content/agent-orchestration/initiatives.json';
 import dataAgentDatasets from '@/content/data-agent/datasets.json';
 import enrollmentTrials from '@/content/enrollment-forecast/trials.json';
+import digitalTwinScenarios from '@/content/digital-twin/scenarios.json';
 import marketChangelog from '@/content/changelogs/market-intelligence-highscore.json';
 import siteScoringChangelog from '@/content/changelogs/site-feasibility-scoring.json';
 import siteFeedbackChangelog from '@/content/changelogs/site-feasibility-human-feedback.json';
@@ -26,6 +28,7 @@ import protocolChangelog from '@/content/changelogs/protocol-qa-logic-engine.jso
 import orchestrationChangelog from '@/content/changelogs/agent-orchestration-highscore.json';
 import dataAgentChangelog from '@/content/changelogs/data-agent-catalog.json';
 import enrollmentChangelog from '@/content/changelogs/enrollment-forecast-monte-carlo.json';
+import digitalTwinChangelog from '@/content/changelogs/digital-twin-synthetic-control.json';
 
 export function generateStaticParams() {
   const ports = getPorts();
@@ -110,6 +113,15 @@ export default function PrototypeDetailPage({ params }: { params: { locale: Loca
       <>
         <EnrollmentForecastPrototype locale={params.locale} trials={enrollmentTrials} />
         <PrototypeChangelog locale={params.locale} entries={enrollmentChangelog as unknown as LogEntry[]} />
+      </>
+    );
+  }
+
+  if (params.slug === 'digital-twin-synthetic-control') {
+    return (
+      <>
+        <DigitalTwinPrototype locale={params.locale} scenarios={digitalTwinScenarios} />
+        <PrototypeChangelog locale={params.locale} entries={digitalTwinChangelog as unknown as LogEntry[]} />
       </>
     );
   }

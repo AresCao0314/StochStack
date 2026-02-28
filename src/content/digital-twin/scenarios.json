@@ -1,0 +1,56 @@
+[
+  {
+    "id": "dt-onc-nsclc-ph3",
+    "trialCode": "DT-ONC-NSCLC-501",
+    "therapeuticArea": "Oncology",
+    "indication": "NSCLC",
+    "phase": "Phase 3",
+    "endpoint": "PFS at Week 24",
+    "historicalSource": {
+      "system": "EDC",
+      "trials": ["ONC-NSCLC-214", "ONC-NSCLC-198", "ONC-LU-177"],
+      "historicalPatients": 1280
+    },
+    "observed": {
+      "treatedN": 210,
+      "controlN": 210
+    },
+    "visitTrajectory": [
+      { "visit": 1, "treated": 0.51, "observedControl": 0.49, "syntheticControl": 0.495 },
+      { "visit": 2, "treated": 0.55, "observedControl": 0.5, "syntheticControl": 0.502 },
+      { "visit": 3, "treated": 0.58, "observedControl": 0.51, "syntheticControl": 0.509 },
+      { "visit": 4, "treated": 0.62, "observedControl": 0.515, "syntheticControl": 0.513 },
+      { "visit": 5, "treated": 0.66, "observedControl": 0.52, "syntheticControl": 0.518 },
+      { "visit": 6, "treated": 0.69, "observedControl": 0.525, "syntheticControl": 0.523 },
+      { "visit": 7, "treated": 0.72, "observedControl": 0.53, "syntheticControl": 0.529 },
+      { "visit": 8, "treated": 0.75, "observedControl": 0.535, "syntheticControl": 0.534 }
+    ]
+  },
+  {
+    "id": "dt-imm-ra-ph3",
+    "trialCode": "DT-IMM-RA-322",
+    "therapeuticArea": "Immunology",
+    "indication": "Rheumatoid Arthritis",
+    "phase": "Phase 3",
+    "endpoint": "ACR50 at Week 16",
+    "historicalSource": {
+      "system": "EDC",
+      "trials": ["IMM-RA-099", "IMM-SLE-042"],
+      "historicalPatients": 940
+    },
+    "observed": {
+      "treatedN": 180,
+      "controlN": 180
+    },
+    "visitTrajectory": [
+      { "visit": 1, "treated": 0.29, "observedControl": 0.28, "syntheticControl": 0.281 },
+      { "visit": 2, "treated": 0.33, "observedControl": 0.295, "syntheticControl": 0.294 },
+      { "visit": 3, "treated": 0.38, "observedControl": 0.31, "syntheticControl": 0.307 },
+      { "visit": 4, "treated": 0.42, "observedControl": 0.325, "syntheticControl": 0.319 },
+      { "visit": 5, "treated": 0.46, "observedControl": 0.34, "syntheticControl": 0.333 },
+      { "visit": 6, "treated": 0.5, "observedControl": 0.355, "syntheticControl": 0.346 },
+      { "visit": 7, "treated": 0.53, "observedControl": 0.368, "syntheticControl": 0.358 },
+      { "visit": 8, "treated": 0.57, "observedControl": 0.38, "syntheticControl": 0.37 }
+    ]
+  }
+]
