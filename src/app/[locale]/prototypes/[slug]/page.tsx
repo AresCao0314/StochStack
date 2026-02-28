@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { MarketIntelligencePrototype } from '@/components/market-intelligence-prototype';
 import { ProtocolLogicPrototype, type ProtocolRecord } from '@/components/protocol-logic-prototype';
 import { PrototypeChangelog, type LogEntry } from '@/components/prototype-changelog';
+import { AgentOrchestrationPrototype } from '@/components/agent-orchestration-prototype';
 import { SiteFeasibilityFeedbackPrototype } from '@/components/site-feasibility-feedback-prototype';
 import { SiteFeasibilityPrototype } from '@/components/site-feasibility-prototype';
 import { getDictionary, locales, type Locale } from '@/lib/i18n';
@@ -13,10 +14,12 @@ import signals from '@/content/market-intelligence/signals.json';
 import digest from '@/content/market-intelligence/digest.json';
 import feasibilitySites from '@/content/site-feasibility/sites.json';
 import protocolEngineData from '@/content/protocol-engine/protocols.json';
+import orchestrationInitiatives from '@/content/agent-orchestration/initiatives.json';
 import marketChangelog from '@/content/changelogs/market-intelligence-highscore.json';
 import siteScoringChangelog from '@/content/changelogs/site-feasibility-scoring.json';
 import siteFeedbackChangelog from '@/content/changelogs/site-feasibility-human-feedback.json';
 import protocolChangelog from '@/content/changelogs/protocol-qa-logic-engine.json';
+import orchestrationChangelog from '@/content/changelogs/agent-orchestration-highscore.json';
 
 export function generateStaticParams() {
   const ports = getPorts();
@@ -74,6 +77,15 @@ export default function PrototypeDetailPage({ params }: { params: { locale: Loca
       <>
         <ProtocolLogicPrototype locale={params.locale} protocols={protocolEngineData as unknown as ProtocolRecord[]} />
         <PrototypeChangelog locale={params.locale} entries={protocolChangelog as unknown as LogEntry[]} />
+      </>
+    );
+  }
+
+  if (params.slug === 'agent-orchestration-highscore') {
+    return (
+      <>
+        <AgentOrchestrationPrototype locale={params.locale} initiatives={orchestrationInitiatives} />
+        <PrototypeChangelog locale={params.locale} entries={orchestrationChangelog as unknown as LogEntry[]} />
       </>
     );
   }

@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.1.0",
+    "title": {
+      "en": "Initial Agent Orchestration Prototype",
+      "zh": "Agent 编排原型首版",
+      "de": "Erste Version des Agent-Orchestration-Prototyps"
+    },
+    "changes": {
+      "en": [
+        "Added natural-language request routing across 10 HighScore initiatives.",
+        "Added skill-pack workflow output for routed initiatives.",
+        "Added backlog intake storage for unmatched requests."
+      ],
+      "zh": [
+        "新增面向 10 个 HighScore initiatives 的自然语言路由。",
+        "新增命中 initiative 后的 skill 执行工作流输出。",
+        "新增未命中请求的 backlog 入库。"
+      ],
+      "de": [
+        "Routing natuerlicher Sprache auf 10 HighScore-Initiativen hinzugefuegt.",
+        "Skill-Workflow-Ausgabe fuer geroutete Initiativen integriert.",
+        "Backlog-Speicherung fuer nicht zuordenbare Anfragen hinzugefuegt."
+      ]
+    }
+  }
+]

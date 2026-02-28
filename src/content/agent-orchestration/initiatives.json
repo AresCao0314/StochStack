@@ -1,0 +1,77 @@
+[
+  {
+    "id": "initiative-01-portfolio-mgmt",
+    "name": "Clinical operation portfolio management",
+    "summary": "Manage milestones, budget, and resources across studies with proactive risk signals.",
+    "aliases": [
+      "clinical operations portfolio management",
+      "trial milestones",
+      "budget planning",
+      "resource allocation"
+    ],
+    "keywords": ["portfolio", "milestone", "budget", "resource", "capacity", "timeline"]
+  },
+  {
+    "id": "initiative-02-trial-simulator",
+    "name": "Clinical trial simulator capability",
+    "summary": "Run trial simulation and digital twin scenarios before operational commitment.",
+    "aliases": ["clinical trial simulation", "digital twin trial"],
+    "keywords": ["simulate", "simulation", "digital twin", "scenario", "power", "assumption"]
+  },
+  {
+    "id": "initiative-03-site-startup",
+    "name": "Optimized site startup capability",
+    "summary": "Accelerate site startup and activation through bottleneck-aware workflows.",
+    "aliases": ["site startup", "site activation"],
+    "keywords": ["startup", "activation", "site opening", "ethics", "contract", "startup delay"]
+  },
+  {
+    "id": "initiative-04-footprint-selection",
+    "name": "Data-driven trial footprint and site selection capability",
+    "summary": "Optimize footprint and site mix using data-backed feasibility and geographic strategy.",
+    "aliases": ["site selection", "trial footprint"],
+    "keywords": ["footprint", "site selection", "country mix", "region", "feasibility", "site ranking"]
+  },
+  {
+    "id": "initiative-05-partner-of-choice",
+    "name": "Differentiated global Partner-of-Choice model",
+    "summary": "Build strategic CRO partnerships with transparent performance and governance model.",
+    "aliases": ["partner-of-choice", "strategic CRO partnership"],
+    "keywords": ["partner", "cro", "vendor", "alliance", "governance", "sla"]
+  },
+  {
+    "id": "initiative-06-submission-closeout",
+    "name": "Submission and close-out acceleration capability",
+    "summary": "Shorten regulatory submission and study close-out cycle with coordinated operations.",
+    "aliases": ["regulatory submission acceleration", "study close-out"],
+    "keywords": ["submission", "close-out", "csr", "regulatory", "filing", "lock"]
+  },
+  {
+    "id": "initiative-07-rbqm",
+    "name": "Holistic analytics/AI-enabled and risk-based trial data quality management",
+    "summary": "Deploy RBQM with AI signals to improve data quality and reduce monitoring waste.",
+    "aliases": ["risk-based quality management", "RBQM"],
+    "keywords": ["rbqm", "risk-based", "data quality", "monitoring", "query", "deviation"]
+  },
+  {
+    "id": "initiative-08-delivery-sourcing",
+    "name": "Simplified clinical delivery and sourcing model to optimize costs",
+    "summary": "Optimize costs through delivery model redesign and sourcing strategy.",
+    "aliases": ["clinical outsourcing model", "functional service provider"],
+    "keywords": ["sourcing", "fsp", "outsourcing", "cost", "delivery model", "op model"]
+  },
+  {
+    "id": "initiative-09-data-tech-foundation",
+    "name": "Integrated, scalable data and tech foundation",
+    "summary": "Build interoperable clinical systems and unified data platform for scale.",
+    "aliases": ["clinical data platform", "interoperable clinical systems"],
+    "keywords": ["data platform", "integration", "interoperable", "system", "architecture", "pipeline"]
+  },
+  {
+    "id": "initiative-10-ai-authoring",
+    "name": "AI tools for end-to-end automation (first step: authoring)",
+    "summary": "Automate medical writing and downstream document workflows with AI.",
+    "aliases": ["medical writing automation", "AI authoring"],
+    "keywords": ["authoring", "medical writing", "automation", "document", "protocol writing", "csr drafting"]
+  }
+]
