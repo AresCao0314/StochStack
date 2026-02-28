@@ -4,27 +4,83 @@ import { getDictionary, type Locale } from '@/lib/i18n';
 
 const aboutTimeline = [
   {
+    year: '1988',
+    text: {
+      en: 'Born in Shenyang, where winter light and industrial geometry first shaped my sense of structure.',
+      zh: '出生于沈阳，在寒光与工业几何里形成了最早的结构感。',
+      de: 'Geboren in Shenyang: Winterlicht und industrielle Geometrie praegten frueh mein Strukturdenken.'
+    }
+  },
+  {
+    year: '2006',
+    text: {
+      en: 'By the Pearl River in Guangzhou, I learned to read fast-changing signals across people, place, and momentum.',
+      zh: '2006 年在广州珠江边，开始学会读取人与场景之间快速变化的信号。',
+      de: '2006 am Perlfluss in Guangzhou: Signale zwischen Menschen, Raum und Dynamik lesen gelernt.'
+    }
+  },
+  {
+    year: '2011',
+    text: {
+      en: 'In Shanghai, studied computational neurobiology and neural conservation across species as a language of patterns.',
+      zh: '2011 年在上海学习计算神经生物学，研究跨物种神经系统的保守性，把“模式”当作语言。',
+      de: '2011 in Shanghai: Computational Neurobiology und konservierte neuronale Muster ueber Spezies hinweg untersucht.'
+    }
+  },
+  {
+    year: '2014',
+    text: {
+      en: 'Entered genomics, moving through technical leadership, product strategy, and general management.',
+      zh: '2014 年进入基因组学，从技术负责人、产品经理到 General Manager，持续跨栈演进。',
+      de: 'Seit 2014 in der Genomik: von technischer Leitung ueber Produktstrategie bis General Management.'
+    }
+  },
+  {
+    year: '2016',
+    text: {
+      en: 'Worked in Europe on market shaping and sales leadership, translating science into adoption.',
+      zh: '2016 年赴欧洲，负责市场与销售团队，把科学语言翻译成真实采用。',
+      de: '2016 in Europa: Marketing- und Vertriebsfuehrung, wissenschaftliche Inhalte in Adoption ueberfuehrt.'
+    }
+  },
+  {
+    year: '2017',
+    text: {
+      en: 'Returned to Shanghai to bridge proteomics, early-stage AI, and enterprise clinical platforms.',
+      zh: '2017 年回到上海，连接蛋白组学、早研 AI 与临床系统落地（CTMS/EDC/PV/RIMS）。',
+      de: '2017 zurueck in Shanghai: Bruecke zwischen Proteomik, frueher AI und klinischen Plattformen (CTMS/EDC/PV/RIMS).'
+    }
+  },
+  {
     year: '2019',
     text: {
-      en: 'Moved from pure execution to system-level design thinking.',
-      zh: '从执行层转向系统层设计思维。',
-      de: 'Vom reinen Delivery-Fokus hin zu systemischem Designdenken gewechselt.'
+      en: 'Expanded into IRC imaging review and broader trial system implementation at operational depth.',
+      zh: '2019 年进一步进入 IRC 独立影像阅片与临床试验系统实施，深入执行纵深。',
+      de: '2019 Ausbau in IRC-Bildreview und tiefere Umsetzung klinischer Studiensysteme.'
     }
   },
   {
-    year: '2022',
+    year: '2021',
     text: {
-      en: 'Started combining clinical workflows with AI-native tooling.',
-      zh: '开始把临床工作流与 AI-native 工具结合。',
-      de: 'Klinische Workflows mit AI-nativen Tools verbunden.'
+      en: 'Shifted focus to AI applications across clinical development and clinical operations workflows.',
+      zh: '2021 年起聚焦临床研发与临床运营全流程的 AI 应用。',
+      de: 'Ab 2021 Fokus auf AI-Anwendungen entlang klinischer Entwicklung und Operations.'
     }
   },
   {
-    year: '2025',
+    year: '2023',
     text: {
-      en: 'Launched StochStack as a signal-driven prototype and editorial lab.',
-      zh: '启动随机栈，作为信号驱动的原型与编辑实验场。',
-      de: 'StochStack als signalgetriebenes Prototyp- und Editorial-Lab gestartet.'
+      en: 'Started working with large language models, turning tacit operating logic into editable systems.',
+      zh: '2023 年开始系统使用大语言模型，把隐性经验转写为可编辑、可协作的系统逻辑。',
+      de: 'Seit 2023 mit Large Language Models: implizite Betriebslogik in editierbare Systeme ueberfuehrt.'
+    }
+  },
+  {
+    year: 'Now',
+    text: {
+      en: 'StochStack: a signal desk for turning uncertainty into prototypes, and prototypes into decisions.',
+      zh: '现在，随机栈成为一个信号工作台：把不确定性转成原型，再把原型转成决策。',
+      de: 'Heute ist StochStack ein Signal-Desk: Unsicherheit in Prototypen und Prototypen in Entscheidungen uebersetzen.'
     }
   }
 ];
@@ -61,9 +117,9 @@ export default function AboutPage({ params }: { params: { locale: Locale } }) {
   };
 
   const now = {
-    en: 'Building prototype systems for AI-assisted clinical development and operator tooling.',
-    zh: '正在构建面向 AI 辅助临床开发与操作流的原型系统。',
-    de: 'Aktuell: Prototyp-Systeme für AI-gestützte klinische Entwicklung und Operator-Tools.'
+    en: 'Designing operator-facing AI systems where clinical logic, execution rhythm, and decision transparency stay in one frame.',
+    zh: '正在构建面向操作者的 AI 系统，让临床逻辑、执行节奏与决策透明度留在同一画面里。',
+    de: 'Aktuell baue ich operator-orientierte AI-Systeme, in denen klinische Logik, Ausfuehrungsrhythmus und Entscheidungstransparenz zusammenbleiben.'
   };
 
   const stack = ['Next.js', 'TypeScript', 'PromptOps', 'Design Systems', 'Clinical Workflow Modeling'];
