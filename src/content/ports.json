@@ -1,5 +1,36 @@
 [
   {
+    "slug": "lay-language-synopsis-eu",
+    "name": {
+      "en": "Lay Language Synopsis (EU)",
+      "zh": "Lay Language Synopsis（EU）",
+      "de": "Lay Language Synopsis (EU)"
+    },
+    "description": {
+      "en": "Generate participant-friendly lay protocol synopsis from protocol/protocol synopsis for EU submission workflows.",
+      "zh": "将 protocol/protocol synopsis 转换为受试者友好的 lay language synopsis，用于 EU 递交流程。",
+      "de": "Teilnehmerfreundliche Lay-Synopsis aus Protocol/Synopsis fuer EU-Einreichungsprozesse erzeugen."
+    },
+    "tags": [
+      "Medical Writing",
+      "Protocol",
+      "EU"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/lay-language-synopsis-eu",
+    "screenshot": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "LLM Generation",
+      "Plain Language",
+      "Regulatory Checklist"
+    ],
+    "designIntent": {
+      "en": "Reduce protocol language complexity and produce submission-ready lay communication drafts.",
+      "zh": "降低 protocol 语言复杂度，形成可提交的 lay communication 草稿。",
+      "de": "Protocol-Komplexitaet reduzieren und einreichungsnahe Lay-Kommunikationsentwuerfe erzeugen."
+    }
+  },
+  {
     "slug": "historical-protocol-digitizer",
     "name": {
       "en": "Historical Protocol Digitizer",

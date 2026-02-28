@@ -8,6 +8,7 @@ import { AgentOrchestrationPrototype } from '@/components/agent-orchestration-pr
 import { DataAgentPrototype } from '@/components/data-agent-prototype';
 import { DigitalTwinPrototype } from '@/components/digital-twin-prototype';
 import { EnrollmentForecastPrototype } from '@/components/enrollment-forecast-prototype';
+import { LaySynopsisPrototype } from '@/components/lay-synopsis-prototype';
 import { ProtocolDigitizationPrototype } from '@/components/protocol-digitization-prototype';
 import { SiteFeasibilityFeedbackPrototype } from '@/components/site-feasibility-feedback-prototype';
 import { SiteFeasibilityPrototype } from '@/components/site-feasibility-prototype';
@@ -23,6 +24,7 @@ import dataAgentDatasets from '@/content/data-agent/datasets.json';
 import enrollmentTrials from '@/content/enrollment-forecast/trials.json';
 import digitalTwinScenarios from '@/content/digital-twin/scenarios.json';
 import protocolDigitizationSamples from '@/content/protocol-digitization/samples.json';
+import laySynopsisSamples from '@/content/lay-synopsis/samples.json';
 import marketChangelog from '@/content/changelogs/market-intelligence-highscore.json';
 import siteScoringChangelog from '@/content/changelogs/site-feasibility-scoring.json';
 import siteFeedbackChangelog from '@/content/changelogs/site-feasibility-human-feedback.json';
@@ -32,6 +34,7 @@ import dataAgentChangelog from '@/content/changelogs/data-agent-catalog.json';
 import enrollmentChangelog from '@/content/changelogs/enrollment-forecast-monte-carlo.json';
 import digitalTwinChangelog from '@/content/changelogs/digital-twin-synthetic-control.json';
 import protocolDigitizationChangelog from '@/content/changelogs/historical-protocol-digitizer.json';
+import laySynopsisChangelog from '@/content/changelogs/lay-language-synopsis-eu.json';
 
 export function generateStaticParams() {
   const ports = getPorts();
@@ -134,6 +137,15 @@ export default function PrototypeDetailPage({ params }: { params: { locale: Loca
       <>
         <ProtocolDigitizationPrototype locale={params.locale} samples={protocolDigitizationSamples} />
         <PrototypeChangelog locale={params.locale} entries={protocolDigitizationChangelog as unknown as LogEntry[]} />
+      </>
+    );
+  }
+
+  if (params.slug === 'lay-language-synopsis-eu') {
+    return (
+      <>
+        <LaySynopsisPrototype locale={params.locale} samples={laySynopsisSamples} />
+        <PrototypeChangelog locale={params.locale} entries={laySynopsisChangelog as unknown as LogEntry[]} />
       </>
     );
   }

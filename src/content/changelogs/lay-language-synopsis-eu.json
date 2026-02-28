@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.1.0",
+    "title": {
+      "en": "Lay Language Synopsis EU Prototype Added",
+      "zh": "新增 Lay Language Synopsis（EU）原型",
+      "de": "Lay Language Synopsis (EU) Prototype hinzugefuegt"
+    },
+    "changes": {
+      "en": [
+        "Added protocol/synopsis to lay-language generation workflow.",
+        "Added EU-oriented readiness checklist and readability hints.",
+        "Added English/German output mode with JSON export."
+      ],
+      "zh": [
+        "新增 protocol/synopsis 到 lay language 的自动生成流程。",
+        "新增面向 EU 的检查清单与可读性提示。",
+        "新增英文/德文输出模式与 JSON 导出。"
+      ],
+      "de": [
+        "Workflow von Protocol/Synopsis zu Lay-Language-Output integriert.",
+        "EU-orientierte Checkliste und Lesbarkeits-Hinweise hinzugefuegt.",
+        "Englisch/Deutsch-Ausgabemodus mit JSON-Export ergaenzt."
+      ]
+    }
+  }
+]
