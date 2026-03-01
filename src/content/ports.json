@@ -1,5 +1,36 @@
 [
   {
+    "slug": "ops-twin-site-startup-recruitment",
+    "name": {
+      "en": "Ops Digital Twin (A2A x MCP)",
+      "zh": "Ops Digital Twin（A2A x MCP）",
+      "de": "Ops Digital Twin (A2A x MCP)"
+    },
+    "description": {
+      "en": "Site start-up + recruitment simulation workspace showing multi-agent collaboration and MCP-like shared context versioning.",
+      "zh": "面向 Site 启动与招募仿真的多智能体协作工作台，展示 A2A 交互与 MCP-like 共享上下文版本化。",
+      "de": "Site-Startup- und Recruitment-Simulationsarbeitsflaeche mit Multi-Agent-Zusammenarbeit und MCP-aehnlicher Shared-Context-Versionierung."
+    },
+    "tags": [
+      "Multi-Agent",
+      "Clinical Ops",
+      "Digital Twin"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/ops-twin",
+    "screenshot": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "A2A Runtime",
+      "Context Patch Log",
+      "Deterministic Simulation"
+    ],
+    "designIntent": {
+      "en": "Make cross-agent operational reasoning inspectable by turning every handoff into auditable context patches.",
+      "zh": "让跨 agent 的运营推理可审阅：每一次 handoff 都转化为可追踪的 context patch。",
+      "de": "Agentenuebergreifende operative Entscheidungslogik durch auditierbare Context-Patches transparent machen."
+    }
+  },
+  {
     "slug": "vendor-ai-intelligence-radar",
     "name": {
       "en": "Clinical AI Vendor Intelligence Radar",

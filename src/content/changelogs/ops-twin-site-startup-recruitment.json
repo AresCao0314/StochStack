@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2026-03-01",
+    "version": "v0.1.0",
+    "title": {
+      "en": "Ops Twin MVP Launched",
+      "zh": "Ops Twin MVP 发布",
+      "de": "Ops Twin MVP gestartet"
+    },
+    "changes": {
+      "en": [
+        "Added three-zone interface: scenario console, A2A timeline, and MCP-like shared context panel.",
+        "Implemented six-agent runtime with deterministic seeded simulation and ordered handoff workflow.",
+        "Added context patch/event-log model with diff drawer, JSON export, replay, and local run history."
+      ],
+      "zh": [
+        "新增三栏交互界面：场景控制台、A2A 对话流、MCP-like 共享上下文面板。",
+        "实现六个 agent 的有序 handoff 流程，并支持可复现 seed 仿真。",
+        "新增 patch/event log 上下文机制，支持 diff 抽屉、JSON 导出、回放与本地历史运行。"
+      ],
+      "de": [
+        "Dreizonen-UI ergaenzt: Scenario Console, A2A-Timeline und MCP-aehnliches Shared-Context-Panel.",
+        "Sechs-Agenten-Runtime mit deterministischer Seed-Simulation und geordnetem Handoff umgesetzt.",
+        "Context-Patch/Event-Log mit Diff-Drawer, JSON-Export, Replay und lokaler Run-Historie hinzugefuegt."
+      ]
+    }
+  }
+]
