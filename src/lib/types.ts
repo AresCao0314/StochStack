@@ -17,7 +17,14 @@ export type Port = {
   designIntent: LocalizedText;
 };
 
-export type NoteTopic = 'AI' | 'Clinical' | 'Books' | 'Thinking';
+export type NoteTopic =
+  | 'AI'
+  | 'Clinical'
+  | 'Books'
+  | 'Thinking'
+  | 'Data Foundation'
+  | 'Responsible AI'
+  | 'Advanced AI';
 
 export type Note = {
   slug: string;

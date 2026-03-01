@@ -38,7 +38,16 @@ const zh = {
   notes: {
     title: '信号日志',
     subtitle: '来自日常研究与构建过程的片段、模型与注记。',
-    topics: ['AI', '临床', '阅读', '思考'],
+    topics: ['AI', '临床', '阅读', '思考', '数据底座', '负责任 AI', '前沿 AI'],
+    topicLabels: {
+      AI: 'AI',
+      Clinical: '临床',
+      Books: '阅读',
+      Thinking: '思考',
+      'Data Foundation': '数据底座',
+      'Responsible AI': '负责任 AI',
+      'Advanced AI': '前沿 AI'
+    },
     capture: {
       title: '随手记录',
       subtitle: '在手机或网页端快速写下原始想法，一键整理成可用要点。',

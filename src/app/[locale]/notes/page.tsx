@@ -32,6 +32,7 @@ export default function NotesPage({ params }: { params: { locale: Locale } }) {
         notes={getNotes()}
         allLabel={dict.common.all}
         topicLabel={dict.common.filterByTag}
+        topicLabels={dict.notes.topicLabels}
       />
 
       <NotesCapture locale={params.locale} dict={dict.notes.capture} />

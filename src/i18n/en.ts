@@ -38,7 +38,16 @@ const en = {
   notes: {
     title: 'Signal Logs',
     subtitle: 'Fragments, models, and editorial traces from ongoing work.',
-    topics: ['AI', 'Clinical', 'Books', 'Thinking'],
+    topics: ['AI', 'Clinical', 'Books', 'Thinking', 'Data Foundation', 'Responsible AI', 'Advanced AI'],
+    topicLabels: {
+      AI: 'AI',
+      Clinical: 'Clinical',
+      Books: 'Books',
+      Thinking: 'Thinking',
+      'Data Foundation': 'Data Foundation',
+      'Responsible AI': 'Responsible AI',
+      'Advanced AI': 'Advanced AI'
+    },
     capture: {
       title: 'Quick Capture',
       subtitle: 'Drop raw notes from phone or web, then condense into usable bullets.',

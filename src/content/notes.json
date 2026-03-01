@@ -1,5 +1,341 @@
 [
   {
+    "slug": "agentic-learning-loops-in-clinical-ops",
+    "topic": "Advanced AI",
+    "date": "2026-02-08",
+    "title": {
+      "en": "Agentic Learning Loops in Clinical Operations",
+      "zh": "临床运营中的 Agent 学习回路",
+      "de": "Agentic Learning Loops in Clinical Operations"
+    },
+    "excerpt": {
+      "en": "Real gains come when agents can learn from feedback loops without breaking governance boundaries.",
+      "zh": "真正收益来自 agent 在治理边界内持续从反馈回路中学习。",
+      "de": "Echte Gewinne entstehen, wenn Agents innerhalb von Governance-Grenzen aus Feedback-Loops lernen."
+    },
+    "sections": {
+      "en": [
+        "A static assistant saturates quickly. An agentic loop uses outcomes, feedback, and policy constraints to update behavior safely.",
+        "The design challenge is not only algorithmic; it is operational: where to allow adaptation and where to freeze policy.",
+        "Clinical operations benefits when loops are explicit, reviewable, and reversible."
+      ],
+      "zh": [
+        "静态助手很快会到天花板。Agentic 回路通过结果、反馈与策略约束来安全更新行为。",
+        "挑战不只在算法，更在运营：哪些环节允许自适应，哪些环节必须策略冻结。",
+        "当回路可见、可审阅、可回滚时，临床运营才能稳定受益。"
+      ],
+      "de": [
+        "Ein statischer Assistent saettigt schnell. Agentische Loops nutzen Outcome, Feedback und Policy-Grenzen fuer sichere Anpassung.",
+        "Die Herausforderung ist nicht nur algorithmisch, sondern operativ: wo Adaptation erlaubt ist und wo Policy fix bleiben muss.",
+        "Clinical Operations profitieren, wenn Loops explizit, reviewbar und reversibel sind."
+      ]
+    },
+    "highlight": {
+      "en": "Learning loops need brakes as much as acceleration.",
+      "zh": "学习回路既需要加速器，也需要刹车系统。",
+      "de": "Lernschleifen brauchen Bremsen ebenso wie Beschleunigung."
+    },
+    "quote": {
+      "en": "Adaptive systems are trustworthy only when rollback is designed in.",
+      "zh": "可自适应系统只有内建回滚机制时才值得信任。",
+      "de": "Adaptive Systeme sind nur vertrauenswuerdig, wenn Rollback eingebaut ist."
+    },
+    "sidenotes": {
+      "en": [
+        "Reward design is a governance topic, not only ML topic.",
+        "Human override should be measured as a quality signal."
+      ],
+      "zh": [
+        "奖励设计是治理议题，不只是机器学习议题。",
+        "人工接管频率应被记录为质量信号。"
+      ],
+      "de": [
+        "Reward-Design ist ein Governance-Thema, nicht nur ML.",
+        "Human-Override sollte als Qualitaetssignal gemessen werden."
+      ]
+    }
+  },
+  {
+    "slug": "beyond-genai-clinical-ai-modality-map",
+    "topic": "Advanced AI",
+    "date": "2026-02-18",
+    "title": {
+      "en": "Beyond GenAI: Clinical AI Modality Map",
+      "zh": "超越 GenAI：临床 AI 模态地图",
+      "de": "Jenseits von GenAI: Clinical AI Modality Map"
+    },
+    "excerpt": {
+      "en": "Clinical AI value comes from modality composition, not from one model family.",
+      "zh": "临床 AI 的价值来自模态组合，而不是单一模型家族。",
+      "de": "Der Wert klinischer AI entsteht durch Modalitaetskombination, nicht durch eine Modellfamilie."
+    },
+    "sections": {
+      "en": [
+        "GenAI handles language surfaces well, but many clinical bottlenecks are probabilistic, temporal, or visual.",
+        "Teams need a modality map: NLP for text intent, CV for imaging, Bayesian layers for uncertainty, optimization for resource decisions.",
+        "Advanced AI strategy is therefore architecture composition, not model worship."
+      ],
+      "zh": [
+        "GenAI 擅长语言界面，但临床瓶颈往往是概率、时序或视觉问题。",
+        "团队应维护模态地图：NLP 处理文本意图，CV 处理影像，Bayesian 层处理不确定性，优化器处理资源决策。",
+        "因此 advanced AI 的核心是架构编排，而不是模型崇拜。"
+      ],
+      "de": [
+        "GenAI ist stark auf Sprachoberflaechen, doch klinische Engpaesse sind oft probabilistisch, temporal oder visuell.",
+        "Noetig ist eine Modalitaetskarte: NLP fuer Text-Intent, CV fuer Bilddaten, Bayesian Layer fuer Unsicherheit, Optimierung fuer Ressourcenentscheidungen.",
+        "Advanced-AI-Strategie ist daher Architekturkomposition statt Modellkult."
+      ]
+    },
+    "highlight": {
+      "en": "One workflow, many modalities.",
+      "zh": "一个工作流，多种智能模态。",
+      "de": "Ein Workflow, viele Modalitaeten."
+    },
+    "quote": {
+      "en": "The best model is usually a system.",
+      "zh": "最好的模型，通常是系统。",
+      "de": "Das beste Modell ist meistens ein System."
+    },
+    "sidenotes": {
+      "en": [
+        "Map failure modes by modality before tool selection.",
+        "Compose models around operations, not demos."
+      ],
+      "zh": [
+        "先按模态映射失败模式，再选工具。",
+        "围绕运营场景组合模型，而不是围绕演示。"
+      ],
+      "de": [
+        "Fehlermodi zuerst pro Modalitaet mappen, dann Tools waehlen.",
+        "Modelle um Operations herum komponieren, nicht um Demos."
+      ]
+    }
+  },
+  {
+    "slug": "data-governance-for-multi-agent-clinical-systems",
+    "topic": "Responsible AI",
+    "date": "2026-02-12",
+    "title": {
+      "en": "Data Governance for Multi-Agent Clinical Systems",
+      "zh": "多 Agent 临床系统的数据治理",
+      "de": "Data Governance fuer Multi-Agent-Clinical-Systems"
+    },
+    "excerpt": {
+      "en": "As agents multiply, governance must track delegation paths, not just data lineage.",
+      "zh": "当 agent 增多，治理要追踪的不仅是数据血缘，还有委托路径。",
+      "de": "Mit mehr Agents muss Governance Delegationspfade verfolgen, nicht nur Datenlinien."
+    },
+    "sections": {
+      "en": [
+        "Classical governance assumes one actor chain; agentic systems create branching actor graphs.",
+        "You need delegation logs, execution scope limits, and revocation controls as first-class primitives.",
+        "Without these constraints, velocity gains become irreproducible risk."
+      ],
+      "zh": [
+        "传统治理假设单一执行链路，而 agent 系统会形成分叉的执行图。",
+        "因此必须把 delegation log、执行范围限制、撤销机制做成一等原语。",
+        "缺少这些约束，速度收益会转化为不可复现风险。"
+      ],
+      "de": [
+        "Klassische Governance nimmt eine lineare Akteurskette an; agentische Systeme erzeugen verzweigte Graphen.",
+        "Delegationslogs, Scope-Limits und Revocation-Control muessen daher erstklassige Primitive sein.",
+        "Ohne diese Grenzen werden Geschwindigkeitsgewinne zu nicht reproduzierbarem Risiko."
+      ]
+    },
+    "highlight": {
+      "en": "Delegation without trace is hidden autonomy.",
+      "zh": "没有追踪的委托，就是隐形自治。",
+      "de": "Delegation ohne Trace ist versteckte Autonomie."
+    },
+    "quote": {
+      "en": "Good governance scales with agents by shrinking ambiguity.",
+      "zh": "好的治理在 agent 增长时，通过压缩歧义来扩展。",
+      "de": "Gute Governance skaliert mit Agents, indem sie Ambiguitaet reduziert."
+    },
+    "sidenotes": {
+      "en": [
+        "Agent header + approval gate should be mandatory metadata.",
+        "Revocation pathways must be testable."
+      ],
+      "zh": [
+        "Agent header 与审批 gate 应是强制元数据。",
+        "撤销路径必须可测试。"
+      ],
+      "de": [
+        "Agent-Header + Approval-Gate sollten Pflichtmetadaten sein.",
+        "Revocation-Pfade muessen testbar sein."
+      ]
+    }
+  },
+  {
+    "slug": "responsible-ai-governance-by-design",
+    "topic": "Responsible AI",
+    "date": "2026-02-21",
+    "title": {
+      "en": "Responsible AI as Workflow Design",
+      "zh": "把 Responsible AI 做进工作流设计",
+      "de": "Responsible AI als Workflow-Design"
+    },
+    "excerpt": {
+      "en": "Responsible AI fails when treated as policy text only; it works when embedded in operating steps.",
+      "zh": "Responsible AI 只停留在政策文本会失效，嵌入执行步骤才会生效。",
+      "de": "Responsible AI scheitert als reiner Policy-Text und wirkt erst in operativen Schritten."
+    },
+    "sections": {
+      "en": [
+        "Governance should appear at decision boundaries: data intake, model selection, output release, and escalation.",
+        "A practical pattern is policy-as-checkpoints with explicit owner assignment and audit traces.",
+        "If teams cannot see where a decision can be challenged, governance is decorative."
+      ],
+      "zh": [
+        "治理必须出现在决策边界：数据接入、模型选择、结果发布、升级处理。",
+        "可执行模式是 checkpoint 化的 policy，并绑定 owner 与审计轨迹。",
+        "如果团队看不见“在哪一步可以质疑决策”，治理就是装饰。"
+      ],
+      "de": [
+        "Governance muss an Entscheidungsgrenzen sichtbar sein: Data Intake, Modellauswahl, Output-Freigabe, Eskalation.",
+        "Pragmatisch ist ein Policy-as-Checkpoint-Muster mit Owner-Zuordnung und Audit-Trace.",
+        "Wenn nicht sichtbar ist, wo Entscheidungen hinterfragt werden koennen, bleibt Governance dekorativ."
+      ]
+    },
+    "highlight": {
+      "en": "Governance is interface, not appendix.",
+      "zh": "治理是界面，不是附录。",
+      "de": "Governance ist Interface, nicht Anhang."
+    },
+    "quote": {
+      "en": "Trust comes from challenge paths, not confidence scores alone.",
+      "zh": "信任来自可挑战路径，而不只来自置信分数。",
+      "de": "Vertrauen entsteht durch Challenge-Pfade, nicht nur durch Konfidenzwerte."
+    },
+    "sidenotes": {
+      "en": [
+        "Every critical output needs who-approved + why-evidence.",
+        "Escalation SLA is part of model quality."
+      ],
+      "zh": [
+        "关键输出都需要 who-approved 与 why-evidence。",
+        "升级 SLA 本身就是模型质量的一部分。"
+      ],
+      "de": [
+        "Jeder kritische Output braucht who-approved + why-evidence.",
+        "Eskalations-SLA ist Teil der Modellqualitaet."
+      ]
+    }
+  },
+  {
+    "slug": "study-entity-modeling-with-usdm-bridge",
+    "topic": "Data Foundation",
+    "date": "2026-02-24",
+    "title": {
+      "en": "Study Entity Modeling with USDM Bridge",
+      "zh": "用 USDM 思路做研究实体建模",
+      "de": "Studien-Entitaetsmodellierung mit USDM-Bruecke"
+    },
+    "excerpt": {
+      "en": "Entity consistency across protocol, execution, and reporting is the real scalability lever.",
+      "zh": "协议、执行、报告之间的实体一致性，才是规模化杠杆。",
+      "de": "Entitaetskonsistenz zwischen Protocol, Execution und Reporting ist der echte Skalierungshebel."
+    },
+    "sections": {
+      "en": [
+        "Each handoff layer tends to rename the same concept. The cost is not semantic purity, but operational ambiguity.",
+        "A bridge model aligned to USDM principles can keep intent stable while allowing local system differences.",
+        "When entities are stable, automation stops being prompt tricks and becomes infrastructure behavior."
+      ],
+      "zh": [
+        "每次交接都在给同一个概念换名字，损失的不是术语整洁，而是执行清晰度。",
+        "对齐 USDM 思路的桥接模型，可以在保持意图稳定的同时兼容本地系统差异。",
+        "实体一旦稳定，自动化就不再是提示词技巧，而是基础设施行为。"
+      ],
+      "de": [
+        "In jeder Uebergabe wird dasselbe Konzept umbenannt. Das Problem ist nicht Semantik, sondern operative Unklarheit.",
+        "Ein Brueckenmodell nach USDM-Prinzipien stabilisiert Intent trotz lokaler Systemunterschiede.",
+        "Stabile Entitaeten machen aus Automation Infrastrukturverhalten statt Prompt-Tricks."
+      ]
+    },
+    "highlight": {
+      "en": "Name drift is control drift.",
+      "zh": "命名漂移，最终就是控制漂移。",
+      "de": "Namensdrift ist Kontrolldrift."
+    },
+    "quote": {
+      "en": "Data modeling is organizational alignment in machine-readable form.",
+      "zh": "数据建模，本质是组织对齐的机器可读版本。",
+      "de": "Datenmodellierung ist organisatorische Ausrichtung in maschinenlesbarer Form."
+    },
+    "sidenotes": {
+      "en": [
+        "Map entities once, reuse across authoring, ops, and reporting.",
+        "Do not let downstream exports redefine core objects."
+      ],
+      "zh": [
+        "实体映射要一次定义，多处复用。",
+        "不要让下游导出格式反向定义核心对象。"
+      ],
+      "de": [
+        "Entitaeten einmal mappen, dann ueber Authoring/Ops/Reporting wiederverwenden.",
+        "Keine Neudefinition von Kernobjekten durch Downstream-Exporte."
+      ]
+    }
+  },
+  {
+    "slug": "clinical-data-foundation-control-plane",
+    "topic": "Data Foundation",
+    "date": "2026-03-01",
+    "title": {
+      "en": "Clinical Data Foundation as Control Plane",
+      "zh": "把临床数据底座当作控制平面",
+      "de": "Clinical Data Foundation als Control Plane"
+    },
+    "excerpt": {
+      "en": "A usable foundation is not a warehouse; it is an operating surface with governance and latency constraints.",
+      "zh": "可用的数据底座不是仓库，而是带治理与时延约束的操作平面。",
+      "de": "Eine nutzbare Data Foundation ist kein Lager, sondern eine Operationsflaeche mit Governance- und Latenzregeln."
+    },
+    "sections": {
+      "en": [
+        "Most teams over-invest in storage and under-invest in decision pathways. A clinical data foundation should expose what can be acted on now, not only what can be queried later.",
+        "The minimal core is three layers: canonical entities, access policy fabric, and reusable data products. Without all three, scale becomes manual overhead.",
+        "A good control plane keeps provenance visible and handoff friction low, so study teams can move from question to action in one loop."
+      ],
+      "zh": [
+        "很多团队把预算投在存储，却没有投在决策路径上。临床数据底座应先回答“现在能执行什么”，而不是“以后能查什么”。",
+        "最小闭环是三层：规范实体层、权限策略层、可复用数据产品层。缺任何一层，规模化都会退化成人工协调。",
+        "好的控制平面让来源可见、交接低摩擦，让研究团队能在一个回路里从问题走到动作。"
+      ],
+      "de": [
+        "Viele Teams investieren in Storage, aber nicht in Entscheidungswege. Eine Clinical Data Foundation muss zeigen, was jetzt handlungsfaehig ist.",
+        "Der minimale Kern besteht aus drei Ebenen: kanonische Entitaeten, Access-Policy-Fabric und wiederverwendbare Data Products.",
+        "Ein gutes Control Plane haelt Provenienz sichtbar und Uebergaben reibungsarm, damit Teams in einem Loop von Frage zu Aktion kommen."
+      ]
+    },
+    "highlight": {
+      "en": "Foundation first means control first.",
+      "zh": "先做底座，本质是先做控制。",
+      "de": "Foundation first heißt: zuerst Kontrolle."
+    },
+    "quote": {
+      "en": "If governance is bolted on later, velocity becomes debt.",
+      "zh": "治理如果后补，速度最终会变成债务。",
+      "de": "Wenn Governance spaeter aufgesetzt wird, wird Geschwindigkeit zu Schuld."
+    },
+    "sidenotes": {
+      "en": [
+        "Data products should have owners, SLAs, and deprecation policy.",
+        "Latency budget is a design input, not a reporting output."
+      ],
+      "zh": [
+        "数据产品必须有 owner、SLA 和退役策略。",
+        "时延预算是设计输入，不是汇报输出。"
+      ],
+      "de": [
+        "Data Products brauchen Owner, SLA und Deprecation-Regeln.",
+        "Latenzbudget ist ein Design-Input, kein Reporting-Output."
+      ]
+    }
+  },
+  {
     "slug": "latent-workflow-maps",
     "topic": "AI",
     "date": "2026-02-05",
@@ -41,9 +377,18 @@
       "de": "Minimalismus ohne Sichtbarkeit von Zustand ist versteckte Komplexität."
     },
     "sidenotes": {
-      "en": ["Map-like UI improves operator onboarding speed by giving topology.", "Reversible branches reduce fear of experimentation."],
-      "zh": ["地图式 UI 通过提供拓扑结构降低上手成本。", "可回滚分支显著降低试错心理负担。"],
-      "de": ["Kartenlogik verbessert Onboarding durch sichtbare Topologie.", "Reversible Pfade senken die Hemmschwelle für Experimente."]
+      "en": [
+        "Map-like UI improves operator onboarding speed by giving topology.",
+        "Reversible branches reduce fear of experimentation."
+      ],
+      "zh": [
+        "地图式 UI 通过提供拓扑结构降低上手成本。",
+        "可回滚分支显著降低试错心理负担。"
+      ],
+      "de": [
+        "Kartenlogik verbessert Onboarding durch sichtbare Topologie.",
+        "Reversible Pfade senken die Hemmschwelle für Experimente."
+      ]
     }
   },
   {
@@ -88,9 +433,18 @@
       "de": "Kennzahlen müssen zeigen, wo Risikosignale an Geschwindigkeit verlieren."
     },
     "sidenotes": {
-      "en": ["A short escalation path can outperform a sophisticated dashboard.", "SLA for insight delivery matters."],
-      "zh": ["短升级路径有时比复杂仪表盘更有效。", "洞察交付 SLA 需要被显式定义。"],
-      "de": ["Kurze Eskalationswege schlagen oft komplexe Dashboards.", "SLA für Erkenntnislieferung ist zentral."]
+      "en": [
+        "A short escalation path can outperform a sophisticated dashboard.",
+        "SLA for insight delivery matters."
+      ],
+      "zh": [
+        "短升级路径有时比复杂仪表盘更有效。",
+        "洞察交付 SLA 需要被显式定义。"
+      ],
+      "de": [
+        "Kurze Eskalationswege schlagen oft komplexe Dashboards.",
+        "SLA für Erkenntnislieferung ist zentral."
+      ]
     }
   },
   {
@@ -135,9 +489,18 @@
       "de": "Die beste Notiz ist verändertes Handeln."
     },
     "sidenotes": {
-      "en": ["Contradictions are useful edge cases.", "Behavioral deltas are better than quote collections."],
-      "zh": ["矛盾是宝贵的边界样本。", "行为增量比摘抄集合更有价值。"],
-      "de": ["Widersprüche sind wertvolle Randfälle.", "Verhaltensdeltas sind nützlicher als Zitatsammlungen."]
+      "en": [
+        "Contradictions are useful edge cases.",
+        "Behavioral deltas are better than quote collections."
+      ],
+      "zh": [
+        "矛盾是宝贵的边界样本。",
+        "行为增量比摘抄集合更有价值。"
+      ],
+      "de": [
+        "Widersprüche sind wertvolle Randfälle.",
+        "Verhaltensdeltas sind nützlicher als Zitatsammlungen."
+      ]
     }
   },
   {
@@ -182,9 +545,18 @@
       "de": "Vertrauen entsteht durch sichtbare Grenzen."
     },
     "sidenotes": {
-      "en": ["Overconfidence bias often starts at UI copy level.", "Alternatives create cognitive flexibility."],
-      "zh": ["过度自信偏差常从文案层开始。", "备选路径可提升认知灵活度。"],
-      "de": ["Overconfidence beginnt oft bereits in UI-Tonality.", "Alternativen fördern kognitive Flexibilität."]
+      "en": [
+        "Overconfidence bias often starts at UI copy level.",
+        "Alternatives create cognitive flexibility."
+      ],
+      "zh": [
+        "过度自信偏差常从文案层开始。",
+        "备选路径可提升认知灵活度。"
+      ],
+      "de": [
+        "Overconfidence beginnt oft bereits in UI-Tonality.",
+        "Alternativen fördern kognitive Flexibilität."
+      ]
     }
   },
   {
@@ -229,9 +601,18 @@
       "de": "Ein guter Schnitt ist eine respektvolle Unterbrechung."
     },
     "sidenotes": {
-      "en": ["Fast cuts need stable anchors.", "Not all sections should compete for attention."],
-      "zh": ["快节奏切换需要稳定锚点。", "并非所有区块都应争夺注意力。"],
-      "de": ["Schnelle Cuts brauchen stabile Anker.", "Nicht alle Bereiche dürfen zugleich Aufmerksamkeit fordern."]
+      "en": [
+        "Fast cuts need stable anchors.",
+        "Not all sections should compete for attention."
+      ],
+      "zh": [
+        "快节奏切换需要稳定锚点。",
+        "并非所有区块都应争夺注意力。"
+      ],
+      "de": [
+        "Schnelle Cuts brauchen stabile Anker.",
+        "Nicht alle Bereiche dürfen zugleich Aufmerksamkeit fordern."
+      ]
     }
   },
   {
@@ -276,9 +657,18 @@
       "de": "Gute Räume zeigen dir, wie man zurückkehrt."
     },
     "sidenotes": {
-      "en": ["Thresholds can be visual, textual, or interactive.", "Wayfinding reduces cognitive friction."],
-      "zh": ["阈值可以是视觉、文字或交互上的。", "路径记忆能显著降低认知摩擦。"],
-      "de": ["Schwellen können visuell, textlich oder interaktiv sein.", "Wayfinding reduziert kognitive Reibung."]
+      "en": [
+        "Thresholds can be visual, textual, or interactive.",
+        "Wayfinding reduces cognitive friction."
+      ],
+      "zh": [
+        "阈值可以是视觉、文字或交互上的。",
+        "路径记忆能显著降低认知摩擦。"
+      ],
+      "de": [
+        "Schwellen können visuell, textlich oder interaktiv sein.",
+        "Wayfinding reduziert kognitive Reibung."
+      ]
     }
   }
 ]

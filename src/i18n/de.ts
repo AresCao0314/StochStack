@@ -38,7 +38,16 @@ const de = {
   notes: {
     title: 'Signal Logs',
     subtitle: 'Analytische Fragmente aus AI, Klinischer Entwicklung und Denken.',
-    topics: ['AI', 'Klinik', 'Bücher', 'Denken'],
+    topics: ['AI', 'Klinik', 'Bücher', 'Denken', 'Data Foundation', 'Responsible AI', 'Advanced AI'],
+    topicLabels: {
+      AI: 'AI',
+      Clinical: 'Klinik',
+      Books: 'Bücher',
+      Thinking: 'Denken',
+      'Data Foundation': 'Data Foundation',
+      'Responsible AI': 'Responsible AI',
+      'Advanced AI': 'Advanced AI'
+    },
     capture: {
       title: 'Quick Capture',
       subtitle: 'Notizen mobil oder im Web erfassen und direkt in Bullet Points verdichten.',
