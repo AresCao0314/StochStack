@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { EditorialLayout } from '@/components/editorial-layout';
+import { DataFoundationNote } from '@/components/data-foundation-note';
 import { getDictionary, locales, type Locale } from '@/lib/i18n';
 import { getNoteBySlug, getNotes } from '@/lib/content';
 
@@ -32,7 +33,11 @@ export default function NoteDetailPage({ params }: { params: { locale: Locale; s
   return (
     <div className="space-y-6">
       <p className="section-title">{dict.notes.title}</p>
-      <EditorialLayout note={note} locale={params.locale} />
+      {params.slug === 'clinical-development-data-foundation-landscape' ? (
+        <DataFoundationNote note={note} locale={params.locale} />
+      ) : (
+        <EditorialLayout note={note} locale={params.locale} />
+      )}
     </div>
   );
 }

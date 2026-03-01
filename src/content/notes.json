@@ -1,5 +1,55 @@
 [
   {
+    "slug": "clinical-development-data-foundation-landscape",
+    "topic": "Data Foundation",
+    "date": "2026-03-01",
+    "title": {
+      "en": "Clinical Development Data Foundation Layered Panorama",
+      "zh": "临床研发 Data Foundation 分层全景图",
+      "de": "Layered Panorama der Clinical-Development Data Foundation"
+    },
+    "excerpt": {
+      "en": "From source systems to semantic products and agents: a full-stack, auditable architecture view for clinical development.",
+      "zh": "从源系统到语义产品与 Agent：一张可审计、可运营的临床研发全栈架构图。",
+      "de": "Von Quellsystemen bis zu semantischen Produkten und Agents: eine auditierbare Vollstack-Architektur fuer Clinical Development."
+    },
+    "sections": {
+      "en": [
+        "This note is rendered in visual mode."
+      ],
+      "zh": [
+        "本文启用可视化模式展示。"
+      ],
+      "de": [
+        "Diese Notiz wird im Visual-Modus dargestellt."
+      ]
+    },
+    "highlight": {
+      "en": "Extract -> Clean -> Conform -> Canonical -> Productize -> Operationalize.",
+      "zh": "Extract -> Clean -> Conform -> Canonical -> Productize -> Operationalize。",
+      "de": "Extract -> Clean -> Conform -> Canonical -> Productize -> Operationalize."
+    },
+    "quote": {
+      "en": "The foundation is done when every conclusion has an evidence path.",
+      "zh": "当每个结论都能追溯证据路径时，底座才算完成。",
+      "de": "Die Foundation ist erst fertig, wenn jede Schlussfolgerung einen Evidenzpfad hat."
+    },
+    "sidenotes": {
+      "en": [
+        "Design for traceability before designing for automation.",
+        "Metric definitions are governance assets, not dashboard labels."
+      ],
+      "zh": [
+        "先设计可追溯，再设计自动化。",
+        "指标口径是治理资产，不是仪表盘文案。"
+      ],
+      "de": [
+        "Zuerst Traceability designen, dann Automation.",
+        "Metrikdefinitionen sind Governance-Assets, keine Dashboard-Labels."
+      ]
+    }
+  },
+  {
     "slug": "agentic-learning-loops-in-clinical-ops",
     "topic": "Advanced AI",
     "date": "2026-02-08",
