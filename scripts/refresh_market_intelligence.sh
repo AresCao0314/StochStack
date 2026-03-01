@@ -10,7 +10,7 @@ CTGOV_SYNC_SCRIPT="$PROJECT_DIR/scripts/fetch_ctgov_site_feasibility.py"
 VENDOR_RADAR_SYNC_SCRIPT="$PROJECT_DIR/scripts/sync_vendor_ai_radar.py"
 VENDOR_SIGNALS_OUTPUT="$PROJECT_DIR/runtime-data/vendor-intelligence/signals.json"
 LEGACY_DATA_DIR="$LEGACY_DIR/data"
-TARGET_DATA_DIR="$PROJECT_DIR/src/content/market-intelligence"
+TARGET_DATA_DIR="$PROJECT_DIR/runtime-data/market-intelligence"
 
 mkdir -p "$(dirname "$LOG_FILE")"
 
@@ -30,7 +30,7 @@ mkdir -p "$(dirname "$LOG_FILE")"
     --providers google,bing \
     --limit-per-topic 2
 
-  echo "[INFO] syncing generated data into site content..."
+  echo "[INFO] syncing generated data into runtime store..."
   mkdir -p "$TARGET_DATA_DIR"
   cp "$LEGACY_DATA_DIR/projects.json" "$TARGET_DATA_DIR/projects.json"
   cp "$LEGACY_DATA_DIR/latest_signals.json" "$TARGET_DATA_DIR/signals.json"

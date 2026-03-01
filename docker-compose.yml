@@ -11,6 +11,7 @@ services:
       - NODE_ENV=production
       - NOTES_DATA_FILE=/data/notes-captures.json
       - VENDOR_INTEL_SIGNALS_FILE=/runtime-data/vendor-intelligence/signals.json
+      - MARKET_INTEL_DATA_DIR=/runtime-data/market-intelligence
     volumes:
       - notes_data:/data
       - ./runtime-data:/runtime-data

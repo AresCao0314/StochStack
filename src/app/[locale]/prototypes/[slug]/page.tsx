@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { MarketIntelligencePrototype } from '@/components/market-intelligence-prototype';
 import { ProtocolLogicPrototype, type ProtocolRecord } from '@/components/protocol-logic-prototype';
 import { PrototypeChangelog, type LogEntry } from '@/components/prototype-changelog';
 import { AgentOrchestrationPrototype } from '@/components/agent-orchestration-prototype';
@@ -17,9 +16,6 @@ import { CtmDashboardPrototype, type TrialRecord, type SkillPack } from '@/compo
 import { getDictionary, locales, type Locale } from '@/lib/i18n';
 import { getPortBySlug, getPorts } from '@/lib/content';
 import { loadCtmSopRegistry } from '@/lib/ctm-sop-registry';
-import projects from '@/content/market-intelligence/projects.json';
-import signals from '@/content/market-intelligence/signals.json';
-import digest from '@/content/market-intelligence/digest.json';
 import feasibilitySites from '@/content/site-feasibility/sites.json';
 import protocolEngineData from '@/content/protocol-engine/protocols.json';
 import orchestrationInitiatives from '@/content/agent-orchestration/initiatives.json';
@@ -30,7 +26,6 @@ import protocolDigitizationSamples from '@/content/protocol-digitization/samples
 import laySynopsisSamples from '@/content/lay-synopsis/samples.json';
 import csrDraftSamples from '@/content/csr-drafting/samples.json';
 import ctmDashboardTrials from '@/content/ctm-dashboard/trials.json';
-import marketChangelog from '@/content/changelogs/market-intelligence-highscore.json';
 import siteScoringChangelog from '@/content/changelogs/site-feasibility-scoring.json';
 import siteFeedbackChangelog from '@/content/changelogs/site-feasibility-human-feedback.json';
 import protocolChangelog from '@/content/changelogs/protocol-qa-logic-engine.json';
@@ -78,20 +73,6 @@ export default function PrototypeDetailPage({ params }: { params: { locale: Loca
           }}
         />
         <PrototypeChangelog locale={params.locale} entries={ctmDashboardChangelog as unknown as LogEntry[]} />
-      </>
-    );
-  }
-
-  if (params.slug === 'market-intelligence-highscore') {
-    return (
-      <>
-        <MarketIntelligencePrototype
-          locale={params.locale}
-          projects={projects}
-          signals={signals}
-          digest={digest}
-        />
-        <PrototypeChangelog locale={params.locale} entries={marketChangelog as unknown as LogEntry[]} />
       </>
     );
   }

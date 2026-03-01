@@ -95,6 +95,7 @@ Notes:
 - Use `runtime-data/` for mutable operational data generated on server.
 - `runtime-data/` is gitignored locally and should persist on server disk.
 - Current runtime data paths:
+  - Market intelligence: `runtime-data/market-intelligence/{projects.json,signals.json,digest.json}`
   - Vendor radar signals: `runtime-data/vendor-intelligence/signals.json`
 
 One-time server migration:
@@ -105,8 +106,24 @@ mkdir -p runtime-data/vendor-intelligence
 if [ -f src/content/vendor-intelligence/signals.json ] && [ ! -f runtime-data/vendor-intelligence/signals.json ]; then
   cp src/content/vendor-intelligence/signals.json runtime-data/vendor-intelligence/signals.json
 fi
+
+mkdir -p runtime-data/market-intelligence
+if [ -f src/content/market-intelligence/projects.json ] && [ ! -f runtime-data/market-intelligence/projects.json ]; then
+  cp src/content/market-intelligence/projects.json runtime-data/market-intelligence/projects.json
+fi
+if [ -f src/content/market-intelligence/signals.json ] && [ ! -f runtime-data/market-intelligence/signals.json ]; then
+  cp src/content/market-intelligence/signals.json runtime-data/market-intelligence/signals.json
+fi
+if [ -f src/content/market-intelligence/digest.json ] && [ ! -f runtime-data/market-intelligence/digest.json ]; then
+  cp src/content/market-intelligence/digest.json runtime-data/market-intelligence/digest.json
+fi
 docker compose up -d --build
 ```
+
+## Update Logs
+
+- Prototype-level logs: each prototype page has its own timeline-style changelog section.
+- Repository-level release log: `CHANGELOG.md` (append one entry per update for reviewers).
 
 ## Protocol PDF Auto-Extraction (Qwen)
 
