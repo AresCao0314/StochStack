@@ -6,6 +6,7 @@ import { OpsTwinScenarioForm } from '@/components/opsTwin/scenario-form';
 import { OpsTwinDiffDrawer } from '@/components/opsTwin/diff-drawer';
 import { OpsTwinContextPanel } from '@/components/opsTwin/context-panel';
 import { OpsTwinSimulationPanel } from '@/components/opsTwin/simulation-panel';
+import { McpStatusPanel } from '@/components/opsTwin/mcp-status-panel';
 import { runtimeSteps } from '@/lib/opsTwin/agentRuntime';
 import { applyPatch, createInitialContext, exportContext, replayFromEventLog } from '@/lib/opsTwin/contextStore';
 import { buildCalibrationPatches } from '@/lib/opsTwin/sim/calibration';
@@ -280,6 +281,8 @@ export function OpsTwinStudio() {
               <p className="text-xs text-ink/65">Stored locally (max 5 runs). Each run keeps full context + event log.</p>
             </div>
           </section>
+
+          <McpStatusPanel />
         </div>
 
         <div className="space-y-4 xl:col-span-5">

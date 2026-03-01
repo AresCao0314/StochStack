@@ -1,0 +1,9 @@
+{
+  "mcpServers": [
+    {
+      "name": "stochstack-ops-twin",
+      "description": "Clinical Operations Digital Twin",
+      "url": "http://localhost:3000/api/mcp"
+    }
+  ]
+}

@@ -1,6 +1,44 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.3.0",
+    "title": {
+      "en": "MCP Server Integration",
+      "zh": "MCP 服务器集成",
+      "de": "MCP-Server-Integration"
+    },
+    "changes": {
+      "en": [
+        "Added full MCP (Model Context Protocol) Server implementation for external tool integration.",
+        "Exposed 8 MCP Tools: create_session, run_simulation, get_context, calibrate_with_actuals, analyze_scenario, export_simulation, list_sessions, replay_simulation.",
+        "Exposed 7 MCP Resources: context schema, current context, history, KPIs, recruitment curve, risk register, agent registry.",
+        "Added 4 MCP Prompts: ops_twin_analyst, risk_assessor, site_selection_advisor, forecast_calibrator.",
+        "Created SSE endpoint at /api/mcp for real-time MCP client connections.",
+        "Added MCP status panel to Ops Twin Studio UI with connection details and available tools.",
+        "Provided Claude Desktop and Cursor configuration examples."
+      ],
+      "zh": [
+        "新增完整的 MCP (Model Context Protocol) 服务器实现，支持外部工具集成。",
+        "暴露 8 个 MCP 工具：create_session, run_simulation, get_context, calibrate_with_actuals, analyze_scenario, export_simulation, list_sessions, replay_simulation。",
+        "暴露 7 个 MCP 资源：context schema, current context, history, KPIs, recruitment curve, risk register, agent registry。",
+        "新增 4 个 MCP Prompts：ops_twin_analyst, risk_assessor, site_selection_advisor, forecast_calibrator。",
+        "在 /api/mcp 创建 SSE 端点，支持实时 MCP 客户端连接。",
+        "在 Ops Twin Studio UI 新增 MCP 状态面板，显示连接详情和可用工具。",
+        "提供 Claude Desktop 和 Cursor 配置示例。"
+      ],
+      "de": [
+        "Vollständige MCP (Model Context Protocol) Server-Implementierung für externe Tool-Integration hinzugefügt.",
+        "8 MCP Tools verfügbar: create_session, run_simulation, get_context, calibrate_with_actuals, analyze_scenario, export_simulation, list_sessions, replay_simulation.",
+        "7 MCP Resources verfügbar: context schema, current context, history, KPIs, recruitment curve, risk register, agent registry.",
+        "4 MCP Prompts hinzugefügt: ops_twin_analyst, risk_assessor, site_selection_advisor, forecast_calibrator.",
+        "SSE-Endpunkt unter /api/mcp für Echtzeit-MCP-Client-Verbindungen erstellt.",
+        "MCP-Status-Panel im Ops Twin Studio UI mit Verbindungsdetails und verfügbaren Tools hinzugefügt.",
+        "Konfigurationsbeispiele für Claude Desktop und Cursor bereitgestellt."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.2.0",
     "title": {
       "en": "Forecast Calibration & Confidence Layer",
