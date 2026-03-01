@@ -1,25 +1,58 @@
 {
-  "updatedAt": "2026-03-01T00:00:00Z",
+  "updatedAt": "2026-03-01T04:09:04Z",
   "items": [
     {
       "id": "sig-001",
-      "title": "New AI workflow update in clinical document lifecycle",
+      "title": "Clinical document lifecycle AI assistant adds protocol-to-CSR trace controls",
       "source": "vendor monitoring",
       "publishedAt": "2026-02-28",
       "link": "https://example.com/signal-1",
-      "scenarios": ["medical-writing", "submission-closeout"],
-      "technologies": ["GenAI", "Rules Engine"],
-      "kind": "vendor_update"
+      "scenarios": [
+        "medical-writing",
+        "submission-closeout"
+      ],
+      "technologies": [
+        "GenAI",
+        "Rules Engine",
+        "Agent Systems"
+      ],
+      "kind": "vendor_update",
+      "classificationConfidence": 0.91
     },
     {
       "id": "sig-002",
-      "title": "Patient simulation method improves trial planning confidence intervals",
+      "title": "Patient simulation method improves recruitment-curve uncertainty bounds",
       "source": "literature monitoring",
       "publishedAt": "2026-02-27",
       "link": "https://example.com/signal-2",
-      "scenarios": ["synthetic-control", "patient-recruitment"],
-      "technologies": ["Simulation / Digital Twin", "Bayesian Modeling"],
-      "kind": "literature"
+      "scenarios": [
+        "synthetic-control",
+        "patient-recruitment"
+      ],
+      "technologies": [
+        "Simulation / Digital Twin",
+        "Bayesian Modeling"
+      ],
+      "kind": "literature",
+      "classificationConfidence": 0.86
+    },
+    {
+      "id": "sig-003",
+      "title": "RBQM update: anomaly triage agent reduces manual review load",
+      "source": "vendor monitoring",
+      "publishedAt": "2026-02-26",
+      "link": "https://example.com/signal-3",
+      "scenarios": [
+        "data-quality-rbqm",
+        "portfolio-control-tower"
+      ],
+      "technologies": [
+        "Machine Learning",
+        "Agent Systems",
+        "Continuous Learning"
+      ],
+      "kind": "vendor_update",
+      "classificationConfidence": 0.79
     }
   ]
 }

@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.2.0",
+    "title": {
+      "en": "Coverage scoring + parity matrix + confidence layer",
+      "zh": "覆盖率评分 + Vendor 对比矩阵 + 归类置信度层",
+      "de": "Coverage-Score + Parity-Matrix + Konfidenzschicht"
+    },
+    "changes": {
+      "en": [
+        "Added scenario coverage score (0-100) using vendor/product/literature/technology spread.",
+        "Added vendor feature parity matrix (scenario support, GenAI, agent, CV, simulation, rules, maturity).",
+        "Added classification confidence for auto-collected signals from keyword hit density."
+      ],
+      "zh": [
+        "新增场景覆盖率评分（0-100），综合 vendor/product/literature/technology 覆盖面。",
+        "新增 vendor 对比矩阵（场景支持、GenAI、Agent、CV、仿真、规则、成熟度）。",
+        "新增自动采集信号的归类置信度（基于关键词命中密度）。"
+      ],
+      "de": [
+        "Szenario-Coverage-Score (0-100) auf Basis von Vendor/Produkt/Literatur/Technologie-Abdeckung hinzugefuegt.",
+        "Vendor-Feature-Parity-Matrix (Support, GenAI, Agent, CV, Simulation, Rules, Reifegrad) hinzugefuegt.",
+        "Klassifizierungs-Konfidenz fuer Auto-Signale auf Basis der Keyword-Trefferdichte hinzugefuegt."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.1.0",
     "title": {
       "en": "Vendor intelligence radar baseline",

@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { BookOpenText, Building2, Cpu, Radar } from 'lucide-react';
+import { BookOpenText, Building2, Cpu, Radar, Scale, Target } from 'lucide-react';
 import type { Locale } from '@/lib/i18n';
 
 export type Scenario = {
@@ -54,6 +54,7 @@ export type SignalItem = {
   scenarios: string[];
   technologies: string[];
   kind: 'vendor_update' | 'literature';
+  classificationConfidence?: number;
 };
 
 export type Signals = {
@@ -73,10 +74,22 @@ const copy = {
     literature: 'Literature Signals',
     latest: 'Latest Auto-Collected Signals',
     technologies: 'Technology surface',
+    coverage: 'Scenario Coverage Score',
+    parity: 'Vendor Feature Parity Matrix',
+    confidence: 'Classification confidence',
     vendorCount: 'vendors',
     productCount: 'products',
     litCount: 'papers',
-    open: 'open'
+    open: 'open',
+    supports: 'Supports',
+    genai: 'GenAI',
+    agents: 'Agent',
+    cv: 'CV',
+    simulation: 'Simulation',
+    rules: 'Rules',
+    maturity: 'Maturity',
+    yes: 'Y',
+    no: '-'
   },
   zh: {
     title: '临床 AI Vendor 情报雷达',
@@ -89,10 +102,22 @@ const copy = {
     literature: '文献信号',
     latest: '最新自动采集信号',
     technologies: '技术面',
+    coverage: '场景覆盖率评分',
+    parity: 'Vendor 对比矩阵',
+    confidence: '自动归类置信度',
     vendorCount: '家 vendor',
     productCount: '个产品',
     litCount: '篇文献',
-    open: '打开'
+    open: '打开',
+    supports: '场景支持',
+    genai: 'GenAI',
+    agents: 'Agent',
+    cv: 'CV',
+    simulation: '仿真',
+    rules: '规则',
+    maturity: '成熟度',
+    yes: '是',
+    no: '-'
   },
   de: {
     title: 'Clinical AI Vendor Intelligence Radar',
@@ -105,15 +130,46 @@ const copy = {
     literature: 'Literatur-Signale',
     latest: 'Neueste automatisch erfasste Signale',
     technologies: 'Technologie-Flaeche',
+    coverage: 'Szenario-Coverage-Score',
+    parity: 'Vendor Feature-Parity-Matrix',
+    confidence: 'Klassifizierungs-Konfidenz',
     vendorCount: 'Vendor',
     productCount: 'Produkte',
     litCount: 'Publikationen',
-    open: 'oeffnen'
+    open: 'oeffnen',
+    supports: 'Support',
+    genai: 'GenAI',
+    agents: 'Agent',
+    cv: 'CV',
+    simulation: 'Simulation',
+    rules: 'Rules',
+    maturity: 'Reifegrad',
+    yes: 'J',
+    no: '-'
   }
 } as const;
 
 function uniq<T>(items: T[]) {
   return Array.from(new Set(items));
+}
+
+function coverageScore(vendors: number, products: number, papers: number, techCoverageRatio: number) {
+  const vendorPart = Math.min(vendors / 6, 1) * 30;
+  const productPart = Math.min(products / 10, 1) * 25;
+  const paperPart = Math.min(papers / 5, 1) * 20;
+  const techPart = Math.min(techCoverageRatio, 1) * 25;
+  return Math.round(vendorPart + productPart + paperPart + techPart);
+}
+
+function productMaturityScore(status: 'alpha' | 'beta' | 'live') {
+  if (status === 'live') return 1;
+  if (status === 'beta') return 0.6;
+  return 0.3;
+}
+
+function hasTech(product: VendorProduct, keywords: string[]) {
+  const lower = product.technologies.join(' ').toLowerCase();
+  return keywords.some((kw) => lower.includes(kw));
 }
 
 export function VendorIntelligencePrototype({
@@ -133,7 +189,15 @@ export function VendorIntelligencePrototype({
       const vendors = catalog.vendors.filter((vendor) => vendor.products.some((product) => product.scenarios.includes(item.id)));
       const products = vendors.flatMap((vendor) => vendor.products.filter((product) => product.scenarios.includes(item.id)));
       const papers = catalog.literature.filter((lit) => lit.scenarios.includes(item.id));
-      return { id: item.id, vendors: vendors.length, products: products.length, papers: papers.length };
+      const techSet = uniq([...products.flatMap((p) => p.technologies), ...papers.flatMap((l) => l.technologies)]);
+      const techCoverageRatio = techSet.length / Math.max(catalog.technologyTaxonomy.length, 1);
+      return {
+        id: item.id,
+        vendors: vendors.length,
+        products: products.length,
+        papers: papers.length,
+        coverage: coverageScore(vendors.length, products.length, papers.length, techCoverageRatio)
+      };
     });
   }, [catalog]);
 
@@ -163,7 +227,28 @@ export function VendorIntelligencePrototype({
     return uniq([...tech, ...litTech]).sort();
   }, [filteredLiterature, filteredVendors]);
 
+  const parityRows = useMemo(() => {
+    return filteredVendors.map((vendor) => {
+      const products = vendor.products;
+      const maturity = products.length
+        ? products.reduce((sum, p) => sum + productMaturityScore(p.status), 0) / products.length
+        : 0;
+      return {
+        id: vendor.id,
+        name: vendor.name,
+        supports: products.length > 0,
+        genai: products.some((p) => hasTech(p, ['genai', 'generative', 'llm', 'foundation model'])),
+        agents: products.some((p) => hasTech(p, ['agent', 'orchestration', 'autonomous'])),
+        cv: products.some((p) => hasTech(p, ['computer vision', 'imaging'])),
+        simulation: products.some((p) => hasTech(p, ['simulation', 'digital twin', 'virtual patient'])),
+        rules: products.some((p) => hasTech(p, ['rules engine', 'constraint', 'traceability'])),
+        maturity: Math.round(maturity * 100)
+      };
+    });
+  }, [filteredVendors]);
+
   const scenarioName = (id: string) => catalog.scenarios.find((item) => item.id === id)?.name[locale] ?? id;
+  const mark = (flag: boolean) => (flag ? t.yes : t.no);
 
   return (
     <div className="space-y-8">
@@ -206,6 +291,7 @@ export function VendorIntelligencePrototype({
                 <p className="mt-2 text-[11px] text-ink/65">
                   {stat?.vendors ?? 0} {t.vendorCount} · {stat?.products ?? 0} {t.productCount} · {stat?.papers ?? 0} {t.litCount}
                 </p>
+                <p className="mt-1 text-[11px] font-semibold text-ink/75">{t.coverage}: {stat?.coverage ?? 0}/100</p>
               </article>
             );
           })}
@@ -256,6 +342,42 @@ export function VendorIntelligencePrototype({
         </article>
       </section>
 
+      <section className="noise-border rounded-lg p-4">
+        <h2 className="mb-3 flex items-center gap-2 text-xl font-semibold">
+          <Scale size={16} /> {t.parity}
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-xs">
+            <thead>
+              <tr className="border-b border-ink/15 text-left uppercase tracking-[0.12em] text-ink/60">
+                <th className="px-2 py-2">Vendor</th>
+                <th className="px-2 py-2">{t.supports}</th>
+                <th className="px-2 py-2">{t.genai}</th>
+                <th className="px-2 py-2">{t.agents}</th>
+                <th className="px-2 py-2">{t.cv}</th>
+                <th className="px-2 py-2">{t.simulation}</th>
+                <th className="px-2 py-2">{t.rules}</th>
+                <th className="px-2 py-2">{t.maturity}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {parityRows.map((row) => (
+                <tr key={row.id} className="border-b border-ink/10">
+                  <td className="px-2 py-2 font-medium">{row.name}</td>
+                  <td className="px-2 py-2">{mark(row.supports)}</td>
+                  <td className="px-2 py-2">{mark(row.genai)}</td>
+                  <td className="px-2 py-2">{mark(row.agents)}</td>
+                  <td className="px-2 py-2">{mark(row.cv)}</td>
+                  <td className="px-2 py-2">{mark(row.simulation)}</td>
+                  <td className="px-2 py-2">{mark(row.rules)}</td>
+                  <td className="px-2 py-2">{row.maturity}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section className="grid gap-4 xl:grid-cols-2">
         <article className="noise-border rounded-lg p-4">
           <h2 className="mb-3 flex items-center gap-2 text-xl font-semibold">
@@ -287,6 +409,10 @@ export function VendorIntelligencePrototype({
                   {item.publishedAt} · {item.source} · {item.kind}
                 </p>
                 <p className="mt-1 text-xs text-ink/65">{item.technologies.join(' · ')}</p>
+                <p className="mt-1 text-xs font-semibold text-ink/75">
+                  <Target size={12} className="mr-1 inline" /> {t.confidence}:{' '}
+                  {Math.round((item.classificationConfidence ?? 0.55) * 100)}%
+                </p>
                 <a className="glitch-link mt-1 inline-block text-xs" href={item.link} target="_blank" rel="noreferrer">
                   {t.open}
                 </a>

@@ -51,15 +51,17 @@ def parse_feed(xml_text: str, fallback_source: str) -> list[dict[str, str]]:
     return entries
 
 
-def match_keywords(text: str, mapping: dict[str, list[str]]) -> list[str]:
+def match_keywords(text: str, mapping: dict[str, list[str]]) -> tuple[list[str], int]:
     hits: list[str] = []
+    total_matches = 0
     lower = text.lower()
     for key, words in mapping.items():
         for word in words:
             if re.search(r"\\b" + re.escape(word.lower()) + r"\\b", lower):
                 hits.append(key)
+                total_matches += 1
                 break
-    return hits
+    return hits, total_matches
 
 
 def normalize_date(raw: str) -> str:
@@ -106,12 +108,16 @@ def build_signals(manifest: dict[str, Any], timeout: int, limit_per_feed: int) -
 
         for idx, item in enumerate(entries):
             text = f"{item['title']} {item.get('source', '')}"
-            scenarios = match_keywords(text, scenario_keywords)
-            technologies = match_keywords(text, tech_keywords)
+            scenarios, scenario_hit_count = match_keywords(text, scenario_keywords)
+            technologies, tech_hit_count = match_keywords(text, tech_keywords)
+            raw_score = scenario_hit_count * 0.12 + tech_hit_count * 0.1
+            confidence = max(0.45, min(0.98, raw_score))
             if not scenarios:
                 scenarios = ["portfolio-control-tower"]
+                confidence = max(0.45, confidence - 0.1)
             if not technologies:
                 technologies = ["Machine Learning"]
+                confidence = max(0.45, confidence - 0.08)
 
             signals.append(
                 {
@@ -123,6 +129,7 @@ def build_signals(manifest: dict[str, Any], timeout: int, limit_per_feed: int) -
                     "scenarios": scenarios,
                     "technologies": technologies,
                     "kind": kind,
+                    "classificationConfidence": round(confidence, 2),
                 }
             )
 
@@ -143,6 +150,18 @@ def main() -> int:
 
     manifest = read_json(manifest_path)
     signals = build_signals(manifest, timeout=args.timeout, limit_per_feed=args.limit_per_feed)
+
+    if not signals and output_path.exists():
+        existing = read_json(output_path)
+        existing_items = existing.get("items", []) if isinstance(existing, dict) else []
+        if existing_items:
+            payload = {
+                "updatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "items": existing_items,
+            }
+            output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+            print(f"[WARN] no fresh signals fetched; preserved {len(existing_items)} existing signals")
+            return 0
 
     payload = {
         "updatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
