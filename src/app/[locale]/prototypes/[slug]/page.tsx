@@ -172,7 +172,7 @@ export default function PrototypeDetailPage({ params }: { params: { locale: Loca
   if (params.slug === 'ops-twin-site-startup-recruitment') {
     return (
       <>
-        <OpsTwinStudio />
+        <OpsTwinStudio locale={params.locale} />
         <PrototypeChangelog locale={params.locale} entries={opsTwinChangelog as unknown as LogEntry[]} />
       </>
     );

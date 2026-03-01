@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
 export default function OpsTwinPage({ params }: { params: { locale: Locale } }) {
   return (
     <>
-      <OpsTwinStudio />
+      <OpsTwinStudio locale={params.locale} />
       <PrototypeChangelog locale={params.locale} entries={opsTwinChangelog as unknown as LogEntry[]} />
     </>
   );

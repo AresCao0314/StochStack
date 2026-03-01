@@ -15,6 +15,7 @@ import { buildCalibrationPatches } from '@/lib/opsTwin/sim/calibration';
 import { createRng, hashToSeed } from '@/lib/opsTwin/sim/seeded';
 import { findAgentRecord } from '@/lib/a2a/registry';
 import { routeAgentExecution } from '@/lib/a2a/router';
+import type { Locale } from '@/lib/i18n';
 import type { AgentMessage, ContextRoot, RunHistoryItem, ScenarioInput } from '@/lib/opsTwin/types';
 
 const HISTORY_KEY = 'opsTwinRunsV1';
@@ -72,7 +73,63 @@ function saveHistory(items: RunHistoryItem[]) {
   window.localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, 5)));
 }
 
-export function OpsTwinStudio() {
+const studioCopy: Record<
+  Locale,
+  {
+    tag: string;
+    title: string;
+    subtitle: string;
+    mcpPlayground: string;
+    a2aRuntime: string;
+    remoteExecution: string;
+    remoteHint: string;
+    runHistory: string;
+    restorePlaceholder: string;
+    historyHint: string;
+  }
+> = {
+  en: {
+    tag: 'ops digital twin',
+    title: 'Site Start-up + Recruitment Simulation Ops Twin',
+    subtitle: 'A2A x MCP in Clinical Ops Digital Twin',
+    mcpPlayground: 'MCP Server Playground',
+    a2aRuntime: 'A2A Runtime',
+    remoteExecution: 'Remote agent execution',
+    remoteHint:
+      'When enabled, non-orchestrator agents are routed through `/api/a2a/inbox` and shown as remote transport in thread logs.',
+    runHistory: 'Run History',
+    restorePlaceholder: 'Restore previous run',
+    historyHint: 'Stored locally (max 5 runs). Each run keeps full context + event log.'
+  },
+  zh: {
+    tag: 'ops 数字孪生',
+    title: 'Site 启动 + 招募仿真 Ops Twin',
+    subtitle: '临床运营数字孪生中的 A2A x MCP',
+    mcpPlayground: 'MCP 服务器演示台',
+    a2aRuntime: 'A2A 运行层',
+    remoteExecution: '远程 Agent 执行',
+    remoteHint: '开启后，非 orchestrator 的 agent 会通过 `/api/a2a/inbox` 远程路由，并在线程中显示 remote 传输信息。',
+    runHistory: '运行历史',
+    restorePlaceholder: '恢复历史运行',
+    historyHint: '本地最多保留 5 条历史，每条都包含完整 context 与 event log。'
+  },
+  de: {
+    tag: 'ops digital twin',
+    title: 'Site Start-up + Recruitment Simulation Ops Twin',
+    subtitle: 'A2A x MCP im Clinical Ops Digital Twin',
+    mcpPlayground: 'MCP Server Playground',
+    a2aRuntime: 'A2A Runtime',
+    remoteExecution: 'Remote-Agent-Ausführung',
+    remoteHint:
+      'Wenn aktiviert, werden Nicht-Orchestrator-Agenten über `/api/a2a/inbox` geroutet und im Thread als Remote-Transport markiert.',
+    runHistory: 'Run-Historie',
+    restorePlaceholder: 'Früheren Lauf laden',
+    historyHint: 'Lokal gespeichert (max. 5 Läufe). Jeder Lauf enthält vollständigen Context und Event-Log.'
+  }
+};
+
+export function OpsTwinStudio({ locale }: { locale: Locale }) {
+  const copy = studioCopy[locale];
   const [input, setInput] = useState<ScenarioInput>(defaultInput);
   const [running, setRunning] = useState(false);
   const [context, setContext] = useState<ContextRoot | null>(null);
@@ -302,31 +359,31 @@ export function OpsTwinStudio() {
     <div className="space-y-6">
       <header className="space-y-3">
         <div className="flex items-center gap-3">
-          <p className="section-title">ops digital twin</p>
+          <p className="section-title">{copy.tag}</p>
           <span className="text-ink/30">|</span>
           <a 
-            href="/en/ops-twin/mcp-demo" 
+            href={`/${locale}/ops-twin/mcp-demo`} 
             className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 hover:underline"
           >
             <Server className="h-3.5 w-3.5" />
-            MCP Server Playground
+            {copy.mcpPlayground}
             <ExternalLink className="h-3 w-3" />
           </a>
         </div>
-        <h1 className="text-4xl font-bold leading-tight md:text-6xl">Site Start-up + Recruitment Simulation Ops Twin</h1>
-        <p className="max-w-3xl text-lg text-ink/70">A2A x MCP in Clinical Ops Digital Twin</p>
+        <h1 className="text-4xl font-bold leading-tight md:text-6xl">{copy.title}</h1>
+        <p className="max-w-3xl text-lg text-ink/70">{copy.subtitle}</p>
       </header>
 
-      <OpsGuidePanel />
+      <OpsGuidePanel locale={locale} />
 
       <div className="grid gap-6 xl:grid-cols-12">
         <div className="space-y-4 xl:col-span-3">
           <OpsTwinScenarioForm value={input} onChange={setInput} onRun={runSimulation} onReset={resetSimulation} running={running} />
 
           <section className="noise-border rounded-lg p-4">
-            <p className="section-title">A2A Runtime</p>
+            <p className="section-title">{copy.a2aRuntime}</p>
             <label className="mt-2 flex items-center justify-between rounded border border-ink/15 px-2 py-2 text-sm">
-              <span>Remote agent execution</span>
+              <span>{copy.remoteExecution}</span>
               <input
                 type="checkbox"
                 checked={a2aRemoteMode}
@@ -334,13 +391,11 @@ export function OpsTwinStudio() {
                 aria-label="Toggle remote A2A execution mode"
               />
             </label>
-            <p className="mt-2 text-xs text-ink/65">
-              When enabled, non-orchestrator agents are routed through `/api/a2a/inbox` and shown as remote transport in thread logs.
-            </p>
+            <p className="mt-2 text-xs text-ink/65">{copy.remoteHint}</p>
           </section>
 
           <section className="noise-border rounded-lg p-4">
-            <p className="section-title">Run History</p>
+            <p className="section-title">{copy.runHistory}</p>
             <div className="mt-2 space-y-2">
               <select
                 className="w-full rounded border border-ink/20 bg-transparent px-2 py-2 text-sm"
@@ -349,7 +404,7 @@ export function OpsTwinStudio() {
                 aria-label="Restore a previous run"
               >
                 <option value="" disabled>
-                  Restore previous run
+                  {copy.restorePlaceholder}
                 </option>
                 {historyOptions.map((item) => (
                   <option key={item.id} value={item.id}>
@@ -357,11 +412,11 @@ export function OpsTwinStudio() {
                   </option>
                 ))}
               </select>
-              <p className="text-xs text-ink/65">Stored locally (max 5 runs). Each run keeps full context + event log.</p>
+              <p className="text-xs text-ink/65">{copy.historyHint}</p>
             </div>
           </section>
 
-          <McpStatusPanel />
+          <McpStatusPanel locale={locale} />
         </div>
 
         <div className="space-y-4 xl:col-span-5">
