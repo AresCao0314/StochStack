@@ -81,6 +81,7 @@ const studioCopy: Record<
     title: string;
     subtitle: string;
     mcpPlayground: string;
+    evalDashboard: string;
     a2aRuntime: string;
     remoteExecution: string;
     llmReasoning: string;
@@ -96,6 +97,7 @@ const studioCopy: Record<
     title: 'Site Start-up + Recruitment Simulation Ops Twin',
     subtitle: 'A2A x MCP in Clinical Ops Digital Twin',
     mcpPlayground: 'MCP Server Playground',
+    evalDashboard: 'Agent Eval Dashboard',
     a2aRuntime: 'A2A Runtime',
     remoteExecution: 'Remote agent execution',
     llmReasoning: 'LLM-native reasoning',
@@ -111,6 +113,7 @@ const studioCopy: Record<
     title: 'Site 启动 + 招募仿真 Ops Twin',
     subtitle: '临床运营数字孪生中的 A2A x MCP',
     mcpPlayground: 'MCP 服务器演示台',
+    evalDashboard: 'Agent 评估看板',
     a2aRuntime: 'A2A 运行层',
     remoteExecution: '远程 Agent 执行',
     llmReasoning: 'LLM-native 推理',
@@ -125,6 +128,7 @@ const studioCopy: Record<
     title: 'Site Start-up + Recruitment Simulation Ops Twin',
     subtitle: 'A2A x MCP im Clinical Ops Digital Twin',
     mcpPlayground: 'MCP Server Playground',
+    evalDashboard: 'Agent-Eval-Dashboard',
     a2aRuntime: 'A2A Runtime',
     remoteExecution: 'Remote-Agent-Ausführung',
     llmReasoning: 'LLM-native Reasoning',
@@ -373,6 +377,13 @@ export function OpsTwinStudio({ locale }: { locale: Locale }) {
         <div className="flex items-center gap-3">
           <p className="section-title">{copy.tag}</p>
           <span className="text-ink/30">|</span>
+          <a
+            href={`/${locale}/ops-twin/eval`}
+            className="inline-flex items-center gap-1.5 text-sm text-ink/80 hover:text-ink hover:underline"
+          >
+            {copy.evalDashboard}
+            <ExternalLink className="h-3 w-3" />
+          </a>
           <a 
             href={`/${locale}/ops-twin/mcp-demo`} 
             className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 hover:underline"

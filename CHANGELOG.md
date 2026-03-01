@@ -2,6 +2,14 @@
 
 All notable repository-level changes are tracked here for review.
 
+
+### Ops Twin Eval Console v0.5.0
+- Added `/[locale]/ops-twin/eval` evaluation workspace with agent scorecards (accuracy, bias, stability, adoption).
+- Added trial-level filter and version comparison view (`vA` vs `vB`) across all core agents.
+- Added human feedback loop panel for accept/reject decisions with rationale capture and local persistence.
+- Added eval entry link from Ops Twin main page and sitemap entry for `/ops-twin/eval`.
+- **User-visible**: business reviewers can now inspect agent quality, compare versions, and submit structured feedback.
+- **Operational**: currently mock-data based (`src/content/ops-eval/agent-scorecards.json`) and ready to swap with runtime data source.
 ## 2026-03-01
 
 ### MCP Server Integration v0.3.0

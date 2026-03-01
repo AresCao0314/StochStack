@@ -1,0 +1,67 @@
+{
+  "trials": [
+    { "id": "TR-ONC-2401", "name": "Oncology Wave 2401", "ta": "Oncology", "phase": "II" },
+    { "id": "TR-CAR-3102", "name": "Cardio Pulse 3102", "ta": "Cardio", "phase": "III" },
+    { "id": "TR-RARE-1207", "name": "Rare Signal 1207", "ta": "Rare", "phase": "II" }
+  ],
+  "versions": ["vA", "vB"],
+  "agents": [
+    "Country_Feasibility_Agent",
+    "Site_Scout_Agent",
+    "StartUp_Workflow_Agent",
+    "Recruitment_Dynamics_Agent",
+    "Risk_Officer_Agent"
+  ],
+  "scorecards": [
+    { "trialId": "TR-ONC-2401", "agent": "Country_Feasibility_Agent", "version": "vA", "accuracy": 0.68, "bias": -0.12, "stability": 0.71, "adoption": 0.64, "samples": 31, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-ONC-2401", "agent": "Country_Feasibility_Agent", "version": "vB", "accuracy": 0.76, "bias": -0.05, "stability": 0.78, "adoption": 0.73, "samples": 38, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-ONC-2401", "agent": "Site_Scout_Agent", "version": "vA", "accuracy": 0.61, "bias": -0.18, "stability": 0.66, "adoption": 0.59, "samples": 44, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-ONC-2401", "agent": "Site_Scout_Agent", "version": "vB", "accuracy": 0.74, "bias": -0.07, "stability": 0.75, "adoption": 0.72, "samples": 51, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-ONC-2401", "agent": "StartUp_Workflow_Agent", "version": "vA", "accuracy": 0.7, "bias": -0.09, "stability": 0.74, "adoption": 0.67, "samples": 29, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-ONC-2401", "agent": "StartUp_Workflow_Agent", "version": "vB", "accuracy": 0.79, "bias": -0.03, "stability": 0.8, "adoption": 0.76, "samples": 36, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-ONC-2401", "agent": "Recruitment_Dynamics_Agent", "version": "vA", "accuracy": 0.64, "bias": -0.16, "stability": 0.68, "adoption": 0.6, "samples": 40, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-ONC-2401", "agent": "Recruitment_Dynamics_Agent", "version": "vB", "accuracy": 0.78, "bias": -0.06, "stability": 0.77, "adoption": 0.75, "samples": 48, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-ONC-2401", "agent": "Risk_Officer_Agent", "version": "vA", "accuracy": 0.72, "bias": -0.08, "stability": 0.73, "adoption": 0.66, "samples": 26, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-ONC-2401", "agent": "Risk_Officer_Agent", "version": "vB", "accuracy": 0.81, "bias": -0.02, "stability": 0.82, "adoption": 0.79, "samples": 33, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-CAR-3102", "agent": "Country_Feasibility_Agent", "version": "vA", "accuracy": 0.66, "bias": -0.11, "stability": 0.7, "adoption": 0.62, "samples": 22, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-CAR-3102", "agent": "Country_Feasibility_Agent", "version": "vB", "accuracy": 0.73, "bias": -0.06, "stability": 0.76, "adoption": 0.71, "samples": 27, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-CAR-3102", "agent": "Site_Scout_Agent", "version": "vA", "accuracy": 0.6, "bias": -0.19, "stability": 0.65, "adoption": 0.56, "samples": 33, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-CAR-3102", "agent": "Site_Scout_Agent", "version": "vB", "accuracy": 0.71, "bias": -0.09, "stability": 0.73, "adoption": 0.69, "samples": 39, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-CAR-3102", "agent": "StartUp_Workflow_Agent", "version": "vA", "accuracy": 0.67, "bias": -0.1, "stability": 0.72, "adoption": 0.64, "samples": 24, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-CAR-3102", "agent": "StartUp_Workflow_Agent", "version": "vB", "accuracy": 0.76, "bias": -0.04, "stability": 0.79, "adoption": 0.75, "samples": 29, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-CAR-3102", "agent": "Recruitment_Dynamics_Agent", "version": "vA", "accuracy": 0.62, "bias": -0.15, "stability": 0.67, "adoption": 0.58, "samples": 35, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-CAR-3102", "agent": "Recruitment_Dynamics_Agent", "version": "vB", "accuracy": 0.75, "bias": -0.07, "stability": 0.76, "adoption": 0.73, "samples": 42, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-CAR-3102", "agent": "Risk_Officer_Agent", "version": "vA", "accuracy": 0.69, "bias": -0.09, "stability": 0.71, "adoption": 0.63, "samples": 20, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-CAR-3102", "agent": "Risk_Officer_Agent", "version": "vB", "accuracy": 0.79, "bias": -0.03, "stability": 0.81, "adoption": 0.77, "samples": 26, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-RARE-1207", "agent": "Country_Feasibility_Agent", "version": "vA", "accuracy": 0.63, "bias": -0.14, "stability": 0.67, "adoption": 0.57, "samples": 17, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-RARE-1207", "agent": "Country_Feasibility_Agent", "version": "vB", "accuracy": 0.72, "bias": -0.08, "stability": 0.74, "adoption": 0.69, "samples": 23, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-RARE-1207", "agent": "Site_Scout_Agent", "version": "vA", "accuracy": 0.58, "bias": -0.2, "stability": 0.62, "adoption": 0.51, "samples": 28, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-RARE-1207", "agent": "Site_Scout_Agent", "version": "vB", "accuracy": 0.69, "bias": -0.11, "stability": 0.7, "adoption": 0.66, "samples": 34, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-RARE-1207", "agent": "StartUp_Workflow_Agent", "version": "vA", "accuracy": 0.65, "bias": -0.11, "stability": 0.69, "adoption": 0.6, "samples": 19, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-RARE-1207", "agent": "StartUp_Workflow_Agent", "version": "vB", "accuracy": 0.74, "bias": -0.05, "stability": 0.77, "adoption": 0.72, "samples": 25, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-RARE-1207", "agent": "Recruitment_Dynamics_Agent", "version": "vA", "accuracy": 0.6, "bias": -0.18, "stability": 0.64, "adoption": 0.53, "samples": 30, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-RARE-1207", "agent": "Recruitment_Dynamics_Agent", "version": "vB", "accuracy": 0.71, "bias": -0.09, "stability": 0.73, "adoption": 0.68, "samples": 36, "lastUpdated": "2026-03-02" },
+
+    { "trialId": "TR-RARE-1207", "agent": "Risk_Officer_Agent", "version": "vA", "accuracy": 0.67, "bias": -0.1, "stability": 0.7, "adoption": 0.59, "samples": 16, "lastUpdated": "2026-03-01" },
+    { "trialId": "TR-RARE-1207", "agent": "Risk_Officer_Agent", "version": "vB", "accuracy": 0.77, "bias": -0.04, "stability": 0.79, "adoption": 0.74, "samples": 22, "lastUpdated": "2026-03-02" }
+  ],
+  "suggestions": [
+    { "id": "SUG-001", "trialId": "TR-ONC-2401", "agent": "Site_Scout_Agent", "version": "vB", "title": "Replace 2 low-conversion sites in France", "rationale": "vB predicts 14% slower conversion in current bottom quartile sites." },
+    { "id": "SUG-002", "trialId": "TR-ONC-2401", "agent": "Recruitment_Dynamics_Agent", "version": "vB", "title": "Increase pre-screening support in Germany", "rationale": "Screen-fail burden contributes most of month-4 gap." },
+    { "id": "SUG-003", "trialId": "TR-CAR-3102", "agent": "StartUp_Workflow_Agent", "version": "vB", "title": "Parallelize ethics and contract package", "rationale": "Critical-path lag is concentrated in startup packet handoff." },
+    { "id": "SUG-004", "trialId": "TR-RARE-1207", "agent": "Risk_Officer_Agent", "version": "vB", "title": "Escalate monitoring cadence for 3 sites", "rationale": "Risk scoring flags persistent quality variance." }
+  ]
+}

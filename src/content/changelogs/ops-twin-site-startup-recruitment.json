@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-02",
+    "version": "v0.5.0",
+    "title": {
+      "en": "Agent Evaluation Console",
+      "zh": "Agent 评估控制台",
+      "de": "Agent-Evaluierungskonsole"
+    },
+    "changes": {
+      "en": [
+        "Added per-agent scorecards (accuracy, bias, stability, adoption).",
+        "Added trial-level filtering and version comparison (vA vs vB).",
+        "Added human feedback loop panel with accept/reject decisions and reason capture."
+      ],
+      "zh": [
+        "新增按 agent 的评分卡（accuracy、bias、stability、adoption）。",
+        "新增 trial 维度筛选与版本对比（vA vs vB）。",
+        "新增人工反馈闭环面板，支持 accept/reject 与理由记录。"
+      ],
+      "de": [
+        "Agent-spezifische Scorecards (Accuracy, Bias, Stabilität, Adoption) hinzugefügt.",
+        "Trial-Filter und Versionsvergleich (vA vs vB) hinzugefügt.",
+        "Human-Feedback-Loop mit Accept/Reject und Begründungserfassung hinzugefügt."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-02",
     "version": "v0.4.1",
     "title": {
       "en": "A2A Security + Reliability + LLM-native Reasoning",
