@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.2.0",
+    "title": {
+      "en": "Forecast Calibration & Confidence Layer",
+      "zh": "预测校准与置信度层上线",
+      "de": "Forecast-Kalibrierung und Confidence-Layer"
+    },
+    "changes": {
+      "en": [
+        "Added actual observation capture to track predicted vs actual enrollment error over time.",
+        "Implemented automatic parameter callback to tune startup/screen-fail/dropout/competition/patient-pool assumptions.",
+        "Added confidence panel with MAPE, signed bias, tracked points, and assumption shift diagnostics."
+      ],
+      "zh": [
+        "新增实际值录入与预测误差追踪，持续比较 predicted 与 actual 入组轨迹。",
+        "实现参数自动回调，动态调节 startup/screen-fail/dropout/competition/patient-pool 假设。",
+        "新增置信度面板：MAPE、signed bias、追踪点数量与参数变动诊断。"
+      ],
+      "de": [
+        "Erfassung beobachteter Ist-Werte zur laufenden Prognosefehler-Verfolgung (predicted vs actual) hinzugefuegt.",
+        "Automatische Parameter-Rueckkopplung fuer Startup/Screen-Fail/Dropout/Competition/Patient-Pool integriert.",
+        "Confidence-Panel mit MAPE, Signed Bias, Tracking-Punkten und Parameter-Shift-Diagnostik ergaenzt."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.1.0",
     "title": {
       "en": "Ops Twin MVP Launched",

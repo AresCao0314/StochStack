@@ -101,6 +101,17 @@ export function createInitialContext(input: ScenarioInput, runId: string, seed: 
         sitesNeeded: 0,
         totalStartupCost: 0,
         overallRiskScore: 0
+      },
+      actuals: [],
+      forecastDiagnostics: {
+        confidenceScore: 0.7,
+        mape: 0,
+        signedBias: 0,
+        points: 0,
+        lastCalibratedAt: null,
+        parameterShift: {},
+        notes: ['No observed actuals yet.'],
+        history: []
       }
     },
     eventLog: []
@@ -150,6 +161,17 @@ export function replayFromEventLog(context: ContextRoot): ContextRoot {
         sitesNeeded: 0,
         totalStartupCost: 0,
         overallRiskScore: 0
+      },
+      actuals: [],
+      forecastDiagnostics: {
+        confidenceScore: 0.7,
+        mape: 0,
+        signedBias: 0,
+        points: 0,
+        lastCalibratedAt: null,
+        parameterShift: {},
+        notes: ['No observed actuals yet.'],
+        history: []
       }
     },
     eventLog: []

@@ -104,10 +104,40 @@ export type Kpis = {
   overallRiskScore: number;
 };
 
+export type ActualObservation = {
+  month: number;
+  actualCumulativeEnrollment: number;
+  startupAvgDaysObserved?: number;
+  recordedAt: string;
+};
+
+export type ForecastErrorPoint = {
+  month: number;
+  predictedCumulativeEnrollment: number;
+  actualCumulativeEnrollment: number;
+  absPctError: number;
+  signedPctError: number;
+  startupErrorDays?: number;
+  recordedAt: string;
+};
+
+export type ForecastDiagnostics = {
+  confidenceScore: number;
+  mape: number;
+  signedBias: number;
+  points: number;
+  lastCalibratedAt: string | null;
+  parameterShift: Record<string, number>;
+  notes: string[];
+  history: ForecastErrorPoint[];
+};
+
 export type SimResults = {
   recruitmentCurve: RecruitmentPoint[];
   startupDistribution: StartupDistributionPoint[];
   kpis: Kpis;
+  actuals: ActualObservation[];
+  forecastDiagnostics: ForecastDiagnostics;
 };
 
 export type ContextRoot = {

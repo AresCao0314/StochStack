@@ -8,6 +8,7 @@ import { OpsTwinContextPanel } from '@/components/opsTwin/context-panel';
 import { OpsTwinSimulationPanel } from '@/components/opsTwin/simulation-panel';
 import { runtimeSteps } from '@/lib/opsTwin/agentRuntime';
 import { applyPatch, createInitialContext, exportContext, replayFromEventLog } from '@/lib/opsTwin/contextStore';
+import { buildCalibrationPatches } from '@/lib/opsTwin/sim/calibration';
 import { createRng, hashToSeed } from '@/lib/opsTwin/sim/seeded';
 import type { AgentMessage, ContextRoot, RunHistoryItem, ScenarioInput } from '@/lib/opsTwin/types';
 
@@ -83,6 +84,28 @@ export function OpsTwinStudio() {
     [history]
   );
 
+  function upsertRunHistory(runId: string, snapshotContext: ContextRoot, snapshotMessages: AgentMessage[], snapshotInput: ScenarioInput) {
+    setHistory((prev) => {
+      const targetIndex = prev.findIndex((item) => item.id === runId);
+      const nextItem: RunHistoryItem = {
+        id: runId,
+        createdAt: targetIndex >= 0 ? prev[targetIndex].createdAt : new Date().toISOString(),
+        input: snapshotInput,
+        context: snapshotContext,
+        messages: snapshotMessages
+      };
+
+      const nextHistory =
+        targetIndex >= 0
+          ? prev.map((item, idx) => (idx === targetIndex ? nextItem : item))
+          : [nextItem, ...prev];
+
+      const trimmed = nextHistory.slice(0, 5);
+      saveHistory(trimmed);
+      return trimmed;
+    });
+  }
+
   async function runSimulation() {
     setRunning(true);
     setSelectedMessage(null);
@@ -151,17 +174,7 @@ export function OpsTwinStudio() {
       setMessages(nextMessages);
     }
 
-    const historyItem: RunHistoryItem = {
-      id: runId,
-      createdAt: new Date().toISOString(),
-      input,
-      context: nextContext,
-      messages: nextMessages
-    };
-
-    const nextHistory = [historyItem, ...history].slice(0, 5);
-    setHistory(nextHistory);
-    saveHistory(nextHistory);
+    upsertRunHistory(runId, nextContext, nextMessages, input);
     setRunning(false);
   }
 
@@ -185,6 +198,53 @@ export function OpsTwinStudio() {
   function handleReplay() {
     if (!context) return;
     setContext(replayFromEventLog(context));
+  }
+
+  function handleTrackActual(inputData: {
+    month: number;
+    actualCumulativeEnrollment: number;
+    startupAvgDaysObserved?: number;
+  }) {
+    if (!context || running) return;
+
+    const { patches, diagnostics } = buildCalibrationPatches({
+      context,
+      month: inputData.month,
+      actualCumulativeEnrollment: inputData.actualCumulativeEnrollment,
+      startupAvgDaysObserved: inputData.startupAvgDaysObserved
+    });
+
+    let nextContext = context;
+    const eventIds: string[] = [];
+
+    patches.forEach((patch) => {
+      nextContext = applyPatch(nextContext, patch);
+      const event = nextContext.eventLog[nextContext.eventLog.length - 1];
+      if (event) eventIds.push(event.id);
+    });
+
+    const calibrationMessage = mapMessage(
+      {
+        agent: 'CTM_Orchestrator',
+        role: 'Calibration Controller',
+        text: `Calibration updated with month ${inputData.month} actuals. Confidence now ${Math.round(
+          diagnostics.confidenceScore * 100
+        )}%; assumptions auto-tuned.`,
+        attachments: [
+          {
+            type: 'Assumption',
+            data: diagnostics.parameterShift
+          }
+        ]
+      },
+      eventIds,
+      messages.length + 1
+    );
+
+    const nextMessages = [...messages, calibrationMessage];
+    setContext(nextContext);
+    setMessages(nextMessages);
+    upsertRunHistory(nextContext.meta.runId, nextContext, nextMessages, input);
   }
 
   return (
@@ -237,7 +297,7 @@ export function OpsTwinStudio() {
         </div>
       </div>
 
-      <OpsTwinSimulationPanel context={context} />
+      <OpsTwinSimulationPanel context={context} onTrackActual={handleTrackActual} />
 
       <OpsTwinDiffDrawer
         open={Boolean(selectedMessage)}
