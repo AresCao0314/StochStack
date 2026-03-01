@@ -5,6 +5,7 @@ import { runRecruitmentDynamics } from '@/lib/opsTwin/agents/recruitmentDynamics
 import { runRiskOfficer } from '@/lib/opsTwin/agents/riskOfficer';
 import { runOrchestratorFinalize } from '@/lib/opsTwin/agents/ctmOrchestrator';
 import type { AgentName, AgentRunResult, ContextRoot, Rng } from '@/lib/opsTwin/types';
+import type { A2AIntent } from '@/lib/a2a/types';
 
 export type RuntimeStep = {
   id: number;
@@ -51,3 +52,26 @@ export const runtimeSteps: RuntimeStep[] = [
     run: (context) => runOrchestratorFinalize(context)
   }
 ];
+
+export function getRuntimeStepByTarget(target: AgentName) {
+  return runtimeSteps.find((step) => step.target === target);
+}
+
+export function getIntentByAgent(target: AgentName): A2AIntent {
+  switch (target) {
+    case 'Country_Feasibility_Agent':
+      return 'country.prior';
+    case 'Site_Scout_Agent':
+      return 'site.scout';
+    case 'StartUp_Workflow_Agent':
+      return 'startup.workflow';
+    case 'Recruitment_Dynamics_Agent':
+      return 'recruitment.dynamics';
+    case 'Risk_Officer_Agent':
+      return 'risk.register';
+    case 'CTM_Orchestrator':
+      return 'orchestrator.finalize';
+    default:
+      return 'orchestrator.finalize';
+  }
+}

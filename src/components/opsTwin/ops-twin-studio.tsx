@@ -7,11 +7,14 @@ import { OpsTwinDiffDrawer } from '@/components/opsTwin/diff-drawer';
 import { OpsTwinContextPanel } from '@/components/opsTwin/context-panel';
 import { OpsTwinSimulationPanel } from '@/components/opsTwin/simulation-panel';
 import { McpStatusPanel } from '@/components/opsTwin/mcp-status-panel';
+import { OpsGuidePanel } from '@/components/opsTwin/ops-guide-panel';
 import { Server, ExternalLink } from 'lucide-react';
 import { runtimeSteps } from '@/lib/opsTwin/agentRuntime';
 import { applyPatch, createInitialContext, exportContext, replayFromEventLog } from '@/lib/opsTwin/contextStore';
 import { buildCalibrationPatches } from '@/lib/opsTwin/sim/calibration';
 import { createRng, hashToSeed } from '@/lib/opsTwin/sim/seeded';
+import { findAgentRecord } from '@/lib/a2a/registry';
+import { routeAgentExecution } from '@/lib/a2a/router';
 import type { AgentMessage, ContextRoot, RunHistoryItem, ScenarioInput } from '@/lib/opsTwin/types';
 
 const HISTORY_KEY = 'opsTwinRunsV1';
@@ -76,6 +79,7 @@ export function OpsTwinStudio() {
   const [messages, setMessages] = useState<AgentMessage[]>([]);
   const [selectedMessage, setSelectedMessage] = useState<AgentMessage | null>(null);
   const [history, setHistory] = useState<RunHistoryItem[]>([]);
+  const [a2aRemoteMode, setA2aRemoteMode] = useState(true);
 
   useEffect(() => {
     setHistory(loadHistory());
@@ -134,13 +138,20 @@ export function OpsTwinStudio() {
 
     for (let i = 0; i < runtimeSteps.length; i += 1) {
       const step = runtimeSteps[i];
+      const stepRecord = findAgentRecord(step.target);
+      const stepRemote = Boolean(
+        a2aRemoteMode && stepRecord && stepRecord.active && stepRecord.mode === 'remote'
+      );
 
       const requestMsg = mapMessage(
         {
           agent: 'CTM_Orchestrator',
           role: 'Ops Twin Orchestrator',
           text: `Step ${step.id}: ${step.request}`,
-          handoffTo: step.target
+          handoffTo: step.target,
+          transport: stepRemote ? 'remote' : 'local',
+          remoteEndpoint: stepRemote ? stepRecord?.baseUrl : undefined,
+          deliveryStatus: 'ok'
         },
         [],
         i * 10
@@ -151,7 +162,15 @@ export function OpsTwinStudio() {
         await wait(rng.int(300, 600));
       }
 
-      const runResult = step.run(nextContext, rng);
+      const routed = await routeAgentExecution({
+        target: step.target,
+        context: nextContext,
+        baseSeed: seed,
+        stepId: step.id,
+        runRemote: a2aRemoteMode
+      });
+
+      const runResult = routed.result;
       const eventIds: string[] = [];
 
       runResult.patches.forEach((patch) => {
@@ -161,8 +180,38 @@ export function OpsTwinStudio() {
       });
 
       runResult.messages.forEach((rawMessage, msgIdx) => {
-        nextMessages = [...nextMessages, mapMessage(rawMessage, eventIds, i * 10 + msgIdx + 1)];
+        nextMessages = [
+          ...nextMessages,
+          mapMessage(
+            {
+              ...rawMessage,
+              transport: routed.transport,
+              latencyMs: routed.latencyMs,
+              remoteEndpoint: routed.endpoint,
+              deliveryStatus: routed.deliveryStatus
+            },
+            eventIds,
+            i * 10 + msgIdx + 1
+          )
+        ];
       });
+
+      if (routed.deliveryStatus !== 'ok') {
+        nextMessages = [
+          ...nextMessages,
+          mapMessage(
+            {
+              agent: 'CTM_Orchestrator',
+              role: 'Transport Supervisor',
+              text: `A2A remote delivery degraded for ${step.target}. Fallback to local execution applied.`,
+              transport: 'local',
+              deliveryStatus: routed.deliveryStatus
+            },
+            [],
+            i * 10 + 9
+          )
+        ];
+      }
 
       if (input.realtimeMessages) {
         setContext(nextContext);
@@ -268,9 +317,27 @@ export function OpsTwinStudio() {
         <p className="max-w-3xl text-lg text-ink/70">A2A x MCP in Clinical Ops Digital Twin</p>
       </header>
 
+      <OpsGuidePanel />
+
       <div className="grid gap-6 xl:grid-cols-12">
         <div className="space-y-4 xl:col-span-3">
           <OpsTwinScenarioForm value={input} onChange={setInput} onRun={runSimulation} onReset={resetSimulation} running={running} />
+
+          <section className="noise-border rounded-lg p-4">
+            <p className="section-title">A2A Runtime</p>
+            <label className="mt-2 flex items-center justify-between rounded border border-ink/15 px-2 py-2 text-sm">
+              <span>Remote agent execution</span>
+              <input
+                type="checkbox"
+                checked={a2aRemoteMode}
+                onChange={(e) => setA2aRemoteMode(e.target.checked)}
+                aria-label="Toggle remote A2A execution mode"
+              />
+            </label>
+            <p className="mt-2 text-xs text-ink/65">
+              When enabled, non-orchestrator agents are routed through `/api/a2a/inbox` and shown as remote transport in thread logs.
+            </p>
+          </section>
 
           <section className="noise-border rounded-lg p-4">
             <p className="section-title">Run History</p>

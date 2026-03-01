@@ -175,6 +175,10 @@ export type AgentMessage = {
   role: string;
   text: string;
   handoffTo?: AgentName;
+  transport?: 'local' | 'remote';
+  latencyMs?: number;
+  remoteEndpoint?: string;
+  deliveryStatus?: 'ok' | 'retry' | 'failed';
   attachments?: MessageAttachment[];
   eventIds: string[];
 };

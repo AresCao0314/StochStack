@@ -1,6 +1,35 @@
 [
   {
     "date": "2026-03-01",
+    "version": "v0.4.0",
+    "title": {
+      "en": "A2A Remote Collaboration Layer",
+      "zh": "A2A 远程协作层",
+      "de": "A2A Remote Collaboration Layer"
+    },
+    "changes": {
+      "en": [
+        "Added A2A remote routing layer with agent registry, envelope schema, and inbox API endpoint.",
+        "Enabled optional remote execution for non-orchestrator agents with fallback-to-local retry behavior.",
+        "A2A thread now displays transport mode, endpoint, latency, and delivery status for each agent response.",
+        "Added operator guide panel: clear steps, expected outcomes, and interpretation logic for reviewers."
+      ],
+      "zh": [
+        "新增 A2A 远程路由层：agent registry、envelope 协议和 inbox API 接口。",
+        "非 orchestrator agent 支持可选远程执行，并提供失败回退到本地的重试机制。",
+        "A2A 线程新增传输信息：local/remote、endpoint、延迟与投递状态。",
+        "新增操作指引面板：清晰步骤、预期结果与结果解释，便于评审与演示。"
+      ],
+      "de": [
+        "A2A-Remote-Routing mit Agent-Registry, Envelope-Schema und Inbox-API-Endpunkt hinzugefuegt.",
+        "Optionale Remote-Ausfuehrung fuer Nicht-Orchestrator-Agenten mit Fallback-auf-Local-Retry aktiviert.",
+        "A2A-Thread zeigt nun Transportmodus, Endpunkt, Latenz und Delivery-Status pro Agentenantwort.",
+        "Operator-Guide-Panel mit klaren Schritten, erwarteten Ergebnissen und Interpretationslogik hinzugefuegt."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-01",
     "version": "v0.3.0",
     "title": {
       "en": "MCP Server Integration",

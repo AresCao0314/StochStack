@@ -41,6 +41,15 @@ export function AgentTimeline({
                   {msg.agent}
                 </span>
                 <span className="text-xs text-ink/60">{msg.role}</span>
+                {msg.transport ? (
+                  <span
+                    className={`rounded px-1.5 py-0.5 text-[10px] uppercase tracking-[0.12em] ${
+                      msg.transport === 'remote' ? 'bg-blue-100 text-blue-700' : 'bg-ink/10 text-ink/70'
+                    }`}
+                  >
+                    {msg.transport}
+                  </span>
+                ) : null}
                 {msg.handoffTo ? (
                   <span className="text-xs text-ink/60">
                     <ArrowRightLeft size={12} className="mr-1 inline" />handoff to {msg.handoffTo}
@@ -51,6 +60,12 @@ export function AgentTimeline({
             </div>
 
             <p className="mt-2 text-sm text-ink/85">{msg.text}</p>
+
+            <div className="mt-1 flex flex-wrap items-center gap-3 text-[11px] text-ink/60">
+              {typeof msg.latencyMs === 'number' ? <span>latency: {msg.latencyMs}ms</span> : null}
+              {msg.remoteEndpoint ? <span>endpoint: {msg.remoteEndpoint}</span> : null}
+              {msg.deliveryStatus ? <span>delivery: {msg.deliveryStatus}</span> : null}
+            </div>
 
             {msg.attachments?.length ? (
               <div className="mt-2 grid gap-2">

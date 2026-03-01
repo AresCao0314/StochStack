@@ -22,6 +22,15 @@ All notable repository-level changes are tracked here for review.
 - **User-visible**: No UI change; prevents Ops Twin/MCP deployment from failing at build time.
 - **Operational**: `npm run build` now passes with MCP features enabled.
 
+### Ops Twin A2A Remote Runtime v0.4.0
+- Added A2A runtime modules: protocol envelope types, agent registry, HTTP transport adapter, and client router.
+- Added `/api/a2a/inbox` endpoint for agent-to-agent remote execution handoff.
+- Ops Twin now supports optional remote execution mode for agent steps with retry fallback to local runtime.
+- A2A timeline now surfaces transport telemetry (`local/remote`, endpoint, latency, delivery status).
+- Added operator guide panel with explicit usage steps, expected outcomes, and result interpretation.
+- **User-visible**: clearer operational walkthrough + observable cross-agent communication behavior.
+- **Operational**: build remains static-friendly; no extra infrastructure required for local/demo mode.
+
 ## 2026-03-01
 
 ### Runtime Data Unification
