@@ -124,6 +124,12 @@ docker compose up -d --build
 
 - Prototype-level logs: each prototype page has its own timeline-style changelog section.
 - Repository-level release log: `CHANGELOG.md` (append one entry per update for reviewers).
+- Internal review panel: `/{locale}/ops/logs` (example: `/en/ops/logs`) shows `CHANGELOG.md` plus recent cron refresh runs.
+
+## Ops Log File
+
+- Refresh script log path default: `runtime-data/logs/market-refresh.log`
+- Override with env var when needed: `MARKET_REFRESH_LOG_FILE`
 
 ## Protocol PDF Auto-Extraction (Qwen)
 

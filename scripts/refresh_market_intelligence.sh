@@ -2,7 +2,7 @@
 set -euo pipefail
 
 PROJECT_DIR="${PROJECT_DIR:-/root/stochstack-site}"
-LOG_FILE="${LOG_FILE:-/var/log/stochstack_market_refresh.log}"
+LOG_FILE="${LOG_FILE:-$PROJECT_DIR/runtime-data/logs/market-refresh.log}"
 
 LEGACY_DIR="$PROJECT_DIR/legacy/MarketIntelligenceForHighscore"
 FETCH_SCRIPT="$LEGACY_DIR/scripts/fetch_news.py"
