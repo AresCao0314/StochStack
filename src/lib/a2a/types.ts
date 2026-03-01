@@ -23,6 +23,9 @@ export type A2AEnvelope = {
     runId: string;
     version: number;
   };
+  options?: {
+    llmReasoning?: boolean;
+  };
   timestamp: string;
   signature?: string;
 };
@@ -46,6 +49,12 @@ export type AgentRegistryRecord = {
   mode: 'local' | 'remote';
   capabilities: string[];
   version: string;
+  retryPolicy?: {
+    maxRetries: number;
+    baseDelayMs: number;
+    backoffFactor: number;
+    jitterMs: number;
+  };
 };
 
 export type RoutedAgentResult = {
@@ -54,4 +63,7 @@ export type RoutedAgentResult = {
   latencyMs: number;
   endpoint?: string;
   deliveryStatus: 'ok' | 'retry' | 'failed';
+  attempts: number;
+  retryCount: number;
+  lastError?: string;
 };

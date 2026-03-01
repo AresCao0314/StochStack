@@ -65,6 +65,7 @@ export function AgentTimeline({
               {typeof msg.latencyMs === 'number' ? <span>latency: {msg.latencyMs}ms</span> : null}
               {msg.remoteEndpoint ? <span>endpoint: {msg.remoteEndpoint}</span> : null}
               {msg.deliveryStatus ? <span>delivery: {msg.deliveryStatus}</span> : null}
+              {typeof msg.retryCount === 'number' && msg.retryCount > 0 ? <span>retries: {msg.retryCount}</span> : null}
             </div>
 
             {msg.attachments?.length ? (

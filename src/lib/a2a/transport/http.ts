@@ -9,7 +9,8 @@ export async function sendEnvelopeHttp(endpoint: string, envelope: A2AEnvelope):
       'Content-Type': 'application/json',
       'x-a2a-trace-id': envelope.traceId,
       'x-a2a-from-agent': envelope.fromAgent,
-      'x-a2a-to-agent': envelope.toAgent
+      'x-a2a-to-agent': envelope.toAgent,
+      'x-a2a-signature': envelope.signature || ''
     },
     body: JSON.stringify(envelope)
   });

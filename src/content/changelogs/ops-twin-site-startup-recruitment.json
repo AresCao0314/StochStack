@@ -1,5 +1,37 @@
 [
   {
+    "date": "2026-03-02",
+    "version": "v0.4.1",
+    "title": {
+      "en": "A2A Security + Reliability + LLM-native Reasoning",
+      "zh": "A2A 安全与可靠性 + LLM-native 推理",
+      "de": "A2A Sicherheit/Resilienz + LLM-native Reasoning"
+    },
+    "changes": {
+      "en": [
+        "Added HMAC signature signing/verification for A2A envelopes plus timestamp freshness checks.",
+        "Added inbox-side idempotency dedup by messageId to prevent duplicate processing.",
+        "Added per-agent retry backoff policy (maxRetries/baseDelay/backoff/jitter) with fallback-to-local behavior.",
+        "Added A2A topology panel and remote retry counter for live operational visibility.",
+        "Added optional LLM-native agent reasoning path (Qwen when configured, deterministic fallback otherwise)."
+      ],
+      "zh": [
+        "新增 A2A envelope 的 HMAC 签名与验签，并加入时间戳新鲜度校验。",
+        "新增 inbox 侧 messageId 幂等去重，避免重复处理。",
+        "新增按 agent 配置的 retry backoff 策略（maxRetries/baseDelay/backoff/jitter），并保留回退本地执行。",
+        "新增 A2A 拓扑图与远程重试计数器，增强运行态可观测性。",
+        "新增可选 LLM-native agent 推理链路（配置通义千问时调用，否则确定性兜底）。"
+      ],
+      "de": [
+        "HMAC-Signierung/Verifikation fuer A2A-Envelopes sowie Timestamp-Freshness-Pruefung hinzugefuegt.",
+        "Inbox-seitige Idempotenz-Deduplikation per messageId gegen Doppelverarbeitung eingefuehrt.",
+        "Agent-spezifische Retry-Backoff-Policy (maxRetries/baseDelay/backoff/jitter) mit Fallback-auf-Local hinzugefuegt.",
+        "A2A-Topologiepanel und Remote-Retry-Zaehler fuer bessere Laufzeit-Sichtbarkeit hinzugefuegt.",
+        "Optionale LLM-native Reasoning-Route fuer Agenten (Qwen bei Konfiguration, sonst deterministischer Fallback)."
+      ]
+    }
+  },
+  {
     "date": "2026-03-01",
     "version": "v0.4.0",
     "title": {

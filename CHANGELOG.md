@@ -31,6 +31,15 @@ All notable repository-level changes are tracked here for review.
 - **User-visible**: clearer operational walkthrough + observable cross-agent communication behavior.
 - **Operational**: build remains static-friendly; no extra infrastructure required for local/demo mode.
 
+### Ops Twin A2A Hardening v0.4.1
+- Added HMAC signature validation and timestamp freshness checks for `/api/a2a/inbox`.
+- Added idempotent `messageId` de-duplication cache for inbox processing.
+- Added per-agent retry backoff policy (max retries, delay, factor, jitter) with fallback-to-local execution.
+- Added topology visualization and remote retry counter for runtime observability.
+- Added optional LLM-native agent reasoning path (Qwen if configured, deterministic fallback otherwise).
+- **User-visible**: clearer A2A reliability behavior and agent reasoning traces during demo runs.
+- **Operational**: no infrastructure change required for demo mode; configure `A2A_HMAC_SECRET` and `DASHSCOPE_API_KEY` for hardened + LLM-enabled runtime.
+
 ## 2026-03-01
 
 ### Runtime Data Unification

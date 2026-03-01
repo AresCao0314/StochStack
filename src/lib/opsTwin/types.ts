@@ -179,6 +179,7 @@ export type AgentMessage = {
   latencyMs?: number;
   remoteEndpoint?: string;
   deliveryStatus?: 'ok' | 'retry' | 'failed';
+  retryCount?: number;
   attachments?: MessageAttachment[];
   eventIds: string[];
 };

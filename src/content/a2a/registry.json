@@ -3,51 +3,96 @@
     "agentId": "Country_Feasibility_Agent",
     "name": "Country Feasibility Service",
     "baseUrl": "/api/a2a/inbox",
-    "authMode": "none",
+    "authMode": "hmac",
     "active": true,
     "mode": "remote",
-    "capabilities": ["country-prior", "assumption-update"],
-    "version": "v1"
+    "capabilities": [
+      "country-prior",
+      "assumption-update"
+    ],
+    "version": "v1",
+    "retryPolicy": {
+      "maxRetries": 2,
+      "baseDelayMs": 250,
+      "backoffFactor": 2,
+      "jitterMs": 120
+    }
   },
   {
     "agentId": "Site_Scout_Agent",
     "name": "Site Scout Service",
     "baseUrl": "/api/a2a/inbox",
-    "authMode": "none",
+    "authMode": "hmac",
     "active": true,
     "mode": "remote",
-    "capabilities": ["candidate-site-generation", "site-scoring"],
-    "version": "v1"
+    "capabilities": [
+      "candidate-site-generation",
+      "site-scoring"
+    ],
+    "version": "v1",
+    "retryPolicy": {
+      "maxRetries": 2,
+      "baseDelayMs": 250,
+      "backoffFactor": 2,
+      "jitterMs": 120
+    }
   },
   {
     "agentId": "StartUp_Workflow_Agent",
     "name": "Startup Workflow Service",
     "baseUrl": "/api/a2a/inbox",
-    "authMode": "none",
+    "authMode": "hmac",
     "active": true,
     "mode": "remote",
-    "capabilities": ["startup-timeline", "critical-path-risk"],
-    "version": "v1"
+    "capabilities": [
+      "startup-timeline",
+      "critical-path-risk"
+    ],
+    "version": "v1",
+    "retryPolicy": {
+      "maxRetries": 2,
+      "baseDelayMs": 250,
+      "backoffFactor": 2,
+      "jitterMs": 120
+    }
   },
   {
     "agentId": "Recruitment_Dynamics_Agent",
     "name": "Recruitment Dynamics Service",
     "baseUrl": "/api/a2a/inbox",
-    "authMode": "none",
+    "authMode": "hmac",
     "active": true,
     "mode": "remote",
-    "capabilities": ["recruitment-curve", "enrollment-forecast"],
-    "version": "v1"
+    "capabilities": [
+      "recruitment-curve",
+      "enrollment-forecast"
+    ],
+    "version": "v1",
+    "retryPolicy": {
+      "maxRetries": 2,
+      "baseDelayMs": 250,
+      "backoffFactor": 2,
+      "jitterMs": 120
+    }
   },
   {
     "agentId": "Risk_Officer_Agent",
     "name": "Risk Officer Service",
     "baseUrl": "/api/a2a/inbox",
-    "authMode": "none",
+    "authMode": "hmac",
     "active": true,
     "mode": "remote",
-    "capabilities": ["risk-register", "mitigation-plan"],
-    "version": "v1"
+    "capabilities": [
+      "risk-register",
+      "mitigation-plan"
+    ],
+    "version": "v1",
+    "retryPolicy": {
+      "maxRetries": 2,
+      "baseDelayMs": 250,
+      "backoffFactor": 2,
+      "jitterMs": 120
+    }
   },
   {
     "agentId": "CTM_Orchestrator",
@@ -56,7 +101,10 @@
     "authMode": "none",
     "active": true,
     "mode": "local",
-    "capabilities": ["decision-log", "kpi-finalization"],
+    "capabilities": [
+      "decision-log",
+      "kpi-finalization"
+    ],
     "version": "v1"
   }
 ]

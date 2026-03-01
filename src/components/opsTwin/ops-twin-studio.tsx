@@ -8,6 +8,7 @@ import { OpsTwinContextPanel } from '@/components/opsTwin/context-panel';
 import { OpsTwinSimulationPanel } from '@/components/opsTwin/simulation-panel';
 import { McpStatusPanel } from '@/components/opsTwin/mcp-status-panel';
 import { OpsGuidePanel } from '@/components/opsTwin/ops-guide-panel';
+import { OpsTopologyPanel } from '@/components/opsTwin/ops-topology-panel';
 import { Server, ExternalLink } from 'lucide-react';
 import { runtimeSteps } from '@/lib/opsTwin/agentRuntime';
 import { applyPatch, createInitialContext, exportContext, replayFromEventLog } from '@/lib/opsTwin/contextStore';
@@ -82,7 +83,9 @@ const studioCopy: Record<
     mcpPlayground: string;
     a2aRuntime: string;
     remoteExecution: string;
+    llmReasoning: string;
     remoteHint: string;
+    llmHint: string;
     runHistory: string;
     restorePlaceholder: string;
     historyHint: string;
@@ -95,8 +98,10 @@ const studioCopy: Record<
     mcpPlayground: 'MCP Server Playground',
     a2aRuntime: 'A2A Runtime',
     remoteExecution: 'Remote agent execution',
+    llmReasoning: 'LLM-native reasoning',
     remoteHint:
       'When enabled, non-orchestrator agents are routed through `/api/a2a/inbox` and shown as remote transport in thread logs.',
+    llmHint: 'When enabled, remote agents append model-based rationale (Qwen if configured; otherwise deterministic fallback).',
     runHistory: 'Run History',
     restorePlaceholder: 'Restore previous run',
     historyHint: 'Stored locally (max 5 runs). Each run keeps full context + event log.'
@@ -108,7 +113,9 @@ const studioCopy: Record<
     mcpPlayground: 'MCP 服务器演示台',
     a2aRuntime: 'A2A 运行层',
     remoteExecution: '远程 Agent 执行',
+    llmReasoning: 'LLM-native 推理',
     remoteHint: '开启后，非 orchestrator 的 agent 会通过 `/api/a2a/inbox` 远程路由，并在线程中显示 remote 传输信息。',
+    llmHint: '开启后，远程 agent 会追加模型推理说明（已配置通义千问时调用，否则使用确定性兜底）。',
     runHistory: '运行历史',
     restorePlaceholder: '恢复历史运行',
     historyHint: '本地最多保留 5 条历史，每条都包含完整 context 与 event log。'
@@ -120,8 +127,10 @@ const studioCopy: Record<
     mcpPlayground: 'MCP Server Playground',
     a2aRuntime: 'A2A Runtime',
     remoteExecution: 'Remote-Agent-Ausführung',
+    llmReasoning: 'LLM-native Reasoning',
     remoteHint:
       'Wenn aktiviert, werden Nicht-Orchestrator-Agenten über `/api/a2a/inbox` geroutet und im Thread als Remote-Transport markiert.',
+    llmHint: 'Wenn aktiviert, ergänzen Remote-Agenten modellbasierte Begründungen (Qwen bei Konfiguration, sonst deterministischer Fallback).',
     runHistory: 'Run-Historie',
     restorePlaceholder: 'Früheren Lauf laden',
     historyHint: 'Lokal gespeichert (max. 5 Läufe). Jeder Lauf enthält vollständigen Context und Event-Log.'
@@ -137,6 +146,7 @@ export function OpsTwinStudio({ locale }: { locale: Locale }) {
   const [selectedMessage, setSelectedMessage] = useState<AgentMessage | null>(null);
   const [history, setHistory] = useState<RunHistoryItem[]>([]);
   const [a2aRemoteMode, setA2aRemoteMode] = useState(true);
+  const [llmReasoningMode, setLlmReasoningMode] = useState(false);
 
   useEffect(() => {
     setHistory(loadHistory());
@@ -224,7 +234,8 @@ export function OpsTwinStudio({ locale }: { locale: Locale }) {
         context: nextContext,
         baseSeed: seed,
         stepId: step.id,
-        runRemote: a2aRemoteMode
+        runRemote: a2aRemoteMode,
+        llmReasoning: llmReasoningMode
       });
 
       const runResult = routed.result;
@@ -245,7 +256,8 @@ export function OpsTwinStudio({ locale }: { locale: Locale }) {
               transport: routed.transport,
               latencyMs: routed.latencyMs,
               remoteEndpoint: routed.endpoint,
-              deliveryStatus: routed.deliveryStatus
+              deliveryStatus: routed.deliveryStatus,
+              retryCount: routed.retryCount
             },
             eventIds,
             i * 10 + msgIdx + 1
@@ -392,6 +404,16 @@ export function OpsTwinStudio({ locale }: { locale: Locale }) {
               />
             </label>
             <p className="mt-2 text-xs text-ink/65">{copy.remoteHint}</p>
+            <label className="mt-3 flex items-center justify-between rounded border border-ink/15 px-2 py-2 text-sm">
+              <span>{copy.llmReasoning}</span>
+              <input
+                type="checkbox"
+                checked={llmReasoningMode}
+                onChange={(e) => setLlmReasoningMode(e.target.checked)}
+                aria-label="Toggle LLM-native reasoning mode"
+              />
+            </label>
+            <p className="mt-2 text-xs text-ink/65">{copy.llmHint}</p>
           </section>
 
           <section className="noise-border rounded-lg p-4">
@@ -424,6 +446,7 @@ export function OpsTwinStudio({ locale }: { locale: Locale }) {
         </div>
 
         <div className="space-y-4 xl:col-span-4">
+          <OpsTopologyPanel locale={locale} messages={messages} />
           <OpsTwinContextPanel
             context={context}
             onExport={() => {
