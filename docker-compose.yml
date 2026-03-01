@@ -10,8 +10,10 @@ services:
     environment:
       - NODE_ENV=production
       - NOTES_DATA_FILE=/data/notes-captures.json
+      - VENDOR_INTEL_SIGNALS_FILE=/runtime-data/vendor-intelligence/signals.json
     volumes:
       - notes_data:/data
+      - ./runtime-data:/runtime-data
 
   caddy:
     image: caddy:2.8-alpine

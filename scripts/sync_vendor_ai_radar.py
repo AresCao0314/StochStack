@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Daily sync for vendor/literature AI signals into src/content/vendor-intelligence/signals.json.
+"""Daily sync for vendor/literature AI signals into runtime data path.
 
 - Pulls RSS/Atom feeds from source-manifest.json
 - Applies keyword matching to scenarios and technologies
@@ -140,7 +140,7 @@ def build_signals(manifest: dict[str, Any], timeout: int, limit_per_feed: int) -
 def main() -> int:
     parser = argparse.ArgumentParser(description="Sync vendor/literature AI signals for radar prototype")
     parser.add_argument("--manifest", default="src/content/vendor-intelligence/source-manifest.json")
-    parser.add_argument("--output", default="src/content/vendor-intelligence/signals.json")
+    parser.add_argument("--output", default="runtime-data/vendor-intelligence/signals.json")
     parser.add_argument("--timeout", type=int, default=12)
     parser.add_argument("--limit-per-feed", type=int, default=8)
     args = parser.parse_args()

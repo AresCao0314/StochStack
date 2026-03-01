@@ -75,18 +75,38 @@ python3 scripts/fetch_ctgov_site_feasibility.py --page-size 100 --max-pages 4 --
 
 - Script: `scripts/sync_vendor_ai_radar.py`
 - Feed manifest: `src/content/vendor-intelligence/source-manifest.json`
-- Output: `src/content/vendor-intelligence/signals.json`
+- Runtime output (recommended): `runtime-data/vendor-intelligence/signals.json`
+- App runtime read path: `VENDOR_INTEL_SIGNALS_FILE` (default in Docker: `/runtime-data/vendor-intelligence/signals.json`)
 
 Manual run:
 
 ```bash
-python3 scripts/sync_vendor_ai_radar.py --timeout 12 --limit-per-feed 8
+python3 scripts/sync_vendor_ai_radar.py --output runtime-data/vendor-intelligence/signals.json --timeout 12 --limit-per-feed 8
 ```
 
 Notes:
 - Scenario and technology mapping is keyword-based (editable in manifest).
 - Supports both vendor updates and literature signals via RSS/Atom feeds.
 - The existing daily refresh script now includes this sync before container rebuild.
+- Runtime signal data is intentionally stored outside Git-tracked content to avoid `git pull` conflicts on server.
+
+## Runtime Data (Recommended Ops Mode)
+
+- Use `runtime-data/` for mutable operational data generated on server.
+- `runtime-data/` is gitignored locally and should persist on server disk.
+- Current runtime data paths:
+  - Vendor radar signals: `runtime-data/vendor-intelligence/signals.json`
+
+One-time server migration:
+
+```bash
+cd /root/stochstack-site
+mkdir -p runtime-data/vendor-intelligence
+if [ -f src/content/vendor-intelligence/signals.json ] && [ ! -f runtime-data/vendor-intelligence/signals.json ]; then
+  cp src/content/vendor-intelligence/signals.json runtime-data/vendor-intelligence/signals.json
+fi
+docker compose up -d --build
+```
 
 ## Protocol PDF Auto-Extraction (Qwen)
 

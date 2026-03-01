@@ -6,3 +6,4 @@ out
 .env.local
 legacy/**/.venv/
 legacy/**/__pycache__/
+runtime-data/

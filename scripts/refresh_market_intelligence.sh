@@ -8,6 +8,7 @@ LEGACY_DIR="$PROJECT_DIR/legacy/MarketIntelligenceForHighscore"
 FETCH_SCRIPT="$LEGACY_DIR/scripts/fetch_news.py"
 CTGOV_SYNC_SCRIPT="$PROJECT_DIR/scripts/fetch_ctgov_site_feasibility.py"
 VENDOR_RADAR_SYNC_SCRIPT="$PROJECT_DIR/scripts/sync_vendor_ai_radar.py"
+VENDOR_SIGNALS_OUTPUT="$PROJECT_DIR/runtime-data/vendor-intelligence/signals.json"
 LEGACY_DATA_DIR="$LEGACY_DIR/data"
 TARGET_DATA_DIR="$PROJECT_DIR/src/content/market-intelligence"
 
@@ -45,7 +46,7 @@ mkdir -p "$(dirname "$LOG_FILE")"
 
   echo "[INFO] syncing vendor intelligence radar feeds..."
   if [ -f "$VENDOR_RADAR_SYNC_SCRIPT" ]; then
-    /usr/bin/python3 "$VENDOR_RADAR_SYNC_SCRIPT" --timeout 12 --limit-per-feed 8 || \
+    /usr/bin/python3 "$VENDOR_RADAR_SYNC_SCRIPT" --output "$VENDOR_SIGNALS_OUTPUT" --timeout 12 --limit-per-feed 8 || \
       echo "[WARN] vendor radar sync failed, keep previous vendor-intelligence dataset."
   else
     echo "[WARN] vendor radar sync script not found: $VENDOR_RADAR_SYNC_SCRIPT"
