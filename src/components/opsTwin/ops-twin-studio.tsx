@@ -7,6 +7,7 @@ import { OpsTwinDiffDrawer } from '@/components/opsTwin/diff-drawer';
 import { OpsTwinContextPanel } from '@/components/opsTwin/context-panel';
 import { OpsTwinSimulationPanel } from '@/components/opsTwin/simulation-panel';
 import { McpStatusPanel } from '@/components/opsTwin/mcp-status-panel';
+import { Server, ExternalLink } from 'lucide-react';
 import { runtimeSteps } from '@/lib/opsTwin/agentRuntime';
 import { applyPatch, createInitialContext, exportContext, replayFromEventLog } from '@/lib/opsTwin/contextStore';
 import { buildCalibrationPatches } from '@/lib/opsTwin/sim/calibration';
@@ -251,7 +252,18 @@ export function OpsTwinStudio() {
   return (
     <div className="space-y-6">
       <header className="space-y-3">
-        <p className="section-title">ops digital twin</p>
+        <div className="flex items-center gap-3">
+          <p className="section-title">ops digital twin</p>
+          <span className="text-ink/30">|</span>
+          <a 
+            href="/en/ops-twin/mcp-demo" 
+            className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 hover:underline"
+          >
+            <Server className="h-3.5 w-3.5" />
+            MCP Server Playground
+            <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
         <h1 className="text-4xl font-bold leading-tight md:text-6xl">Site Start-up + Recruitment Simulation Ops Twin</h1>
         <p className="max-w-3xl text-lg text-ink/70">A2A x MCP in Clinical Ops Digital Twin</p>
       </header>

@@ -13,7 +13,7 @@ import {
   type Resource,
 } from '@modelcontextprotocol/sdk/types.js';
 import type { IncomingMessage, ServerResponse } from 'http';
-import type { ContextRoot, ScenarioInput, RunHistoryItem } from '@/lib/opsTwin/types';
+import type { AgentMessage, ContextRoot, ScenarioInput, RunHistoryItem } from '@/lib/opsTwin/types';
 import { createInitialContext, applyPatch, replayFromEventLog } from '@/lib/opsTwin/contextStore';
 import { runtimeSteps } from '@/lib/opsTwin/agentRuntime';
 import { createRng, hashToSeed } from '@/lib/opsTwin/sim/seeded';
@@ -323,7 +323,13 @@ async function handleRunSimulation(args: unknown): Promise<TextContent[]> {
       dropout_rate: z.number().default(0.18),
       competition_index: z.number().default(0.5),
       patient_pool_index: z.number().default(0.6),
-    }).default({}),
+    }).default({
+      avg_startup_days: 75,
+      screen_fail_rate: 0.35,
+      dropout_rate: 0.18,
+      competition_index: 0.5,
+      patient_pool_index: 0.6
+    }),
     deterministicSeed: z.boolean().default(true),
   });
 
@@ -358,7 +364,7 @@ async function handleRunSimulation(args: unknown): Promise<TextContent[]> {
   const rng = createRng(seed);
 
   let context = createInitialContext(input, runId, seed);
-  const messages: { agent: string; role: string; text: string }[] = [];
+  const messages: Omit<AgentMessage, 'id' | 'timestamp' | 'eventIds'>[] = [];
 
   // Run all agent steps
   for (const step of runtimeSteps) {
@@ -369,11 +375,7 @@ async function handleRunSimulation(args: unknown): Promise<TextContent[]> {
     }
     
     for (const msg of result.messages) {
-      messages.push({
-        agent: msg.agent,
-        role: msg.role,
-        text: msg.text,
-      });
+      messages.push(msg);
     }
   }
 
