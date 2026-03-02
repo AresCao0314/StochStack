@@ -19,8 +19,11 @@ export function isLocale(value: string): value is Locale {
   return locales.includes(value as Locale);
 }
 
-export function getDictionary(locale: Locale): Dictionary {
-  return dictionaries[locale];
+export function getDictionary(locale: Locale | string): Dictionary {
+  if (isLocale(locale)) {
+    return dictionaries[locale];
+  }
+  return dictionaries.en;
 }
 
 export function t(locale: Locale) {
