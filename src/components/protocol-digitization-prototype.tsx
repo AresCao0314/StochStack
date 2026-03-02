@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import { ClipboardCopy, FileUp, GitBranch, ShieldCheck } from 'lucide-react';
 import type { Locale } from '@/lib/i18n';
 
@@ -131,6 +132,11 @@ export function ProtocolDigitizationPrototype({ locale, samples }: { locale: Loc
         <p className="section-title">prototype 11</p>
         <h1 className="text-4xl font-bold md:text-6xl">{t.title}</h1>
         <p className="max-w-4xl text-ink/75">{t.subtitle}</p>
+        <div>
+          <Link href={`/${locale}/workflow`} className="scanline inline-flex rounded border border-ink/20 px-3 py-2 text-xs">
+            Open Workflow MVP+
+          </Link>
+        </div>
       </header>
 
       <section className="noise-border rounded-lg p-4">

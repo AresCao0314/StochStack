@@ -4,7 +4,21 @@ import { getNotes, getPorts } from '@/lib/content';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = 'https://stochstack.com';
-  const staticPaths = ['', '/prototypes', '/notes', '/life/books', '/about', '/contact', '/signal', '/ops-twin', '/ops-twin/eval'];
+  const staticPaths = [
+    '',
+    '/prototypes',
+    '/notes',
+    '/life/books',
+    '/about',
+    '/contact',
+    '/signal',
+    '/ops-twin',
+    '/ops-twin/eval',
+    '/workflow',
+    '/documents',
+    '/runs',
+    '/diff'
+  ];
 
   const routes = locales.flatMap((locale) =>
     staticPaths.map((path) => ({

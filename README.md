@@ -30,7 +30,69 @@ npm run start
 npm run lint
 npm run format
 npm run typecheck
+npm run test
+npm run prisma:generate
+npm run prisma:migrate
+npm run db:seed
 ```
+
+## Historical Protocol Digitizer MVP+ (Workflow)
+
+This repo now includes an upgraded, database-backed workflow for the Historical Protocol Digitizer:
+
+- Workflow status machine: `/{locale}/workflow/{studyId}`
+- Documents list: `/{locale}/documents`
+- Runs list: `/{locale}/runs`
+- Review workbench: `/{locale}/review/{runId}`
+- Validation report: `/{locale}/validate/{runId}`
+- USDM artifact: `/{locale}/artifact/usdm/{runId}`
+- DDF artifact: `/{locale}/artifact/ddf/{runId}`
+- Diff console: `/{locale}/diff`
+- Impact list: `/{locale}/impact/{changeSetId}`
+- Feedback intake: `/{locale}/feedback/{studyId}`
+- Ops evidence view: `/{locale}/ops/{studyId}`
+
+### Setup
+
+1. Configure database:
+
+```bash
+cp .env.example .env.local
+```
+
+2. Run Prisma:
+
+```bash
+npm run prisma:generate
+npm run prisma:migrate
+npm run db:seed
+```
+
+3. Start app:
+
+```bash
+npm run dev
+```
+
+4. Open:
+
+```text
+http://localhost:3000/en/workflow
+```
+
+### Supported Inputs / Rules / Loop
+
+- Inputs:
+  - protocol text ingestion (or file text payload)
+  - amendment CSV import (`date,category,description`)
+- Validation rules (MVP):
+  - required structure checks
+  - endpoint vs SoA consistency checks
+  - visit window/order sanity checks
+  - lightweight template checks (objectives/safety)
+- Closed loop:
+  - feedback amendments linked to USDM paths
+  - ops cards aggregate which design areas repeatedly trigger operational changes
 
 ## Optional LLM Setup (Qwen)
 

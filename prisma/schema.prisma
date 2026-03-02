@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Study {
+  id         String           @id @default(cuid())
+  name       String
+  indication String
+  phase      String
+  createdAt  DateTime         @default(now())
+  documents  Document[]
+  runs       ExtractionRun[]
+  feedback   FeedbackAmendment[]
+}
+
+model Document {
+  id          String          @id @default(cuid())
+  studyId     String
+  type        String
+  filename    String
+  mimeType    String
+  versionTag  String
+  uploadedAt  DateTime        @default(now())
+  textExtract String?
+  study       Study           @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  runs        ExtractionRun[]
+}
+
+model ExtractionRun {
+  id            String           @id @default(cuid())
+  studyId       String
+  documentId    String
+  status        String           @default("queued")
+  modelName     String
+  promptVersion String
+  startedAt     DateTime?
+  finishedAt    DateTime?
+  study         Study            @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  document      Document         @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  fields        ExtractedField[]
+  usdmArtifact  USDMArtifact?
+  ddfArtifact   DDFArtifact?
+
+  @@index([studyId])
+  @@index([documentId])
+}
+
+model ExtractedField {
+  id            String         @id @default(cuid())
+  runId          String
+  path           String
+  value          String
+  confidence     Float
+  evidence       String
+  reviewerState  String        @default("pending")
+  reviewerEdits  String?
+  reviewReason   String?
+  run            ExtractionRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+  @@index([path])
+}
+
+model USDMArtifact {
+  id            String        @id @default(cuid())
+  runId          String        @unique
+  usdmJson       String
+  schemaVersion  String
+  generatedAt    DateTime      @default(now())
+  run            ExtractionRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+}
+
+model DDFArtifact {
+  id            String        @id @default(cuid())
+  runId          String        @unique
+  ddfJson        String
+  generatedAt    DateTime      @default(now())
+  run            ExtractionRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+}
+
+model ChangeSet {
+  id           String   @id @default(cuid())
+  baseRunId    String
+  compareRunId String
+  summary      String
+  changes      String
+  generatedAt  DateTime @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actor      String
+  action     String
+  entityType String
+  entityId   String
+  payload    String
+  createdAt  DateTime @default(now())
+}
+
+model FeedbackAmendment {
+  id              String            @id @default(cuid())
+  studyId          String
+  amendmentDate    DateTime
+  category         String
+  description      String
+  linkedUsdmPaths  String
+  createdAt        DateTime          @default(now())
+  study            Study             @relation(fields: [studyId], references: [id], onDelete: Cascade)
+
+  @@index([studyId])
+}

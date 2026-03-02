@@ -10,18 +10,24 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "mcp:test": "./scripts/test-mcp.sh",
-    "mcp:setup": "echo 'Add this to your Claude Desktop config:' && cat mcp-config/claude-desktop-config.json"
+    "mcp:setup": "echo 'Add this to your Claude Desktop config:' && cat mcp-config/claude-desktop-config.json",
+    "test": "vitest run",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "rm -f prisma/dev.db prisma/dev.db-journal && sqlite3 prisma/dev.db < prisma/migrations/20260302120000_init/migration.sql",
+    "db:seed": "prisma db seed"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/space-grotesk": "^5.2.10",
     "@modelcontextprotocol/sdk": "^1.27.1",
+    "@prisma/client": "^5.22.0",
     "@types/pdf-parse": "^1.1.5",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.525.0",
     "next": "^14.2.21",
     "next-themes": "^0.3.0",
     "pdf-parse": "^2.4.5",
+    "prisma": "^5.22.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "yaml": "^2.8.2",
@@ -38,6 +44,11 @@
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.9",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2"
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.2",
+    "vitest": "^4.0.18"
+  },
+  "prisma": {
+    "seed": "node scripts/seed.js"
   }
 }

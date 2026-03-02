@@ -2,6 +2,27 @@
 
 All notable repository-level changes are tracked here for review.
 
+## 2026-03-02
+
+### Historical Protocol Digitizer MVP+ Workflow Upgrade
+- Added SQLite + Prisma-backed workflow data model for Study / Document / ExtractionRun / ExtractedField / USDMArtifact / DDFArtifact / ChangeSet / AuditLog / FeedbackAmendment.
+- Added migration and seed flow (`prisma/schema.prisma`, `prisma/migrations/*`, `scripts/seed.ts`).
+- Added workflow APIs for ingest, extraction run lifecycle, review actions, validation, publish, diff, impact export, and feedback import/linking.
+- Added new product pages:
+  - `/{locale}/workflow/{studyId}` status-machine workflow page
+  - `/{locale}/review/{runId}` human-in-the-loop review workbench
+  - `/{locale}/validate/{runId}` validation report page
+  - `/{locale}/diff` + `/{locale}/impact/{changeSetId}` object diff and impact list
+  - `/{locale}/feedback/{studyId}` amendment CSV intake and USDM path linking
+  - `/{locale}/ops/{studyId}` design-to-ops evidence cards
+  - `/{locale}/artifact/usdm/{runId}` and `/{locale}/artifact/ddf/{runId}` previews + export
+- Added documentation:
+  - `docs/ARCHITECTURE.md`
+  - `docs/DEMO_GUIDE.md`
+- Added minimal automated tests for validation and diff logic (`tests/protocol-workflow.test.ts`).
+- **User-visible**: protocol digitizer now supports explainable extraction review, versioned comparison, and feedback loop demo.
+- **Operational**: requires `DATABASE_URL` and Prisma migrate/seed before first run.
+
 
 ### Ops Twin Eval Console v0.5.0
 - Added `/[locale]/ops-twin/eval` evaluation workspace with agent scorecards (accuracy, bias, stability, adoption).
@@ -11,6 +32,17 @@ All notable repository-level changes are tracked here for review.
 - **User-visible**: business reviewers can now inspect agent quality, compare versions, and submit structured feedback.
 - **Operational**: currently mock-data based (`src/content/ops-eval/agent-scorecards.json`) and ready to swap with runtime data source.
 ## 2026-03-01
+
+### Data Foundation Architecture Visualization
+- Added comprehensive Data Foundation article mapping three projects (Clinical Authoring 2.0, Site Feasibility, Trial Simulation) to six-layer architecture.
+- Created interactive visualization component (`src/components/data-foundation-visualization.tsx`) with:
+  - Project selector toggle (Authoring/Feasibility/Simulation)
+  - Expandable layer cards showing data objects, owners, compliance, KPIs
+  - Architecture diagram showing data flow across layers
+  - Unified governance fields reference
+- Added article page at `/signal/data-foundation` with full visualization.
+- Added preview card on Signal Logs main page.
+- **User-visible**: New Signal Logs article with interactive data architecture visualization.
 
 ### MCP Server Integration v0.3.0
 - Added full MCP (Model Context Protocol) Server implementation (`src/mcp/server.ts`).
