@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import type { Document, Study } from '@prisma/client';
 import { db } from '@/lib/protocolWorkflow/db';
 
 export const dynamic = 'force-dynamic';
@@ -22,7 +23,7 @@ export default async function DocumentsPage({ params }: { params: { locale: stri
         <p className="mt-2 text-sm text-ink/70">Business view: every source document version used in extraction is tracked here.</p>
       </section>
       <section className="space-y-2">
-        {docs.map((doc) => (
+        {docs.map((doc: Document & { study: Study }) => (
           <article key={doc.id} className="noise-border rounded-lg p-4 text-sm">
             <p className="font-semibold">{doc.filename}</p>
             <p className="text-xs text-ink/60">{doc.type} · {doc.versionTag} · {new Date(doc.uploadedAt).toLocaleString()}</p>
