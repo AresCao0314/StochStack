@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import type { Document, ExtractionRun, Study } from '@prisma/client';
 import { db } from '@/lib/protocolWorkflow/db';
 
 export const dynamic = 'force-dynamic';
@@ -11,10 +10,21 @@ export const metadata: Metadata = {
 };
 
 export default async function RunsPage({ params }: { params: { locale: string } }) {
-  const runs = await db.extractionRun.findMany({
+  const runs = (await db.extractionRun.findMany({
     include: { study: true, document: true },
     orderBy: { startedAt: 'desc' }
-  });
+  })) as Array<{
+    id: string;
+    studyId: string;
+    documentId: string;
+    status: string;
+    modelName: string;
+    promptVersion: string;
+    startedAt: Date | null;
+    finishedAt: Date | null;
+    study: { name: string };
+    document: { filename: string };
+  }>;
 
   return (
     <div className="space-y-4">
@@ -23,7 +33,7 @@ export default async function RunsPage({ params }: { params: { locale: string } 
         <p className="mt-2 text-sm text-ink/70">Business view: each extraction run is versioned with state transitions from review to publish.</p>
       </section>
       <section className="space-y-2">
-        {runs.map((run: ExtractionRun & { study: Study; document: Document }) => (
+        {runs.map((run) => (
           <article key={run.id} className="noise-border rounded-lg p-4 text-sm">
             <p className="font-semibold">{run.study.name} · {run.id.slice(0, 8)}</p>
             <p className="text-xs text-ink/60">{run.status} · model={run.modelName} · prompt={run.promptVersion}</p>

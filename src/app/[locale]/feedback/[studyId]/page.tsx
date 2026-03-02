@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import type { FeedbackAmendment } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import { FeedbackWorkbench } from '@/components/protocolWorkflow/feedback-workbench';
 import { WorkflowNav } from '@/components/protocolWorkflow/workflow-nav';
@@ -41,7 +40,7 @@ export default async function FeedbackPage({ params }: { params: { locale: strin
       <FeedbackWorkbench
         locale={params.locale}
         studyId={study.id}
-        initialRows={study.feedback.map((item: FeedbackAmendment) => ({
+        initialRows={study.feedback.map((item) => ({
           ...item,
           linkedUsdmPaths: JSON.parse(item.linkedUsdmPaths || '[]')
         }))}
