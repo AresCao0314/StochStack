@@ -4,6 +4,7 @@ const de = {
   nav: {
     home: 'Start',
     prototypes: 'Prototypen',
+    ventures: 'Ventures',
     notes: 'Notizen',
     life: 'Leben',
     about: 'Über',
@@ -14,10 +15,29 @@ const de = {
     heroSubtitle: 'Experimentelle Systeme zwischen Idee, Methodik und Anwendung.',
     cards: [
       { title: 'Prototypen', hint: '> Prototyp öffnen' },
+      { title: 'Ventures', hint: '> Venture öffnen' },
       { title: 'Notizen', hint: '> Log lesen' },
       { title: 'Leben', hint: '> Signal ansehen' }
     ],
     portsTitle: 'Prototype Ports'
+  },
+  ventures: {
+    title: 'Venture-Systeme',
+    subtitle: 'Komplexe, schwere Systeme in isolierter Laufzeitumgebung.',
+    cards: [
+      {
+        title: 'Protocol OS (Decision-Centric)',
+        summary: 'Design Graph + Policy Scoring + Skill Swarm + nachvollziehbare Exporte.',
+        href: 'https://labs.stochstack.com/de/projects',
+        cta: 'Im Labs-Subnetz öffnen'
+      },
+      {
+        title: 'Lokaler Spiegel',
+        summary: 'Fallback-Route für Demo-Kontinuität, falls Labs nicht erreichbar ist.',
+        href: '/projects',
+        cta: 'Lokalen Spiegel öffnen'
+      }
+    ]
   },
   common: {
     filterByTag: 'Nach Tag filtern',

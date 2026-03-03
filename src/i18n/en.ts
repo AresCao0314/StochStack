@@ -4,6 +4,7 @@ const en = {
   nav: {
     home: 'Home',
     prototypes: 'Prototypes',
+    ventures: 'Ventures',
     notes: 'Notes',
     life: 'Life',
     about: 'About',
@@ -14,10 +15,29 @@ const en = {
     heroSubtitle: 'Signal-first experiments for ideas, systems, and human workflows.',
     cards: [
       { title: 'Prototypes', hint: '> open prototype' },
+      { title: 'Ventures', hint: '> open venture' },
       { title: 'Notes', hint: '> read log' },
       { title: 'Life', hint: '> view signal' }
     ],
     portsTitle: 'Prototype Ports'
+  },
+  ventures: {
+    title: 'Venture Systems',
+    subtitle: 'Heavyweight, decision-centric systems deployed in an isolated runtime.',
+    cards: [
+      {
+        title: 'Protocol OS (Decision-Centric)',
+        summary: 'Design graph + policy scoring + skill swarm + traceable exports.',
+        href: 'https://labs.stochstack.com/en/projects',
+        cta: 'Open on labs'
+      },
+      {
+        title: 'Fallback Mirror',
+        summary: 'Local mirror route for demo continuity when labs is unavailable.',
+        href: '/projects',
+        cta: 'Open local mirror'
+      }
+    ]
   },
   common: {
     filterByTag: 'Filter by tag',

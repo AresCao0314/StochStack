@@ -4,6 +4,7 @@ const zh = {
   nav: {
     home: '首页',
     prototypes: '原型',
+    ventures: 'Ventures',
     notes: '笔记',
     life: '生活',
     about: '关于',
@@ -14,10 +15,29 @@ const zh = {
     heroSubtitle: '以信号为核心的实验场，连接概念、系统与人的工作流。',
     cards: [
       { title: '原型入口', hint: '> 打开原型' },
+      { title: 'Ventures 系统', hint: '> 打开 Ventures' },
       { title: '信号笔记', hint: '> 阅读日志' },
       { title: '生活切片', hint: '> 查看信号' }
     ],
     portsTitle: 'Prototype Ports'
+  },
+  ventures: {
+    title: 'Ventures 系统',
+    subtitle: '面向复杂业务的大型系统，部署在隔离运行环境中。',
+    cards: [
+      {
+        title: 'Protocol OS（决策中枢）',
+        summary: 'Design Graph + Policy Scoring + Skill Swarm + 可追溯导出。',
+        href: 'https://labs.stochstack.com/zh/projects',
+        cta: '打开 labs 子域'
+      },
+      {
+        title: '本地镜像入口',
+        summary: '当 labs 子域不可用时，可用主站镜像路径继续演示。',
+        href: '/projects',
+        cta: '打开本地镜像'
+      }
+    ]
   },
   common: {
     filterByTag: '按标签筛选',
