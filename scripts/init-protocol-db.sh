@@ -19,7 +19,9 @@ study_count="$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM Study;" 2>/dev/null || e
 
 if [ "$study_count" = "0" ]; then
   echo "[init-db] seeding demo data"
-  node /app/scripts/seed.js
+  if ! node /app/scripts/seed.js; then
+    echo "[init-db] warning: seed failed, continue startup without demo seed data"
+  fi
 else
   echo "[init-db] existing Study rows=$study_count, skip seed"
 fi
