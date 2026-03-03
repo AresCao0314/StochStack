@@ -147,3 +147,23 @@ All notable repository-level changes are tracked here for review.
   - scope
   - user-visible behavior changes
   - operational/deployment impact
+
+## 2026-03-03
+
+### Protocol OS Lite v0.6.0
+- Added five decision-critical design checks in one-page Lite flow:
+  - Medical Need Framing
+  - Endpoint + Estimand Alignment
+  - Eligibility Impact Simulation
+  - SoA Burden Quantification
+  - Operational Risk Gates
+- Added in-page agent runtime with two layers:
+  - Functional agents (need framing, estimand, eligibility impact, burden, gates)
+  - Role-review agents (medical, stats, clinops, regulatory)
+- Added optional Tongyi Qwen reasoning path for agent outputs via `/api/protocol-os-lite/reason`:
+  - uses `DASHSCOPE_API_KEY` + `QWEN_MODEL` when configured
+  - automatically falls back to local deterministic reasoning when unavailable
+- Enhanced chapter drafting with placeholder-driven templates and auto-filled narrative aligned to protocol drafting tone.
+- Added persistent product update log section at the bottom of the Lite page for demo traceability.
+- **User-visible**: richer decision workflow, clearer agent transparency, and stronger end-to-end draft credibility in a single page.
+- **Operational**: no new database dependency for Lite mode; optional external LLM call only when key is configured.
