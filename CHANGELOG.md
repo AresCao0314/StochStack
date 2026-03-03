@@ -148,7 +148,43 @@ All notable repository-level changes are tracked here for review.
   - user-visible behavior changes
   - operational/deployment impact
 
+## 2026-03-04
+
+### Protocol OS Lite v0.9.0
+- Implemented full dynamic three-layer calibration loop:
+  - Sliding-window recomputation from latest N feedback samples
+  - Scenario-specific weights by `TA|Phase|Region`
+  - Auto strategy switch (`normal` / `conservative` / `backup`) based on reject-rate threshold
+- Added scenario controls (Phase, Region) and visible scenario key in UI.
+- Added dynamic calibration controls:
+  - window size N
+  - reject threshold
+  - minimum feedback samples for strategy switch
+- Agent logs now show both applied weight and applied strategy for each run.
+- Next-run comparison now scopes to the same scenario for valid before/after interpretation.
+- **User-visible**: explicit and testable “feedback -> dynamic weight/strategy adjustment -> scenario-scoped result shift”.
+- **Operational**: frontend-resident runtime-data behavior preserved; no DB dependency added.
+
 ## 2026-03-03
+
+### Protocol OS Lite v0.8.0
+- Added visible feedback loop controls per agent in Lite page:
+  - `Accept`
+  - `Reject` with reason tags
+- Added per-agent adaptive weighting with bounded updates and acceptance/rejection counters.
+- Added run-to-run comparison panel showing score drift (`Plan A/B`) after feedback and re-run.
+- Feedback-calibrated weights now influence subsequent plan scoring for observable behavior change.
+- **User-visible**: explicit “反馈 -> 权重变化 -> 下次结果对比” path is now operable in one page.
+- **Operational**: still mock-safe and frontend-resident for Lite mode; no backend database dependency.
+
+### Protocol OS Lite v0.7.0
+- Added explicit two-stage drafting flow in Lite mode:
+  - `Generate Synopsis`
+  - `Expand to Full Protocol`
+- Added stage gating so export only proceeds after both synopsis and full draft are generated.
+- Added synopsis object into traceability export payload for auditable handoff between stages.
+- **User-visible**: workflow now mirrors real protocol authoring practice (synopsis first, then full protocol).
+- **Operational**: still frontend-only for Lite mode; no additional data store required.
 
 ### Protocol OS Lite v0.6.0
 - Added five decision-critical design checks in one-page Lite flow:

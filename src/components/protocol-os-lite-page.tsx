@@ -84,6 +84,34 @@ type AgentLog = {
   agent: string;
   output: string;
   provider: 'qwen' | 'local';
+  weightApplied: number;
+  strategyApplied: 'normal' | 'conservative' | 'backup';
+  feedbackStatus?: 'accepted' | 'rejected';
+  feedbackReason?: string;
+};
+
+type AgentProfile = {
+  weight: number;
+  acceptCount: number;
+  rejectCount: number;
+};
+
+type RunSnapshot = {
+  runId: string;
+  scenarioKey: string;
+  timestamp: string;
+  planScores: { A: number; B: number };
+  bestPlan: 'A' | 'B';
+  weightSnapshot: Record<string, number>;
+};
+
+type FeedbackEvent = {
+  id: string;
+  scenarioKey: string;
+  agent: string;
+  decision: 'accepted' | 'rejected';
+  reason?: string;
+  timestamp: string;
 };
 
 type TaDefaults = {
@@ -317,6 +345,36 @@ const CHAPTER_TEMPLATES = [
 
 const UPDATE_LOG = [
   {
+    version: 'v0.9.0',
+    date: '2026-03-04',
+    title: 'Fully dynamic feedback policy (3 layers)',
+    bullets: [
+      'Sliding-window profile recomputation on latest N feedback events.',
+      'Scenario-specific calibration by TA/Phase/Region.',
+      'Auto strategy switch (normal/conservative/backup) when reject rate crosses threshold.'
+    ]
+  },
+  {
+    version: 'v0.8.0',
+    date: '2026-03-04',
+    title: 'Visible feedback loop for agent calibration',
+    bullets: [
+      'Added per-agent Accept/Reject actions with reject reason tags.',
+      'Added dynamic agent weight updates and persisted profile counters.',
+      'Added next-run comparison panel to show score shifts after feedback.'
+    ]
+  },
+  {
+    version: 'v0.7.0',
+    date: '2026-03-03',
+    title: 'Two-stage drafting flow (Synopsis -> Full Protocol)',
+    bullets: [
+      'Added explicit two-stage generation: first Synopsis, then Expand to Full Protocol.',
+      'Export now requires both stages to be completed to reduce premature draft handoff.',
+      'Traceability export now includes synopsis snapshot plus full chapter content.'
+    ]
+  },
+  {
     version: 'v0.6.0',
     date: '2026-03-03',
     title: 'Decision-Centric upgrade with 5 key design checks',
@@ -333,6 +391,83 @@ const UPDATE_LOG = [
     bullets: ['Upgraded chapter drafting to template placeholders and SH/TransCelerate-style language.']
   }
 ] as const;
+
+const AGENT_NAMES = [
+  'MedicalNeedFramingAgent',
+  'EndpointEstimandAgent',
+  'EligibilityImpactAgent',
+  'SoABurdenAgent',
+  'OperationalGateAgent',
+  'MedicalReviewerAgent',
+  'StatsReviewerAgent',
+  'ClinOpsReviewerAgent',
+  'RegReviewerAgent'
+] as const;
+
+const REJECT_REASONS = [
+  'medical-inconsistent',
+  'stats-unreliable',
+  'ops-not-feasible',
+  'reg-risk-high',
+  'too-generic'
+] as const;
+
+const PHASE_OPTIONS = ['I', 'II', 'III'] as const;
+const REGION_OPTIONS = ['Global', 'US/EU', 'APAC/CN'] as const;
+
+function makeScenarioKey(ta: TherapeuticAreaKey, phase: string, region: string) {
+  return `${ta}|${phase}|${region}`;
+}
+
+function createDefaultAgentProfiles(): Record<string, AgentProfile> {
+  const entries = AGENT_NAMES.map((name) => [
+    name,
+    {
+      weight: 1,
+      acceptCount: 0,
+      rejectCount: 0
+    }
+  ]);
+  return Object.fromEntries(entries);
+}
+
+function recomputeProfilesForScenario(events: FeedbackEvent[], scenarioKey: string, windowSize: number) {
+  const base = createDefaultAgentProfiles();
+  const scoped = events.filter((event) => event.scenarioKey === scenarioKey).slice(-windowSize);
+
+  for (const event of scoped) {
+    const profile = base[event.agent] ?? { weight: 1, acceptCount: 0, rejectCount: 0 };
+    if (event.decision === 'accepted') {
+      profile.weight = Math.min(1.4, Number((profile.weight + 0.05).toFixed(2)));
+      profile.acceptCount += 1;
+    } else {
+      profile.weight = Math.max(0.6, Number((profile.weight - 0.08).toFixed(2)));
+      profile.rejectCount += 1;
+    }
+    base[event.agent] = profile;
+  }
+
+  return base;
+}
+
+function deriveAgentStrategies(
+  profiles: Record<string, AgentProfile>,
+  rejectThreshold: number,
+  minFeedbackForSwitch: number
+) {
+  const result: Record<string, { strategy: 'normal' | 'conservative' | 'backup'; rejectRate: number; samples: number }> = {};
+  for (const agentName of AGENT_NAMES) {
+    const profile = profiles[agentName] ?? { weight: 1, acceptCount: 0, rejectCount: 0 };
+    const samples = profile.acceptCount + profile.rejectCount;
+    const rejectRate = samples > 0 ? profile.rejectCount / samples : 0;
+    let strategy: 'normal' | 'conservative' | 'backup' = 'normal';
+    if (samples >= minFeedbackForSwitch && rejectRate >= rejectThreshold) {
+      strategy = rejectRate >= rejectThreshold + 0.2 ? 'backup' : 'conservative';
+    }
+    result[agentName] = { strategy, rejectRate, samples };
+  }
+  return result;
+}
 
 function applyTemplate(template: string, values: Record<string, string>) {
   return template.replace(/\{\{([A-Z0-9_]+)\}\}/g, (_, key: string) => values[key] ?? `{{${key}}}`);
@@ -440,7 +575,13 @@ function scorePolicies(gates: GateResult[], hasEvidence: boolean, conservativeBi
   };
 }
 
-function buildPlans(ta: TherapeuticAreaKey, brief: { objective: string; medicalNeed: string; constraints: string; success: string }, evidence: string[]): Plan[] {
+function buildPlans(
+  ta: TherapeuticAreaKey,
+  brief: { objective: string; medicalNeed: string; constraints: string; success: string },
+  evidence: string[],
+  agentProfiles: Record<string, AgentProfile>,
+  agentStrategies: Record<string, { strategy: 'normal' | 'conservative' | 'backup'; rejectRate: number; samples: number }>
+): Plan[] {
   const cfg = TA_DEFAULTS[ta];
   const hasEvidence = evidence.length > 0;
 
@@ -464,6 +605,28 @@ function buildPlans(ta: TherapeuticAreaKey, brief: { objective: string; medicalN
     });
 
     const policy = scorePolicies(gates, hasEvidence, conservative);
+    const medW = agentProfiles.MedicalReviewerAgent?.weight ?? 1;
+    const statsW = agentProfiles.StatsReviewerAgent?.weight ?? 1;
+    const opsW = agentProfiles.ClinOpsReviewerAgent?.weight ?? 1;
+    const regW = agentProfiles.RegReviewerAgent?.weight ?? 1;
+    const reviewerAvg = (medW + statsW + opsW + regW) / 4;
+    const weightShift = conservative
+      ? Math.round((reviewerAvg - 1) * 10)
+      : Math.round((1 - reviewerAvg) * 10);
+    const criticalAgents = [
+      'MedicalReviewerAgent',
+      'StatsReviewerAgent',
+      'ClinOpsReviewerAgent',
+      'RegReviewerAgent'
+    ] as const;
+    const strategyPenalty = criticalAgents.reduce((sum, name) => {
+      const strategy = agentStrategies[name]?.strategy ?? 'normal';
+      if (strategy === 'backup') return sum + 2;
+      if (strategy === 'conservative') return sum + 1;
+      return sum;
+    }, 0);
+    const strategyShift = conservative ? strategyPenalty * 2 : strategyPenalty * -3;
+    const weightedScore = Math.max(35, Math.min(99, policy.score + weightShift + strategyShift));
 
     const conflicts: Array<{ severity: Severity; message: string }> = [];
     for (const gate of gates) {
@@ -478,9 +641,13 @@ function buildPlans(ta: TherapeuticAreaKey, brief: { objective: string; medicalN
     return {
       id,
       label: conservative ? 'Plan A · Conservative' : 'Plan B · Aggressive',
-      score: policy.score,
+      score: weightedScore,
       hardPass: !policy.hardFail,
-      policyNotes: policy.notes,
+      policyNotes: [
+        ...policy.notes,
+        `Feedback weight shift: ${weightShift >= 0 ? '+' : ''}${weightShift} (reviewer weight avg ${reviewerAvg.toFixed(2)})`,
+        `Strategy shift: ${strategyShift >= 0 ? '+' : ''}${strategyShift} (auto strategy penalty index ${strategyPenalty})`
+      ],
       conflicts: conflicts.length > 0 ? conflicts : [{ severity: 'low', message: 'No material policy conflicts detected.' }],
       nodes: [
         {
@@ -572,7 +739,7 @@ async function getAgentReasoning(params: {
   }
 }
 
-function buildChapterContent(selectedPlan: Plan | null, ta: TherapeuticAreaKey, brief: { objective: string; medicalNeed: string; constraints: string; success: string }) {
+function buildChapterContent(selectedPlan: Plan | null, ta: TherapeuticAreaKey, phase: string, region: string, brief: { objective: string; medicalNeed: string; constraints: string; success: string }) {
   if (!selectedPlan) return [] as Array<{ chapter: string; template: string; text: string }>;
 
   const map = Object.fromEntries(selectedPlan.nodes.map((node) => [node.nodeKey, node])) as Record<string, PlanNode>;
@@ -593,14 +760,14 @@ function buildChapterContent(selectedPlan: Plan | null, ta: TherapeuticAreaKey, 
 
   const placeholders: Record<string, string> = {
     STUDY_ID: `POL-${ta.toUpperCase()}-LITE-001`,
-    PHASE: ta === 'oncology' ? 'II' : 'II/III',
+    PHASE: phase,
     INTERVENTION: intervention,
     POPULATION: ta === 'inflammation' ? 'adults with fibrotic inflammatory disease' : `adults with ${taName.toLowerCase()}-relevant disease`,
     PRIMARY_ENDPOINT: endpointName,
     PRIMARY_TIMEPOINT: endpointWeek,
     CLINICAL_INTENT: brief.objective || 'demonstration of clinically meaningful benefit',
     DISEASE_CONTEXT: brief.medicalNeed,
-    TARGET_REGION: 'global multicenter settings',
+    TARGET_REGION: region,
     KEY_SECONDARY_OBJECTIVES: 'safety, patient-reported outcomes, and supportive efficacy endpoints',
     DESIGN_TYPE: selectedPlan.label.includes('Conservative') ? 'randomized, controlled, conservative-design' : 'randomized, controlled, accelerated-design',
     POWER: String(assumptions.power ?? '0.80'),
@@ -622,6 +789,38 @@ function buildChapterContent(selectedPlan: Plan | null, ta: TherapeuticAreaKey, 
     template: item.template,
     text: applyTemplate(item.template, placeholders)
   }));
+}
+
+function buildSynopsisContent(selectedPlan: Plan | null, ta: TherapeuticAreaKey, phase: string, region: string, brief: { objective: string; medicalNeed: string; constraints: string; success: string }) {
+  if (!selectedPlan) return [] as Array<{ title: string; text: string }>;
+  const endpoint = selectedPlan.nodes.find((item) => item.nodeKey === 'endpoint.primary');
+  const eligibility = selectedPlan.nodes.find((item) => item.nodeKey === 'eligibility.core');
+  const assumptions = selectedPlan.nodes.find((item) => item.nodeKey === 'assumptions.ledger');
+  const soa = selectedPlan.nodes.find((item) => item.nodeKey === 'soa.v0');
+  const visitCount = ((soa?.content?.visits as SoAVisit[] | undefined) ?? []).length;
+
+  return [
+    {
+      title: 'Synopsis · Clinical Intent',
+      text: `${TA_DEFAULTS[ta].label} | Phase ${phase} | ${region}: ${brief.medicalNeed}`
+    },
+    {
+      title: 'Synopsis · Objective and Primary Endpoint',
+      text: `Objective: ${brief.objective} | Primary endpoint: ${String(endpoint?.content?.name ?? 'TBD')}`
+    },
+    {
+      title: 'Synopsis · Core Eligibility',
+      text: `Inclusion/Exclusion baseline is pre-structured and policy-scored. Snapshot: ${JSON.stringify(eligibility?.content ?? {})}`
+    },
+    {
+      title: 'Synopsis · Statistical Assumptions',
+      text: `Assumption ledger: ${JSON.stringify(assumptions?.content ?? {})}`
+    },
+    {
+      title: 'Synopsis · SoA and Operational Risk',
+      text: `Visit count ${visitCount}; gate status ${selectedPlan.analysis.gates.filter((gate) => gate.passed).length}/${selectedPlan.analysis.gates.length} passed.`
+    }
+  ];
 }
 
 function makeProtocolHtml(chapters: Array<{ chapter: string; text: string }>) {
@@ -652,6 +851,8 @@ function download(content: string, filename: string, type: string) {
 
 export function ProtocolOsLitePage({ locale }: { locale: string }) {
   const [ta, setTa] = useState<TherapeuticAreaKey>('oncology');
+  const [phase, setPhase] = useState<(typeof PHASE_OPTIONS)[number]>('II');
+  const [region, setRegion] = useState<(typeof REGION_OPTIONS)[number]>('Global');
   const [brief, setBrief] = useState({ objective: '', medicalNeed: '', constraints: '', success: '' });
   const [snippetInput, setSnippetInput] = useState('Guideline precedent: endpoint has accepted historical use.');
   const [evidence, setEvidence] = useState<string[]>([]);
@@ -660,8 +861,37 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
   const [graphVersion, setGraphVersion] = useState(1);
   const [status, setStatus] = useState('Ready. Protocol OS Lite runs entirely with mock data in one page.');
   const [agentLogs, setAgentLogs] = useState<AgentLog[]>([]);
+  const [rejectReasonDraft, setRejectReasonDraft] = useState<Record<string, string>>({});
+  const [runSnapshots, setRunSnapshots] = useState<RunSnapshot[]>([]);
+  const [feedbackEvents, setFeedbackEvents] = useState<FeedbackEvent[]>([]);
+  const [windowSize, setWindowSize] = useState(20);
+  const [rejectThreshold, setRejectThreshold] = useState(0.5);
+  const [minFeedbackForSwitch, setMinFeedbackForSwitch] = useState(4);
   const [llmEnabled, setLlmEnabled] = useState(false);
   const [runningAgents, setRunningAgents] = useState(false);
+  const [synopsisGenerated, setSynopsisGenerated] = useState(false);
+  const [fullGenerated, setFullGenerated] = useState(false);
+
+  const scenarioKey = useMemo(() => makeScenarioKey(ta, phase, region), [ta, phase, region]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('protocol-lite-feedback-events');
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as FeedbackEvent[];
+      setFeedbackEvents(parsed);
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('protocol-lite-feedback-events', JSON.stringify(feedbackEvents));
+    } catch {
+      // ignore
+    }
+  }, [feedbackEvents]);
 
   useEffect(() => {
     const cfg = TA_DEFAULTS[ta];
@@ -670,14 +900,39 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
     setPlans([]);
     setSelectedPlanId(null);
     setAgentLogs([]);
+    setRejectReasonDraft({});
+    setSynopsisGenerated(false);
+    setFullGenerated(false);
     setStatus(`Defaults loaded for ${cfg.label}.`);
   }, [ta]);
 
+  const agentProfiles = useMemo(
+    () => recomputeProfilesForScenario(feedbackEvents, scenarioKey, windowSize),
+    [feedbackEvents, scenarioKey, windowSize]
+  );
+  const agentStrategies = useMemo(
+    () => deriveAgentStrategies(agentProfiles, rejectThreshold, minFeedbackForSwitch),
+    [agentProfiles, rejectThreshold, minFeedbackForSwitch]
+  );
+
   const selectedPlan = useMemo(() => plans.find((item) => item.id === selectedPlanId) ?? null, [plans, selectedPlanId]);
-  const chapterDraft = useMemo(() => buildChapterContent(selectedPlan, ta, brief), [selectedPlan, ta, brief]);
+  const synopsisDraft = useMemo(() => buildSynopsisContent(selectedPlan, ta, phase, region, brief), [selectedPlan, ta, phase, region, brief]);
+  const chapterDraft = useMemo(() => buildChapterContent(selectedPlan, ta, phase, region, brief), [selectedPlan, ta, phase, region, brief]);
+  const runComparison = useMemo(() => {
+    const scoped = runSnapshots.filter((item) => item.scenarioKey === scenarioKey);
+    if (scoped.length < 2) return null;
+    const current = scoped[scoped.length - 1];
+    const previous = scoped[scoped.length - 2];
+    return {
+      current,
+      previous,
+      deltaA: current.planScores.A - previous.planScores.A,
+      deltaB: current.planScores.B - previous.planScores.B
+    };
+  }, [runSnapshots, scenarioKey]);
 
   async function runAgents(generated: Plan[]) {
-    const preferred = generated.sort((a, b) => b.score - a.score)[0];
+    const preferred = [...generated].sort((a, b) => b.score - a.score)[0];
     const functionalAgents = [
       {
         name: 'MedicalNeedFramingAgent',
@@ -731,11 +986,12 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
 
     const logs: AgentLog[] = [];
     for (const agent of functionalAgents) {
+      const strategy = agentStrategies[agent.name]?.strategy ?? 'normal';
       const result = await getAgentReasoning({
         enabled: llmEnabled,
         locale,
         agent: agent.name,
-        prompt: agent.prompt,
+        prompt: `${agent.prompt} | strategy=${strategy}`,
         fallback: agent.fallback
       });
       logs.push({
@@ -744,16 +1000,19 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
         layer: 'functional',
         agent: agent.name,
         output: result.text,
-        provider: result.provider
+        provider: result.provider,
+        weightApplied: agentProfiles[agent.name]?.weight ?? 1,
+        strategyApplied: strategy
       });
     }
 
     for (const agent of roleAgents) {
+      const strategy = agentStrategies[agent.name]?.strategy ?? 'normal';
       const result = await getAgentReasoning({
         enabled: llmEnabled,
         locale,
         agent: agent.name,
-        prompt: agent.prompt,
+        prompt: `${agent.prompt} | strategy=${strategy}`,
         fallback: agent.fallback
       });
       logs.push({
@@ -762,7 +1021,9 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
         layer: 'role',
         agent: agent.name,
         output: result.text,
-        provider: result.provider
+        provider: result.provider,
+        weightApplied: agentProfiles[agent.name]?.weight ?? 1,
+        strategyApplied: strategy
       });
     }
 
@@ -772,23 +1033,104 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
   async function generatePlans() {
     setStatus('Generating A/B with key design checks and agent runtime...');
     setRunningAgents(true);
-    const generated = buildPlans(ta, brief, evidence);
+    const generated = buildPlans(ta, brief, evidence, agentProfiles, agentStrategies);
     setPlans(generated);
     setSelectedPlanId(null);
+    setSynopsisGenerated(false);
+    setFullGenerated(false);
     await runAgents(generated);
+    setRunSnapshots((prev) => [
+      ...prev.slice(-4),
+      {
+        runId: `run-${Date.now()}`,
+        scenarioKey,
+        timestamp: new Date().toLocaleTimeString(),
+        planScores: {
+          A: generated.find((item) => item.id === 'A')?.score ?? 0,
+          B: generated.find((item) => item.id === 'B')?.score ?? 0
+        },
+        bestPlan: ([...generated].sort((a, b) => b.score - a.score)[0]?.id ?? 'A') as 'A' | 'B',
+        weightSnapshot: Object.fromEntries(Object.entries(agentProfiles).map(([name, profile]) => [name, profile.weight]))
+      }
+    ]);
     setRunningAgents(false);
     setStatus('A/B plans generated with medical/estimand/eligibility/burden/gate analysis and agent reviews.');
   }
 
   function acceptPlan(planId: 'A' | 'B') {
     setSelectedPlanId(planId);
+    setSynopsisGenerated(false);
+    setFullGenerated(false);
     setGraphVersion((prev) => prev + 1);
     setStatus(`Plan ${planId} accepted. Design graph version is now v${graphVersion + 1}.`);
+  }
+
+  function applyAgentFeedback(logId: string, decision: 'accepted' | 'rejected') {
+    const log = agentLogs.find((item) => item.id === logId);
+    if (!log) return;
+    const reason = decision === 'rejected' ? rejectReasonDraft[logId] ?? REJECT_REASONS[0] : undefined;
+
+    setAgentLogs((prev) =>
+      prev.map((item) =>
+        item.id === logId
+          ? {
+              ...item,
+              feedbackStatus: decision,
+              feedbackReason: reason
+            }
+          : item
+      )
+    );
+
+    setFeedbackEvents((prev) => [
+      ...prev,
+      {
+        id: `fb-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        scenarioKey,
+        agent: log.agent,
+        decision,
+        reason,
+        timestamp: new Date().toISOString()
+      }
+    ]);
+
+    setStatus(
+      decision === 'accepted'
+        ? `${log.agent} accepted. Sliding-window profile updated for current scenario.`
+        : `${log.agent} rejected (${reason}). Sliding-window profile updated for current scenario.`
+    );
+  }
+
+  function generateSynopsis() {
+    if (!selectedPlan) {
+      setStatus('Please accept Plan A or B first.');
+      return;
+    }
+    setSynopsisGenerated(true);
+    setFullGenerated(false);
+    setStatus('Synopsis generated. Review synopsis before expanding to full protocol.');
+  }
+
+  function expandToFullProtocol() {
+    if (!selectedPlan) {
+      setStatus('Please accept Plan A or B first.');
+      return;
+    }
+    if (!synopsisGenerated) {
+      setStatus('Generate synopsis first, then expand to full protocol.');
+      return;
+    }
+    setFullGenerated(true);
+    setStatus('Full protocol draft generated from accepted synopsis.');
   }
 
   function exportAll() {
     if (!selectedPlan) {
       setStatus('Please accept Plan A or B before export.');
+      return;
+    }
+    if (!synopsisGenerated || !fullGenerated) {
+      setStatus('Please complete both stages: Generate Synopsis -> Expand to Full Protocol.');
       return;
     }
 
@@ -805,6 +1147,7 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
       gates: selectedPlan.analysis.gates,
       agentLogs,
       nodes: selectedPlan.nodes,
+      synopsis: synopsisDraft,
       chapters: chapterDraft
     };
 
@@ -848,6 +1191,25 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
             </button>
           ))}
         </div>
+        <div className="grid gap-2 md:grid-cols-2">
+          <label className="text-xs text-ink/80">
+            Phase
+            <select className="mt-1 w-full rounded border border-ink/25 bg-base px-2 py-2 text-sm text-ink" value={phase} onChange={(e) => setPhase(e.target.value as (typeof PHASE_OPTIONS)[number])}>
+              {PHASE_OPTIONS.map((item) => (
+                <option key={item} value={item}>{item}</option>
+              ))}
+            </select>
+          </label>
+          <label className="text-xs text-ink/80">
+            Region
+            <select className="mt-1 w-full rounded border border-ink/25 bg-base px-2 py-2 text-sm text-ink" value={region} onChange={(e) => setRegion(e.target.value as (typeof REGION_OPTIONS)[number])}>
+              {REGION_OPTIONS.map((item) => (
+                <option key={item} value={item}>{item}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <p className="text-xs text-ink/70">Scenario key: <code>{scenarioKey}</code></p>
       </Card>
 
       <Card className="bg-base border-ink/25 space-y-3">
@@ -947,10 +1309,39 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
                       {log.layer}
                     </Badge>
                     <Badge className="border-ink/20 bg-ink/5 text-ink">{log.provider}</Badge>
+                    <Badge className="border-ink/20 bg-ink/5 text-ink">w={log.weightApplied.toFixed(2)}</Badge>
+                    <Badge className={log.strategyApplied === 'backup' ? 'border-red-500/45 bg-red-500/10 text-red-700 dark:text-red-300' : log.strategyApplied === 'conservative' ? 'border-amber-500/45 bg-amber-500/10 text-amber-700 dark:text-amber-200' : 'border-ink/20 bg-ink/5 text-ink'}>
+                      {log.strategyApplied}
+                    </Badge>
                     <span className="text-xs text-ink/60">{log.timestamp}</span>
                   </div>
                 </div>
                 <p className="mt-1 text-sm text-ink/90">{log.output}</p>
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <Button variant="outline" onClick={() => applyAgentFeedback(log.id, 'accepted')}>
+                    Accept
+                  </Button>
+                  <select
+                    className="rounded border border-ink/25 bg-base px-2 py-1 text-xs text-ink"
+                    value={rejectReasonDraft[log.id] ?? REJECT_REASONS[0]}
+                    onChange={(e) => setRejectReasonDraft((prev) => ({ ...prev, [log.id]: e.target.value }))}
+                  >
+                    {REJECT_REASONS.map((reason) => (
+                      <option key={reason} value={reason}>
+                        reject: {reason}
+                      </option>
+                    ))}
+                  </select>
+                  <Button variant="outline" onClick={() => applyAgentFeedback(log.id, 'rejected')}>
+                    Reject
+                  </Button>
+                  {log.feedbackStatus ? (
+                    <Badge className={log.feedbackStatus === 'accepted' ? 'border-emerald-500/45 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300' : 'border-red-500/45 bg-red-500/10 text-red-700 dark:text-red-300'}>
+                      {log.feedbackStatus}
+                      {log.feedbackReason ? ` · ${log.feedbackReason}` : ''}
+                    </Badge>
+                  ) : null}
+                </div>
               </div>
             ))}
           </div>
@@ -958,8 +1349,108 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
       </Card>
 
       <Card className="bg-base border-ink/25 space-y-3">
-        <CardTitle className="text-ink">6) Chaptered Protocol Draft (SH/TransCelerate-style structure)</CardTitle>
-        {selectedPlan ? (
+        <CardTitle className="text-ink">Feedback Loop: Weight Change</CardTitle>
+        <div className="grid gap-2 md:grid-cols-3">
+          <label className="text-xs text-ink/80">
+            Sliding window N
+            <input
+              className="mt-1 w-full rounded border border-ink/25 bg-base px-2 py-2 text-sm text-ink"
+              type="number"
+              min={5}
+              max={200}
+              value={windowSize}
+              onChange={(e) => setWindowSize(Math.max(5, Math.min(200, Number(e.target.value) || 20)))}
+            />
+          </label>
+          <label className="text-xs text-ink/80">
+            Reject threshold
+            <input
+              className="mt-1 w-full rounded border border-ink/25 bg-base px-2 py-2 text-sm text-ink"
+              type="number"
+              step={0.05}
+              min={0.3}
+              max={0.9}
+              value={rejectThreshold}
+              onChange={(e) => setRejectThreshold(Math.max(0.3, Math.min(0.9, Number(e.target.value) || 0.5)))}
+            />
+          </label>
+          <label className="text-xs text-ink/80">
+            Min samples for switch
+            <input
+              className="mt-1 w-full rounded border border-ink/25 bg-base px-2 py-2 text-sm text-ink"
+              type="number"
+              min={2}
+              max={20}
+              value={minFeedbackForSwitch}
+              onChange={(e) => setMinFeedbackForSwitch(Math.max(2, Math.min(20, Number(e.target.value) || 4)))}
+            />
+          </label>
+        </div>
+        <div className="grid gap-2 md:grid-cols-2">
+          {AGENT_NAMES.map((name) => {
+            const profile = agentProfiles[name] ?? { weight: 1, acceptCount: 0, rejectCount: 0 };
+            const strategy = agentStrategies[name] ?? { strategy: 'normal', rejectRate: 0, samples: 0 };
+            return (
+              <div key={name} className="rounded border border-ink/20 bg-base p-3 text-xs text-ink">
+                <p className="font-semibold text-ink">{name}</p>
+                <p className="mt-1">weight: {profile.weight.toFixed(2)}</p>
+                <p>accept: {profile.acceptCount} | reject: {profile.rejectCount}</p>
+                <p>reject rate: {(strategy.rejectRate * 100).toFixed(0)}% | samples: {strategy.samples}</p>
+                <p>
+                  strategy:{' '}
+                  <span className={strategy.strategy === 'backup' ? 'text-red-700 dark:text-red-300' : strategy.strategy === 'conservative' ? 'text-amber-700 dark:text-amber-200' : 'text-ink'}>
+                    {strategy.strategy}
+                  </span>
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+
+      <Card className="bg-base border-ink/25 space-y-3">
+        <CardTitle className="text-ink">Feedback Loop: Next-Run Comparison</CardTitle>
+        {runComparison ? (
+          <div className="space-y-2 text-sm text-ink/90">
+            <p className="text-xs text-ink/70">scenario: <code>{scenarioKey}</code></p>
+            <p>
+              previous ({runComparison.previous.timestamp}) best {runComparison.previous.bestPlan}
+              {' '}→ current ({runComparison.current.timestamp}) best {runComparison.current.bestPlan}
+            </p>
+            <p>Plan A: {runComparison.previous.planScores.A} → {runComparison.current.planScores.A} ({runComparison.deltaA >= 0 ? '+' : ''}{runComparison.deltaA})</p>
+            <p>Plan B: {runComparison.previous.planScores.B} → {runComparison.current.planScores.B} ({runComparison.deltaB >= 0 ? '+' : ''}{runComparison.deltaB})</p>
+            <p className="text-xs text-ink/70">Generate A/B again after feedback to observe weight-driven score movement.</p>
+          </div>
+        ) : (
+          <p className="text-sm text-ink/80">Need at least two runs to show comparison. Give feedback, then click Generate A/B again.</p>
+        )}
+      </Card>
+
+      <Card className="bg-base border-ink/25 space-y-3">
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="text-ink">Two-Stage Drafting</CardTitle>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={generateSynopsis}>Generate Synopsis</Button>
+            <Button onClick={expandToFullProtocol}>Expand to Full Protocol</Button>
+          </div>
+        </div>
+        {synopsisGenerated ? (
+          <div className="space-y-2">
+            {synopsisDraft.map((item) => (
+              <div key={item.title} className="rounded border border-ink/20 bg-base p-3">
+                <p className="text-sm font-semibold text-ink">{item.title}</p>
+                <p className="mt-1 text-sm text-ink/90">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-ink/85">After accepting a plan, generate synopsis first.</p>
+        )}
+      </Card>
+
+      <Card className="bg-base border-ink/25 space-y-3">
+        <CardTitle className="text-ink">Chaptered Full Protocol Draft (SH/TransCelerate-style structure)</CardTitle>
+        {fullGenerated ? (
           <div className="space-y-2">
             {chapterDraft.map((chapter) => (
               <div key={chapter.chapter} className="rounded border border-ink/20 bg-base p-3">
@@ -970,13 +1461,13 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-ink/85">Accept a plan first, then chapter-level draft content will be assembled here.</p>
+          <p className="text-sm text-ink/85">Generate synopsis and click <code>Expand to Full Protocol</code>.</p>
         )}
       </Card>
 
       <Card className="bg-base border-ink/25 space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <CardTitle className="text-ink">7) Export Package</CardTitle>
+          <CardTitle className="text-ink">Export Package</CardTitle>
           <Button onClick={exportAll}>Export HTML + CSV + JSON</Button>
         </div>
         <p className="text-xs text-ink/80">Current mock graph version: v{graphVersion}</p>
