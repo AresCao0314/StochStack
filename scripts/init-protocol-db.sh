@@ -1,27 +1,22 @@
 #!/bin/sh
 set -eu
 
-DB_URL="${DATABASE_URL:-file:/data/protocol-workflow.db}"
-DB_PATH="${DB_URL#file:}"
+DB_URL="${DATABASE_URL:-postgresql://postgres:postgres@db:5432/stochstack?schema=public}"
+SEED_ON_STARTUP="${SEED_ON_STARTUP:-true}"
 
-mkdir -p "$(dirname "$DB_PATH")"
+echo "[init-db] using DATABASE_URL=${DB_URL}"
 
-echo "[init-db] using DATABASE_URL=$DB_URL"
-
-table_exists="$(sqlite3 "$DB_PATH" "SELECT name FROM sqlite_master WHERE type='table' AND name='Study';" || true)"
-
-if [ "$table_exists" != "Study" ]; then
-  echo "[init-db] applying schema migration"
-  sqlite3 "$DB_PATH" < /app/prisma/migrations/20260302120000_init/migration.sql
+echo "[init-db] running prisma migrate deploy"
+if ! npx prisma migrate deploy; then
+  echo "[init-db] migrate deploy failed, fallback to prisma db push"
+  npx prisma db push || true
 fi
 
-study_count="$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM Study;" 2>/dev/null || echo 0)"
-
-if [ "$study_count" = "0" ]; then
+if [ "$SEED_ON_STARTUP" = "true" ]; then
   echo "[init-db] seeding demo data"
   if ! node /app/scripts/seed.js; then
     echo "[init-db] warning: seed failed, continue startup without demo seed data"
   fi
 else
-  echo "[init-db] existing Study rows=$study_count, skip seed"
+  echo "[init-db] skip seed because SEED_ON_STARTUP=${SEED_ON_STARTUP}"
 fi

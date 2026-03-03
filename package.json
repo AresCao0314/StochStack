@@ -13,7 +13,8 @@
     "mcp:setup": "echo 'Add this to your Claude Desktop config:' && cat mcp-config/claude-desktop-config.json",
     "test": "vitest run",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "rm -f prisma/dev.db prisma/dev.db-journal && sqlite3 prisma/dev.db < prisma/migrations/20260302120000_init/migration.sql",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:migrate:dev": "prisma migrate dev",
     "db:seed": "prisma db seed"
   },
   "dependencies": {

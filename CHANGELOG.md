@@ -35,6 +35,24 @@ All notable repository-level changes are tracked here for review.
 - Added locale-aware copy for English, Chinese, and German in the new workflow MVP page.
 - **User-visible**: workflow entry page is now always available and presentation-ready, even when backend data initialization is incomplete.
 
+### Protocol OS (Decision-Centric) MVP
+- Added new decision-centric product surface at `/{locale}/projects` with end-to-end flow:
+  - project creation
+  - brief authoring
+  - evidence snippet CRUD
+  - studio A/B plan generation and acceptance
+  - export compiler output download
+- Added core architecture under `src/core/protocol-os`:
+  - versioned Design Graph helpers
+  - policy engine (hard/soft rules + score breakdown)
+  - skill swarm with unified schema contract validation
+  - orchestrator for Plan A/B generation + conflict scoring + changelog persistence
+  - compiler for Protocol HTML + SoA CSV + Traceability JSON
+- Added Prisma Postgres models for Project/Brief/Evidence/DesignGraph/DecisionNode/Proposal/PolicyProfile/ChangeLog/ExportArtifact plus RBAC structures (`User`, `ProjectMembership`).
+- Added fake LLM adapter path for deterministic mock generation while preserving future replaceability.
+- Added unit tests for all six skills (`tests/protocol-os-skills.test.ts`).
+- **Operational**: switched Prisma datasource target to PostgreSQL and updated compose stack with Postgres service + migration/seed startup flow.
+
 
 ### Ops Twin Eval Console v0.5.0
 - Added `/[locale]/ops-twin/eval` evaluation workspace with agent scorecards (accuracy, bias, stability, adoption).

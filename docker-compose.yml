@@ -1,15 +1,35 @@
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: stochstack-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=stochstack
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d stochstack"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: stochstack-app
     restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
     expose:
       - "3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=file:/data/protocol-workflow.db
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/stochstack?schema=public
+      - SEED_ON_STARTUP=true
       - NOTES_DATA_FILE=/data/notes-captures.json
       - VENDOR_INTEL_SIGNALS_FILE=/runtime-data/vendor-intelligence/signals.json
       - MARKET_INTEL_DATA_DIR=/runtime-data/market-intelligence
@@ -35,3 +55,4 @@ volumes:
   caddy_data:
   caddy_config:
   notes_data:
+  pg_data:

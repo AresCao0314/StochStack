@@ -1,13 +1,8 @@
-const path = require('node:path');
 const { PrismaClient } = require('@prisma/client');
-
-if (!process.env.DATABASE_URL || process.env.DATABASE_URL.startsWith('file:./')) {
-  process.env.DATABASE_URL = `file:${path.resolve(__dirname, '../prisma/dev.db')}`;
-}
 
 const prisma = new PrismaClient();
 
-async function main() {
+async function seedLegacyWorkflow() {
   await prisma.auditLog.deleteMany();
   await prisma.changeSet.deleteMany();
   await prisma.feedbackAmendment.deleteMany();
@@ -44,7 +39,7 @@ async function main() {
       studyId: study.id,
       documentId: protocolDoc.id,
       status: 'review',
-      modelName: 'qwen-plus',
+      modelName: 'fake-llm',
       promptVersion: 'digitizer-v0.2.0',
       startedAt: new Date(),
       finishedAt: new Date()
@@ -58,7 +53,7 @@ async function main() {
         path: 'metadata.title',
         value: JSON.stringify('ONC-DELTA-01 Protocol'),
         confidence: 0.88,
-        evidence: JSON.stringify({ docId: protocolDoc.id, page: 1, startChar: 0, endChar: 30, quote: 'ONC-DELTA-01 Protocol', chunkId: 'c1' }),
+        evidence: JSON.stringify({ docId: protocolDoc.id, page: 1, quote: 'ONC-DELTA-01 Protocol', chunkId: 'c1' }),
         reviewerState: 'accepted'
       },
       {
@@ -66,15 +61,7 @@ async function main() {
         path: 'eligibility.inclusion[0]',
         value: JSON.stringify('Age 18-75 years'),
         confidence: 0.86,
-        evidence: JSON.stringify({ docId: protocolDoc.id, page: 1, startChar: 32, endChar: 60, quote: 'Age 18-75 years', chunkId: 'c1' }),
-        reviewerState: 'pending'
-      },
-      {
-        runId: run.id,
-        path: 'soa.visits[0].name',
-        value: JSON.stringify('Screening'),
-        confidence: 0.8,
-        evidence: JSON.stringify({ docId: protocolDoc.id, page: 1, startChar: 180, endChar: 220, quote: 'Screening | Day -28 to -1 | consent; labs; CT', chunkId: 'c2' }),
+        evidence: JSON.stringify({ docId: protocolDoc.id, page: 1, quote: 'Age 18-75 years', chunkId: 'c1' }),
         reviewerState: 'pending'
       }
     ]
@@ -85,10 +72,7 @@ async function main() {
       runId: run.id,
       schemaVersion: 'USDM-1.0.0',
       usdmJson: JSON.stringify({
-        study: { id: 'USDM-NSCLC-P3', title: 'ONC-DELTA-01 Protocol' },
-        studyDesign: { indication: 'NSCLC', phase: 'Phase 3' },
-        eligibilityCriteria: [{ id: 'I1', text: 'Age 18-75 years' }],
-        scheduleOfActivities: [{ encounter: 'Screening', window: 'Day -28 to -1', activities: ['consent', 'labs', 'CT'] }]
+        study: { id: 'USDM-NSCLC-P3', title: 'ONC-DELTA-01 Protocol' }
       })
     }
   });
@@ -97,40 +81,212 @@ async function main() {
     data: {
       runId: run.id,
       ddfJson: JSON.stringify({
-        nodes: [
-          { id: 'protocol', label: 'Protocol Source' },
-          { id: 'usdm', label: 'USDM Model' },
-          { id: 'ops', label: 'Operational Systems' }
-        ],
-        links: [
-          { from: 'protocol', to: 'usdm', note: 'extract + map' },
-          { from: 'usdm', to: 'ops', note: 'build downstream artifacts' }
-        ]
+        nodes: [{ id: 'protocol' }, { id: 'usdm' }, { id: 'ops' }],
+        links: [{ from: 'protocol', to: 'usdm' }, { from: 'usdm', to: 'ops' }]
       })
     }
   });
 
-  await prisma.feedbackAmendment.create({
+  return { studyId: study.id, runId: run.id };
+}
+
+async function seedProtocolOs() {
+  await prisma.exportArtifact.deleteMany();
+  await prisma.proposal.deleteMany();
+  await prisma.decisionNode.deleteMany();
+  await prisma.designGraph.deleteMany();
+  await prisma.policyProfile.deleteMany();
+  await prisma.evidenceSnippet.deleteMany();
+  await prisma.brief.deleteMany();
+  await prisma.projectMembership.deleteMany();
+  await prisma.project.deleteMany();
+  await prisma.user.deleteMany();
+
+  const user = await prisma.user.create({
     data: {
-      studyId: study.id,
-      amendmentDate: new Date('2025-11-20'),
-      category: 'eligibility',
-      description: 'Broaden ANC threshold for recruitment feasibility.',
-      linkedUsdmPaths: JSON.stringify(['eligibility.inclusion[0]'])
+      name: 'Demo CTM',
+      email: 'demo.ctm@local',
+      globalRole: 'clinical_lead'
     }
   });
 
-  await prisma.auditLog.create({
+  const project = await prisma.project.create({
     data: {
+      name: 'Oncology Decision Demo',
+      indication: 'Metastatic NSCLC',
+      phase: 'Phase II',
+      status: 'active'
+    }
+  });
+
+  await prisma.projectMembership.create({
+    data: {
+      projectId: project.id,
+      userId: user.id,
+      role: 'project_owner'
+    }
+  });
+
+  await prisma.brief.create({
+    data: {
+      projectId: project.id,
+      fieldsJson: {
+        objective: 'Select an explainable, regulator-friendly primary endpoint and feasible SoA.',
+        constraints: 'Keep site burden manageable while preserving statistical credibility.',
+        successCriteria: 'Hard policy pass with total score >= 75',
+        comparator: 'SoC',
+        geography: 'EU + China'
+      }
+    }
+  });
+
+  const evidenceData = [
+    {
+      title: 'Guideline excerpt: endpoint precedent',
+      text: 'PFS at 12 months remains an accepted endpoint for this setting when supported by imaging schedule and adjudication.',
+      sourceType: 'guideline',
+      sourceRef: 'Guideline-2025-Section-4',
+      confidence: 0.93
+    },
+    {
+      title: 'Registry benchmark event rate',
+      text: 'Observed event rate in matched population was approximately 0.45 over one year follow-up.',
+      sourceType: 'registry',
+      sourceRef: 'Registry-NSCLC-2024',
+      confidence: 0.88
+    },
+    {
+      title: 'Internal ops note on visit burden',
+      text: 'Site teams reported dropout risk increase when on-treatment visits exceed six intensive contacts in first 24 weeks.',
+      sourceType: 'internal',
+      sourceRef: 'OpsMemo-Q4',
+      confidence: 0.8
+    },
+    {
+      title: 'Regulatory meeting minutes',
+      text: 'Authorities requested explicit clinical meaning wording and discourages unexplained surrogate primary endpoints.',
+      sourceType: 'regulatory',
+      sourceRef: 'HA-Advice-2025-11',
+      confidence: 0.9
+    },
+    {
+      title: 'Recruitment feasibility signal',
+      text: 'Broader ECOG criteria improve recruitment velocity but may elevate heterogeneity and monitoring demand.',
+      sourceType: 'feasibility',
+      sourceRef: 'Feasibility-scan-2025',
+      confidence: 0.75
+    }
+  ];
+
+  await prisma.evidenceSnippet.createMany({
+    data: evidenceData.map((item) => ({
+      projectId: project.id,
+      ...item,
+      tagsJson: ['mvp']
+    }))
+  });
+
+  const policyProfiles = [
+    {
+      role: 'Medical Policy',
+      ownerName: 'Medical Lead',
+      weight: 1,
+      policyJson: {
+        rules: [
+          { id: 'med-hard-clinical-meaning', type: 'hard', targetNodeType: 'endpoint.primary', condition: { field: 'content.clinicalMeaning', op: 'truthy' }, message: 'Primary endpoint must explain clinical meaning.', weight: 1 },
+          { id: 'med-soft-citation', type: 'soft', targetNodeType: 'endpoint.primary', condition: { field: 'citations.length', op: 'gte', value: 1 }, message: 'Guideline or precedent citation is recommended.', weight: 20 }
+        ]
+      }
+    },
+    {
+      role: 'Stats Policy',
+      ownerName: 'Biostat Lead',
+      weight: 1,
+      policyJson: {
+        rules: [
+          { id: 'stats-hard-power', type: 'hard', targetNodeType: 'assumptions.ledger', condition: { field: 'content.power', op: 'gte', value: 0.8 }, message: 'Power must be >= 0.8.', weight: 1 }
+        ]
+      }
+    },
+    {
+      role: 'ClinOps Policy',
+      ownerName: 'ClinOps Lead',
+      weight: 1,
+      policyJson: {
+        rules: [
+          { id: 'ops-soft-burden', type: 'soft', targetNodeType: 'soa.v0', condition: { field: 'impacts.burden', op: 'neq', value: 'High' }, message: 'High burden SoA requires mitigation.', weight: 20 }
+        ]
+      }
+    },
+    {
+      role: 'Reg Policy',
+      ownerName: 'Regulatory Lead',
+      weight: 1,
+      policyJson: {
+        rules: [
+          { id: 'reg-hard-endpoint-reference', type: 'hard', targetNodeType: 'endpoint.primary', condition: { field: 'citations.length', op: 'gte', value: 1 }, message: 'Primary endpoint requires citation.', weight: 1 }
+        ]
+      }
+    }
+  ];
+
+  await prisma.policyProfile.createMany({
+    data: policyProfiles.map((profile) => ({
+      projectId: project.id,
+      role: profile.role,
+      ownerName: profile.ownerName,
+      weight: profile.weight,
+      policyJson: profile.policyJson
+    }))
+  });
+
+  const graph = await prisma.designGraph.create({
+    data: {
+      projectId: project.id,
+      version: 1,
+      nodesJson: [
+        { key: 'endpoint.primary', type: 'endpoint.primary', status: 'draft' },
+        { key: 'eligibility.core', type: 'eligibility.core', status: 'draft' },
+        { key: 'assumptions.ledger', type: 'assumptions.ledger', status: 'draft' },
+        { key: 'soa.v0', type: 'soa.v0', status: 'draft' }
+      ],
+      edgesJson: [
+        { from: 'endpoint.primary', to: 'soa.v0' },
+        { from: 'eligibility.core', to: 'assumptions.ledger' },
+        { from: 'eligibility.core', to: 'soa.v0' },
+        { from: 'assumptions.ledger', to: 'endpoint.primary' }
+      ],
+      decisions: {
+        create: [
+          { key: 'endpoint.primary', type: 'endpoint.primary', status: 'draft' },
+          { key: 'eligibility.core', type: 'eligibility.core', status: 'draft' },
+          { key: 'assumptions.ledger', type: 'assumptions.ledger', status: 'draft' },
+          { key: 'soa.v0', type: 'soa.v0', status: 'draft' }
+        ]
+      }
+    }
+  });
+
+  await prisma.changeLog.create({
+    data: {
+      projectId: project.id,
+      graphVersion: graph.version,
       actor: 'system.seed',
-      action: 'seed.init',
-      entityType: 'Study',
-      entityId: study.id,
-      payload: JSON.stringify({ note: 'Seeded protocol workflow demo data' })
+      action: 'seed_protocol_os',
+      payloadJson: {
+        note: 'Seeded Protocol OS decision-centric demo data',
+        projectId: project.id
+      }
     }
   });
 
-  console.log(`Seed complete. StudyId=${study.id} RunId=${run.id}`);
+  return { projectId: project.id, graphVersion: graph.version };
+}
+
+async function main() {
+  const legacy = await seedLegacyWorkflow();
+  const protocolOs = await seedProtocolOs();
+  console.log(`Seed complete. LegacyStudy=${legacy.studyId} LegacyRun=${legacy.runId} ProtocolOSProject=${protocolOs.projectId}`);
 }
 
 main()

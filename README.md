@@ -33,8 +33,69 @@ npm run typecheck
 npm run test
 npm run prisma:generate
 npm run prisma:migrate
+npm run prisma:migrate:dev
 npm run db:seed
 ```
+
+## Protocol OS (Decision-Centric) MVP
+
+This repo now includes a full decision-centric prototype:
+
+- Project hub: `/{locale}/projects`
+- Brief capture: `/{locale}/projects/{id}/brief`
+- Evidence snippets: `/{locale}/projects/{id}/evidence`
+- Protocol Studio: `/{locale}/projects/{id}/studio`
+
+Architecture highlights:
+
+- Structured truth source: Design Graph + DecisionNode
+- Policy Profiles (Medical / Stats / ClinOps / Reg) with hard/soft rules
+- Skill Swarm via unified contract-validated skill interface
+- Orchestrator generating Plan A/B with conflict and policy scoring
+- Compiler exporting:
+  - Protocol HTML
+  - SoA CSV
+  - Traceability JSON
+
+### Local Postgres Startup
+
+Use Docker Compose to start database (and optionally app stack):
+
+```bash
+docker compose up -d db
+```
+
+Set environment:
+
+```bash
+cp .env.example .env.local
+```
+
+Then initialize:
+
+```bash
+npm install
+npm run prisma:generate
+npm run prisma:migrate
+npm run db:seed
+npm run dev
+```
+
+### 5-Min Demo Flow
+
+1. Open `http://localhost:3000/en/projects`
+2. Create a project
+3. Fill Brief
+4. Add Evidence snippets
+5. Open Studio and run `Generate A/B Plans`
+6. Compare policy score + conflicts, then `Accept Plan A/B`
+7. Open Export tab and click `Export All Artifacts`
+
+Output files are written under:
+
+- `public/exports/protocol-os/{projectId}/v{graphVersion}/protocol.html`
+- `public/exports/protocol-os/{projectId}/v{graphVersion}/soa.csv`
+- `public/exports/protocol-os/{projectId}/v{graphVersion}/traceability.json`
 
 ## Historical Protocol Digitizer MVP+ (Workflow)
 

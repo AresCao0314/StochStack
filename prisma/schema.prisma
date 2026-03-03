@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -113,4 +113,154 @@ model FeedbackAmendment {
   study            Study             @relation(fields: [studyId], references: [id], onDelete: Cascade)
 
   @@index([studyId])
+}
+
+model User {
+  id           String              @id @default(cuid())
+  name         String
+  email        String              @unique
+  globalRole   String              @default("viewer")
+  memberships  ProjectMembership[]
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+}
+
+model Project {
+  id             String              @id @default(cuid())
+  name           String
+  indication     String
+  phase          String
+  status         String              @default("draft")
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  brief          Brief?
+  evidence       EvidenceSnippet[]
+  graphs         DesignGraph[]
+  policies       PolicyProfile[]
+  logs           ChangeLog[]
+  exports        ExportArtifact[]
+  memberships    ProjectMembership[]
+}
+
+model ProjectMembership {
+  id         String   @id @default(cuid())
+  projectId  String
+  userId     String
+  role       String
+  createdAt  DateTime @default(now())
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([projectId])
+  @@index([userId])
+}
+
+model Brief {
+  id         String   @id @default(cuid())
+  projectId  String   @unique
+  fieldsJson Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model EvidenceSnippet {
+  id            String   @id @default(cuid())
+  projectId      String
+  title          String
+  text           String
+  sourceType     String
+  sourceRef      String?
+  publishedDate  DateTime?
+  tagsJson       Json?
+  confidence     Float    @default(0.7)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model DesignGraph {
+  id          String         @id @default(cuid())
+  projectId   String
+  version     Int
+  nodesJson   Json
+  edgesJson   Json
+  createdAt   DateTime       @default(now())
+  project     Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  decisions   DecisionNode[]
+  proposals   Proposal[]
+
+  @@unique([projectId, version])
+  @@index([projectId])
+}
+
+model DecisionNode {
+  id                String      @id @default(cuid())
+  graphId           String
+  key               String
+  type              String
+  status            String      @default("draft")
+  selectedOptionId  String?
+  contentJson       Json?
+  updatedAt         DateTime    @updatedAt
+  graph             DesignGraph @relation(fields: [graphId], references: [id], onDelete: Cascade)
+
+  @@index([graphId, key])
+}
+
+model Proposal {
+  id             String      @id @default(cuid())
+  graphId        String
+  nodeKey        String
+  skillName      String
+  planId         String?
+  proposalJson   Json
+  scoreJson      Json?
+  conflictsJson  Json?
+  createdAt      DateTime    @default(now())
+  graph          DesignGraph @relation(fields: [graphId], references: [id], onDelete: Cascade)
+
+  @@index([graphId, nodeKey])
+}
+
+model PolicyProfile {
+  id         String   @id @default(cuid())
+  projectId  String
+  role       String
+  ownerName  String
+  policyJson Json
+  weight     Float    @default(1.0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model ChangeLog {
+  id           String   @id @default(cuid())
+  projectId     String
+  graphVersion  Int?
+  actor         String
+  action        String
+  payloadJson   Json
+  createdAt     DateTime @default(now())
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model ExportArtifact {
+  id          String   @id @default(cuid())
+  projectId   String
+  type        String
+  version     Int
+  storageRef  String
+  createdAt   DateTime @default(now())
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
 }
