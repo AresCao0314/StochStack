@@ -23,6 +23,18 @@ All notable repository-level changes are tracked here for review.
 - **User-visible**: protocol digitizer now supports explainable extraction review, versioned comparison, and feedback loop demo.
 - **Operational**: requires `DATABASE_URL` and Prisma migrate/seed before first run.
 
+## 2026-03-03
+
+### Workflow Business MVP Mode
+- Reworked `/{locale}/workflow` into a business-first MVP console focused on operational meaning and daily CTM usage.
+- Added a stable client-side mock/live dual-mode page (`src/components/protocolWorkflow/workflow-business-mvp.tsx`):
+  - mock-first delivery path for reliable demos
+  - optional live study discovery via `/api/workflow/studies`
+  - 6-step delivery spine with status progression simulation
+  - action queue and business outcome framing for leadership walkthroughs
+- Added locale-aware copy for English, Chinese, and German in the new workflow MVP page.
+- **User-visible**: workflow entry page is now always available and presentation-ready, even when backend data initialization is incomplete.
+
 
 ### Ops Twin Eval Console v0.5.0
 - Added `/[locale]/ops-twin/eval` evaluation workspace with agent scorecards (accuracy, bias, stability, adoption).
