@@ -9,6 +9,7 @@ services:
       - "3000"
     environment:
       - NODE_ENV=production
+      - DATABASE_URL=file:/data/protocol-workflow.db
       - NOTES_DATA_FILE=/data/notes-captures.json
       - VENDOR_INTEL_SIGNALS_FILE=/runtime-data/vendor-intelligence/signals.json
       - MARKET_INTEL_DATA_DIR=/runtime-data/market-intelligence
