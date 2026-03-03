@@ -150,6 +150,15 @@ All notable repository-level changes are tracked here for review.
 
 ## 2026-03-04
 
+### Protocol OS Lite v1.0.0
+- Added `Synopsis Attribution Console` with three visibility layers:
+  - Section mapping (`Synopsis section -> contributing agents`)
+  - Before/after synopsis diff with source-agent attribution
+  - Per-agent impact contribution scoring within current scenario
+- Added attribution payload export fields (`synopsisDiff`, `agentImpacts`) in traceability JSON.
+- **User-visible**: can explicitly audit which agent changed or influenced each synopsis block.
+- **Operational**: remains Lite-mode local state implementation with no backend dependency.
+
 ### Protocol OS Lite v0.9.0
 - Implemented full dynamic three-layer calibration loop:
   - Sliding-window recomputation from latest N feedback samples

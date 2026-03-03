@@ -114,6 +114,28 @@ type FeedbackEvent = {
   timestamp: string;
 };
 
+type SynopsisSection = {
+  id: string;
+  title: string;
+  text: string;
+  contributors: string[];
+};
+
+type SynopsisSnapshot = {
+  id: string;
+  scenarioKey: string;
+  timestamp: string;
+  sections: SynopsisSection[];
+};
+
+type SynopsisDiffItem = {
+  sectionId: string;
+  sectionTitle: string;
+  before: string;
+  after: string;
+  sourceAgent: string;
+};
+
 type TaDefaults = {
   label: string;
   objective: string;
@@ -345,6 +367,16 @@ const CHAPTER_TEMPLATES = [
 
 const UPDATE_LOG = [
   {
+    version: 'v1.0.0',
+    date: '2026-03-04',
+    title: 'Synopsis Attribution Console',
+    bullets: [
+      'Added section-level mapping from synopsis blocks to responsible agents.',
+      'Added before/after synopsis diff with source-agent attribution.',
+      'Added per-agent impact contribution panel linked to current scenario.'
+    ]
+  },
+  {
     version: 'v0.9.0',
     date: '2026-03-04',
     title: 'Fully dynamic feedback policy (3 layers)',
@@ -419,6 +451,14 @@ function makeScenarioKey(ta: TherapeuticAreaKey, phase: string, region: string) 
   return `${ta}|${phase}|${region}`;
 }
 
+const SYNOPSIS_SECTION_AGENT_MAP: Record<string, string[]> = {
+  clinical_intent: ['MedicalNeedFramingAgent', 'MedicalReviewerAgent'],
+  objective_endpoint: ['EndpointEstimandAgent', 'StatsReviewerAgent', 'RegReviewerAgent'],
+  eligibility_core: ['EligibilityImpactAgent', 'ClinOpsReviewerAgent'],
+  assumptions: ['StatsReviewerAgent', 'EndpointEstimandAgent'],
+  soa_ops_risk: ['SoABurdenAgent', 'OperationalGateAgent', 'ClinOpsReviewerAgent']
+};
+
 function createDefaultAgentProfiles(): Record<string, AgentProfile> {
   const entries = AGENT_NAMES.map((name) => [
     name,
@@ -467,6 +507,54 @@ function deriveAgentStrategies(
     result[agentName] = { strategy, rejectRate, samples };
   }
   return result;
+}
+
+function computeSynopsisDiff(previous: SynopsisSection[] | null, current: SynopsisSection[]) {
+  if (!previous) return [] as SynopsisDiffItem[];
+  const prevMap = new Map(previous.map((section) => [section.id, section]));
+  const diffs: SynopsisDiffItem[] = [];
+  for (const section of current) {
+    const prev = prevMap.get(section.id);
+    if (!prev) {
+      diffs.push({
+        sectionId: section.id,
+        sectionTitle: section.title,
+        before: '',
+        after: section.text,
+        sourceAgent: section.contributors[0] ?? 'UnknownAgent'
+      });
+      continue;
+    }
+    if (prev.text !== section.text) {
+      diffs.push({
+        sectionId: section.id,
+        sectionTitle: section.title,
+        before: prev.text,
+        after: section.text,
+        sourceAgent: section.contributors[0] ?? 'UnknownAgent'
+      });
+    }
+  }
+  return diffs;
+}
+
+function computeAgentImpactScores(
+  profiles: Record<string, AgentProfile>,
+  strategies: Record<string, { strategy: 'normal' | 'conservative' | 'backup'; rejectRate: number; samples: number }>
+) {
+  return AGENT_NAMES.map((name) => {
+    const profile = profiles[name] ?? { weight: 1, acceptCount: 0, rejectCount: 0 };
+    const strategy = strategies[name]?.strategy ?? 'normal';
+    const strategyShift = strategy === 'backup' ? -3 : strategy === 'conservative' ? -1 : 0;
+    const feedbackSignal = profile.acceptCount - profile.rejectCount;
+    const impact = Number((((profile.weight - 1) * 10) + strategyShift + feedbackSignal * 0.2).toFixed(1));
+    return {
+      agent: name,
+      impact,
+      strategy,
+      samples: profile.acceptCount + profile.rejectCount
+    };
+  }).sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 }
 
 function applyTemplate(template: string, values: Record<string, string>) {
@@ -792,7 +880,7 @@ function buildChapterContent(selectedPlan: Plan | null, ta: TherapeuticAreaKey, 
 }
 
 function buildSynopsisContent(selectedPlan: Plan | null, ta: TherapeuticAreaKey, phase: string, region: string, brief: { objective: string; medicalNeed: string; constraints: string; success: string }) {
-  if (!selectedPlan) return [] as Array<{ title: string; text: string }>;
+  if (!selectedPlan) return [] as SynopsisSection[];
   const endpoint = selectedPlan.nodes.find((item) => item.nodeKey === 'endpoint.primary');
   const eligibility = selectedPlan.nodes.find((item) => item.nodeKey === 'eligibility.core');
   const assumptions = selectedPlan.nodes.find((item) => item.nodeKey === 'assumptions.ledger');
@@ -801,24 +889,34 @@ function buildSynopsisContent(selectedPlan: Plan | null, ta: TherapeuticAreaKey,
 
   return [
     {
+      id: 'clinical_intent',
       title: 'Synopsis · Clinical Intent',
-      text: `${TA_DEFAULTS[ta].label} | Phase ${phase} | ${region}: ${brief.medicalNeed}`
+      text: `${TA_DEFAULTS[ta].label} | Phase ${phase} | ${region}: ${brief.medicalNeed}`,
+      contributors: SYNOPSIS_SECTION_AGENT_MAP.clinical_intent
     },
     {
+      id: 'objective_endpoint',
       title: 'Synopsis · Objective and Primary Endpoint',
-      text: `Objective: ${brief.objective} | Primary endpoint: ${String(endpoint?.content?.name ?? 'TBD')}`
+      text: `Objective: ${brief.objective} | Primary endpoint: ${String(endpoint?.content?.name ?? 'TBD')}`,
+      contributors: SYNOPSIS_SECTION_AGENT_MAP.objective_endpoint
     },
     {
+      id: 'eligibility_core',
       title: 'Synopsis · Core Eligibility',
-      text: `Inclusion/Exclusion baseline is pre-structured and policy-scored. Snapshot: ${JSON.stringify(eligibility?.content ?? {})}`
+      text: `Inclusion/Exclusion baseline is pre-structured and policy-scored. Snapshot: ${JSON.stringify(eligibility?.content ?? {})}`,
+      contributors: SYNOPSIS_SECTION_AGENT_MAP.eligibility_core
     },
     {
+      id: 'assumptions',
       title: 'Synopsis · Statistical Assumptions',
-      text: `Assumption ledger: ${JSON.stringify(assumptions?.content ?? {})}`
+      text: `Assumption ledger: ${JSON.stringify(assumptions?.content ?? {})}`,
+      contributors: SYNOPSIS_SECTION_AGENT_MAP.assumptions
     },
     {
+      id: 'soa_ops_risk',
       title: 'Synopsis · SoA and Operational Risk',
-      text: `Visit count ${visitCount}; gate status ${selectedPlan.analysis.gates.filter((gate) => gate.passed).length}/${selectedPlan.analysis.gates.length} passed.`
+      text: `Visit count ${visitCount}; gate status ${selectedPlan.analysis.gates.filter((gate) => gate.passed).length}/${selectedPlan.analysis.gates.length} passed.`,
+      contributors: SYNOPSIS_SECTION_AGENT_MAP.soa_ops_risk
     }
   ];
 }
@@ -863,6 +961,7 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
   const [agentLogs, setAgentLogs] = useState<AgentLog[]>([]);
   const [rejectReasonDraft, setRejectReasonDraft] = useState<Record<string, string>>({});
   const [runSnapshots, setRunSnapshots] = useState<RunSnapshot[]>([]);
+  const [synopsisSnapshots, setSynopsisSnapshots] = useState<SynopsisSnapshot[]>([]);
   const [feedbackEvents, setFeedbackEvents] = useState<FeedbackEvent[]>([]);
   const [windowSize, setWindowSize] = useState(20);
   const [rejectThreshold, setRejectThreshold] = useState(0.5);
@@ -930,6 +1029,17 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
       deltaB: current.planScores.B - previous.planScores.B
     };
   }, [runSnapshots, scenarioKey]);
+  const synopsisComparison = useMemo(() => {
+    const scoped = synopsisSnapshots.filter((item) => item.scenarioKey === scenarioKey);
+    const current = scoped[scoped.length - 1] ?? null;
+    const previous = scoped.length > 1 ? scoped[scoped.length - 2] : null;
+    const diffs = current ? computeSynopsisDiff(previous?.sections ?? null, current.sections) : [];
+    return { current, previous, diffs };
+  }, [synopsisSnapshots, scenarioKey]);
+  const agentImpactScores = useMemo(
+    () => computeAgentImpactScores(agentProfiles, agentStrategies),
+    [agentProfiles, agentStrategies]
+  );
 
   async function runAgents(generated: Plan[]) {
     const preferred = [...generated].sort((a, b) => b.score - a.score)[0];
@@ -1106,6 +1216,15 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
       setStatus('Please accept Plan A or B first.');
       return;
     }
+    setSynopsisSnapshots((prev) => [
+      ...prev.slice(-9),
+      {
+        id: `syn-${Date.now()}`,
+        scenarioKey,
+        timestamp: new Date().toLocaleTimeString(),
+        sections: synopsisDraft
+      }
+    ]);
     setSynopsisGenerated(true);
     setFullGenerated(false);
     setStatus('Synopsis generated. Review synopsis before expanding to full protocol.');
@@ -1138,6 +1257,9 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
       mode: 'protocol-os-lite-mock',
       locale,
       therapeuticArea: ta,
+      phase,
+      region,
+      scenarioKey,
       graphVersion,
       selectedPlan: selectedPlan.id,
       score: selectedPlan.score,
@@ -1148,6 +1270,8 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
       agentLogs,
       nodes: selectedPlan.nodes,
       synopsis: synopsisDraft,
+      synopsisDiff: synopsisComparison.diffs,
+      agentImpacts: agentImpactScores,
       chapters: chapterDraft
     };
 
@@ -1440,11 +1564,67 @@ export function ProtocolOsLitePage({ locale }: { locale: string }) {
               <div key={item.title} className="rounded border border-ink/20 bg-base p-3">
                 <p className="text-sm font-semibold text-ink">{item.title}</p>
                 <p className="mt-1 text-sm text-ink/90">{item.text}</p>
+                <p className="mt-2 text-[11px] text-ink/60">
+                  Contributed by: {item.contributors.join(', ')}
+                </p>
               </div>
             ))}
           </div>
         ) : (
           <p className="text-sm text-ink/85">After accepting a plan, generate synopsis first.</p>
+        )}
+      </Card>
+
+      <Card className="bg-base border-ink/25 space-y-3">
+        <CardTitle className="text-ink">Synopsis Attribution Console</CardTitle>
+        {synopsisGenerated ? (
+          <div className="space-y-4">
+            <div className="rounded border border-ink/20 bg-base p-3">
+              <p className="text-xs uppercase tracking-[0.12em] text-ink/70">Section Mapping</p>
+              <div className="mt-2 space-y-2">
+                {synopsisDraft.map((section) => (
+                  <div key={section.id} className="rounded border border-ink/15 px-2 py-2 text-xs text-ink">
+                    <p className="font-semibold text-ink">{section.title}</p>
+                    <p className="mt-1 text-ink/80">{section.contributors.join(' · ')}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded border border-ink/20 bg-base p-3">
+              <p className="text-xs uppercase tracking-[0.12em] text-ink/70">Before/After Diff</p>
+              {synopsisComparison.diffs.length > 0 ? (
+                <div className="mt-2 space-y-2">
+                  {synopsisComparison.diffs.map((diff) => (
+                    <div key={`${diff.sectionId}-${diff.sourceAgent}`} className="rounded border border-ink/15 px-2 py-2 text-xs text-ink">
+                      <p className="font-semibold">{diff.sectionTitle}</p>
+                      <p className="mt-1 text-ink/75">source agent: {diff.sourceAgent}</p>
+                      <p className="mt-1 text-ink/70">before: {diff.before || '(empty)'}</p>
+                      <p className="mt-1 text-ink">after: {diff.after}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-2 text-xs text-ink/75">No diff yet. Generate synopsis at least twice in the same scenario.</p>
+              )}
+            </div>
+
+            <div className="rounded border border-ink/20 bg-base p-3">
+              <p className="text-xs uppercase tracking-[0.12em] text-ink/70">Impact Attribution</p>
+              <div className="mt-2 space-y-2">
+                {agentImpactScores.slice(0, 9).map((item) => (
+                  <div key={item.agent} className="flex items-center justify-between rounded border border-ink/15 px-2 py-2 text-xs text-ink">
+                    <span>{item.agent}</span>
+                    <span>
+                      impact {item.impact >= 0 ? '+' : ''}{item.impact} | {item.strategy} | n={item.samples}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm text-ink/80">Generate synopsis first to view section mapping, diff, and impact attribution.</p>
         )}
       </Card>
 
