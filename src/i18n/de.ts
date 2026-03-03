@@ -26,6 +26,12 @@ const de = {
     subtitle: 'Komplexe, schwere Systeme in isolierter Laufzeitumgebung.',
     cards: [
       {
+        title: 'Protocol OS Lite (Ein-Seiten-Version)',
+        summary: 'Kompletter One-Page-Mock-Flow mit Fake A/B, Fake Policy Scoring und Fake Exporten.',
+        href: '/ventures/protocol-os-lite',
+        cta: 'Lite-Version öffnen'
+      },
+      {
         title: 'Protocol OS (Decision-Centric)',
         summary: 'Design Graph + Policy Scoring + Skill Swarm + nachvollziehbare Exporte.',
         href: 'https://labs.stochstack.com/de/projects',

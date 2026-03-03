@@ -26,6 +26,12 @@ const en = {
     subtitle: 'Heavyweight, decision-centric systems deployed in an isolated runtime.',
     cards: [
       {
+        title: 'Protocol OS Lite (One-Page)',
+        summary: 'Single-page, full-flow mock demo with fake A/B, fake policy scoring, and fake exports.',
+        href: '/ventures/protocol-os-lite',
+        cta: 'Open lite version'
+      },
+      {
         title: 'Protocol OS (Decision-Centric)',
         summary: 'Design graph + policy scoring + skill swarm + traceable exports.',
         href: 'https://labs.stochstack.com/en/projects',

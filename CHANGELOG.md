@@ -53,6 +53,17 @@ All notable repository-level changes are tracked here for review.
 - Added unit tests for all six skills (`tests/protocol-os-skills.test.ts`).
 - **Operational**: switched Prisma datasource target to PostgreSQL and updated compose stack with Postgres service + migration/seed startup flow.
 
+### Ventures: Protocol OS Lite
+- Added `/{locale}/ventures/protocol-os-lite` as a one-page, zero-backend mock workflow for reliable demos.
+- Lite flow includes:
+  - brief capture
+  - evidence snippets
+  - fake orchestrator A/B generation
+  - fake policy scoring + conflict indicators
+  - plan accept with graph version bump
+  - export of fake Protocol HTML / SoA CSV / Traceability JSON
+- Added Ventures card links for EN/ZH/DE dictionaries so Lite version is the first clickable entry under Ventures.
+
 
 ### Ops Twin Eval Console v0.5.0
 - Added `/[locale]/ops-twin/eval` evaluation workspace with agent scorecards (accuracy, bias, stability, adoption).
