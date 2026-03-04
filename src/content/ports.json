@@ -1,5 +1,36 @@
 [
   {
+    "slug": "ophthalmology-diffusion-control-twin",
+    "name": {
+      "en": "Ophthalmology Diffusion Control Twin",
+      "zh": "眼科扩散合成对照孪生",
+      "de": "Ophthalmology Diffusion Control Twin"
+    },
+    "description": {
+      "en": "Mock diffusion-based digital twin for synthetic control arm generation in ophthalmology trials.",
+      "zh": "以眼科为例的扩散式数字孪生 mock：用于生成 synthetic control arm 患者数据。",
+      "de": "Mock-Digital-Twin auf Diffusionsbasis zur Generierung synthetischer Kontrollarmdaten fuer ophthalmologische Studien."
+    },
+    "tags": [
+      "Digital Twin",
+      "Ophthalmology",
+      "Synthetic Control"
+    ],
+    "status": "alpha",
+    "link": "https://stochstack.com/en/prototypes/ophthalmology-diffusion-control-twin",
+    "screenshot": "https://images.unsplash.com/photo-1584982751601-97dcc096659c?auto=format&fit=crop&w=1200&q=80",
+    "techStack": [
+      "Diffusion Mock",
+      "Patient Simulation",
+      "Control Arm Synthesis"
+    ],
+    "designIntent": {
+      "en": "Demonstrate how diffusion-style denoising can synthesize a control arm with transparent assumptions before production modeling.",
+      "zh": "在进入生产建模前，以可解释假设展示“扩散式去噪”如何合成对照组患者。",
+      "de": "Vor produktivem Modeling transparent zeigen, wie diffusion-aehnliches Denoising einen Kontrollarm synthetisiert."
+    }
+  },
+  {
     "slug": "ops-twin-site-startup-recruitment",
     "name": {
       "en": "Ops Digital Twin (A2A x MCP)",

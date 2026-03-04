@@ -1,0 +1,87 @@
+[
+  {
+    "id": "oph-namd-ph2",
+    "trialCode": "OPH-nAMD-204",
+    "indication": "nAMD",
+    "phase": "Phase 2",
+    "endpoint": "BCVA change at Week 24 (ETDRS letters)",
+    "observedControl": {
+      "n": 120,
+      "meanBcvaChange": 2.1,
+      "sdBcvaChange": 7.4,
+      "meanCstChange": -32,
+      "sdCstChange": 58
+    },
+    "historicalPool": {
+      "studies": ["AMD-118", "AMD-122", "AMD-OBS-19"],
+      "patients": 680
+    },
+    "defaultProfile": {
+      "ageMean": 74.2,
+      "ageSd": 6.3,
+      "baselineBcvaMean": 58.4,
+      "baselineBcvaSd": 9.8,
+      "baselineCstMean": 418,
+      "baselineCstSd": 72,
+      "durationMean": 3.8,
+      "durationSd": 1.6
+    }
+  },
+  {
+    "id": "oph-dme-ph3",
+    "trialCode": "OPH-DME-331",
+    "indication": "DME",
+    "phase": "Phase 3",
+    "endpoint": "BCVA change at Week 52 (ETDRS letters)",
+    "observedControl": {
+      "n": 160,
+      "meanBcvaChange": 4.3,
+      "sdBcvaChange": 9.2,
+      "meanCstChange": -45,
+      "sdCstChange": 66
+    },
+    "historicalPool": {
+      "studies": ["DME-201", "DME-225", "DME-RWE-12"],
+      "patients": 910
+    },
+    "defaultProfile": {
+      "ageMean": 62.8,
+      "ageSd": 8.2,
+      "baselineBcvaMean": 54.7,
+      "baselineBcvaSd": 11.1,
+      "baselineCstMean": 452,
+      "baselineCstSd": 81,
+      "durationMean": 6.4,
+      "durationSd": 2.7
+    }
+  },
+  {
+    "id": "oph-ga-ph2",
+    "trialCode": "OPH-GA-145",
+    "indication": "Geographic Atrophy",
+    "phase": "Phase 2",
+    "endpoint": "GA lesion growth at Month 12 (mm2)",
+    "observedControl": {
+      "n": 104,
+      "meanBcvaChange": -3.4,
+      "sdBcvaChange": 6.1,
+      "meanCstChange": -8,
+      "sdCstChange": 34
+    },
+    "historicalPool": {
+      "studies": ["GA-081", "GA-102", "GA-NAT-03"],
+      "patients": 540
+    },
+    "defaultProfile": {
+      "ageMean": 76.1,
+      "ageSd": 7.4,
+      "baselineBcvaMean": 49.2,
+      "baselineBcvaSd": 10.7,
+      "baselineCstMean": 301,
+      "baselineCstSd": 49,
+      "durationMean": 4.1,
+      "durationSd": 2.2
+    }
+  }
+]
+

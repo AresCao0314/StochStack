@@ -1,0 +1,29 @@
+[
+  {
+    "date": "2026-03-05",
+    "version": "v0.1.0",
+    "title": {
+      "en": "Ophthalmology Diffusion Twin (Mock) Launch",
+      "zh": "眼科扩散数字孪生（Mock）上线",
+      "de": "Launch: Ophthalmology Diffusion Twin (Mock)"
+    },
+    "changes": {
+      "en": [
+        "Added a one-page mock prototype for synthetic control arm generation with diffusion-style denoising loop.",
+        "Included ophthalmology scenarios (nAMD, DME, GA) with configurable cohort size, denoising steps, and calibration strength.",
+        "Added side-by-side observed-vs-synthetic metrics and patient-level synthetic sample table for review."
+      ],
+      "zh": [
+        "新增单页 mock 原型：通过扩散式去噪流程生成 synthetic control arm。",
+        "内置眼科场景（nAMD、DME、GA），可配置样本量、去噪步数与校准强度。",
+        "提供 observed vs synthetic 指标对照与患者级样本表，便于评审。"
+      ],
+      "de": [
+        "Einseitiger Mock-Prototyp fuer Synthetic-Control-Generierung mit diffusion-aehnlicher Denoising-Logik hinzugefuegt.",
+        "Ophthalmologie-Szenarien (nAMD, DME, GA) mit konfigurierbarer Kohortengroesse, Denoising-Schritten und Kalibrierstaerke.",
+        "Vergleich Observed-vs-Synthetic plus patientenbezogene Stichprobe zur Review bereitgestellt."
+      ]
+    }
+  }
+]
+

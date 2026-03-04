@@ -2,6 +2,21 @@
 
 All notable repository-level changes are tracked here for review.
 
+## 2026-03-05
+
+### Prototype: Ophthalmology Diffusion Control Twin (Mock)
+- Added new prototype route `/{locale}/prototypes/ophthalmology-diffusion-control-twin`.
+- Added one-page interactive mock for diffusion-style synthetic control arm generation:
+  - scenario switcher (nAMD / DME / GA)
+  - configurable synthetic cohort size, denoising steps, noise scale, calibration strength
+  - denoising convergence curve
+  - observed-vs-synthetic metric comparison
+  - patient-level synthetic sample table
+- Added content packs:
+  - `src/content/digital-twin/ophthalmology-diffusion-scenarios.json`
+  - `src/content/changelogs/ophthalmology-diffusion-digital-twin.json`
+- Added prototype card metadata in `src/content/ports.json`.
+
 ## 2026-03-02
 
 ### Historical Protocol Digitizer MVP+ Workflow Upgrade
