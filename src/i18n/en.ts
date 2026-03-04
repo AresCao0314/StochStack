@@ -5,6 +5,7 @@ const en = {
     home: 'Home',
     prototypes: 'Prototypes',
     ventures: 'Ventures',
+    atlas: 'Atlas',
     notes: 'Notes',
     life: 'Life',
     about: 'About',
@@ -16,10 +17,15 @@ const en = {
     cards: [
       { title: 'Prototypes', hint: '> open prototype' },
       { title: 'Ventures', hint: '> open venture' },
+      { title: 'Atlas', hint: '> open atlas' },
       { title: 'Notes', hint: '> read log' },
       { title: 'Life', hint: '> view signal' }
     ],
     portsTitle: 'Prototype Ports'
+  },
+  atlas: {
+    title: 'Architecture Atlas',
+    subtitle: 'One diagram can hold what a thousand words cannot.'
   },
   ventures: {
     title: 'Venture Systems',

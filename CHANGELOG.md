@@ -150,6 +150,15 @@ All notable repository-level changes are tracked here for review.
 
 ## 2026-03-04
 
+### Atlas Section Launch
+- Added new global section `Atlas` in top navigation and home quick-entry cards.
+- Added localized route `/{locale}/atlas` with mock architecture visuals:
+  - Layered Clinical Data Stack
+  - Decision-Centric Protocol Loop
+  - A2A + Human Review Governance Mesh
+- Added Atlas path to sitemap for all locales.
+- **User-visible**: a dedicated visual architecture gallery aligned with the “one diagram beats a thousand words” principle.
+
 ### Protocol OS Lite v1.0.0
 - Added `Synopsis Attribution Console` with three visibility layers:
   - Section mapping (`Synopsis section -> contributing agents`)

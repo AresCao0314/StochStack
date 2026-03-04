@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '',
     '/prototypes',
     '/ventures',
+    '/atlas',
     '/ventures/protocol-os-lite',
     '/notes',
     '/life/books',

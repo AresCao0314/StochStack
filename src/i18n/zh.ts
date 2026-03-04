@@ -5,6 +5,7 @@ const zh = {
     home: '首页',
     prototypes: '原型',
     ventures: 'Ventures',
+    atlas: 'Atlas',
     notes: '笔记',
     life: '生活',
     about: '关于',
@@ -16,10 +17,15 @@ const zh = {
     cards: [
       { title: '原型入口', hint: '> 打开原型' },
       { title: 'Ventures 系统', hint: '> 打开 Ventures' },
+      { title: 'Atlas 图谱', hint: '> 打开 Atlas' },
       { title: '信号笔记', hint: '> 阅读日志' },
       { title: '生活切片', hint: '> 查看信号' }
     ],
     portsTitle: 'Prototype Ports'
+  },
+  atlas: {
+    title: '架构图谱 Atlas',
+    subtitle: '一图胜千言，把复杂系统压缩成可讨论的视觉结构。'
   },
   ventures: {
     title: 'Ventures 系统',

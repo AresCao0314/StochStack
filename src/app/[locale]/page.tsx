@@ -57,9 +57,18 @@ export default function HomePage({ params }: { params: { locale: Locale } }) {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-5">
         {dict.home.cards.map((card, idx) => {
-          const href = idx === 0 ? '/prototypes' : idx === 1 ? '/ventures' : idx === 2 ? '/notes' : '/life/books';
+          const href =
+            idx === 0
+              ? '/prototypes'
+              : idx === 1
+                ? '/ventures'
+                : idx === 2
+                  ? '/atlas'
+                  : idx === 3
+                    ? '/notes'
+                    : '/life/books';
           return (
             <article
               key={card.title}

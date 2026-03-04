@@ -13,6 +13,7 @@ type TopNavProps = {
     home: string;
     prototypes: string;
     ventures: string;
+    atlas: string;
     notes: string;
     life: string;
     about: string;
@@ -29,6 +30,7 @@ export function TopNav({ locale, nav }: TopNavProps) {
     { href: `/${locale}`, label: nav.home },
     { href: `/${locale}/prototypes`, label: nav.prototypes },
     { href: `/${locale}/ventures`, label: nav.ventures },
+    { href: `/${locale}/atlas`, label: nav.atlas },
     { href: `/${locale}/notes`, label: nav.notes },
     { href: `/${locale}/life/books`, label: nav.life },
     { href: `/${locale}/about`, label: nav.about },

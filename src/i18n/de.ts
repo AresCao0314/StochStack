@@ -5,6 +5,7 @@ const de = {
     home: 'Start',
     prototypes: 'Prototypen',
     ventures: 'Ventures',
+    atlas: 'Atlas',
     notes: 'Notizen',
     life: 'Leben',
     about: 'Über',
@@ -16,10 +17,15 @@ const de = {
     cards: [
       { title: 'Prototypen', hint: '> Prototyp öffnen' },
       { title: 'Ventures', hint: '> Venture öffnen' },
+      { title: 'Atlas', hint: '> Atlas öffnen' },
       { title: 'Notizen', hint: '> Log lesen' },
       { title: 'Leben', hint: '> Signal ansehen' }
     ],
     portsTitle: 'Prototype Ports'
+  },
+  atlas: {
+    title: 'Architecture Atlas',
+    subtitle: 'Ein Diagramm sagt mehr als tausend Worte.'
   },
   ventures: {
     title: 'Venture-Systeme',
