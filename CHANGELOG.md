@@ -156,6 +156,11 @@ All notable repository-level changes are tracked here for review.
   - Layered Clinical Data Stack
   - Decision-Centric Protocol Loop
   - A2A + Human Review Governance Mesh
+- Added per-diagram interactive detail page `/{locale}/atlas/{slug}` with:
+  - layer toggle controls
+  - zoom controls
+  - direct export to PNG/SVG for article and PPT usage
+- Added `Open Interactive` CTA on each Atlas card to jump from gallery to dedicated diagram workspace.
 - Added Atlas path to sitemap for all locales.
 - **User-visible**: a dedicated visual architecture gallery aligned with the “one diagram beats a thousand words” principle.
 

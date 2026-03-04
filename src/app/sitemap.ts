@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { locales } from '@/lib/i18n';
+import { getAtlasDiagrams } from '@/lib/atlas';
 import { getNotes, getPorts } from '@/lib/content';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -44,5 +45,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   );
 
-  return [...routes, ...prototypes, ...notes];
+  const atlasRoutes = locales.flatMap((locale) =>
+    getAtlasDiagrams().map((diagram) => ({
+      url: `${base}/${locale}/atlas/${diagram.slug}`,
+      lastModified: new Date()
+    }))
+  );
+
+  return [...routes, ...prototypes, ...notes, ...atlasRoutes];
 }
