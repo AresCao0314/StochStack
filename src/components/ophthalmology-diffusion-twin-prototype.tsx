@@ -47,12 +47,22 @@ type SyntheticPatient = {
 type RunResult = {
   seed: number;
   patients: SyntheticPatient[];
+  treatedArmValues: {
+    bcva: number[];
+    cst: number[];
+  };
   lossCurve: number[];
   metrics: {
     syntheticBcvaMean: number;
     syntheticBcvaSd: number;
     syntheticCstMean: number;
     syntheticCstSd: number;
+    treatedBcvaMean: number;
+    treatedBcvaSd: number;
+    treatedCstMean: number;
+    treatedCstSd: number;
+    bcvaAlignmentScore: number;
+    cstAlignmentScore: number;
     ess: number;
     controlReductionPct: number;
   };
@@ -80,6 +90,14 @@ const labels: Record<Locale, any> = {
     reduction: 'Estimated control reduction',
     bcva: 'BCVA change',
     cst: 'CST change',
+    treated: 'Treated arm',
+    synthetic: 'Synthetic arm',
+    alignment: 'Distribution alignment',
+    histogram: 'Histogram overlay',
+    qq: 'Q-Q plot',
+    downloadCsv: 'Download CSV',
+    downloadSyntheticCsv: 'Synthetic patients CSV',
+    metric: 'Metric',
     loss: 'Denoising convergence curve',
     method: 'Mock method note',
     methodText:
@@ -105,6 +123,14 @@ const labels: Record<Locale, any> = {
     reduction: '预计对照组缩减',
     bcva: 'BCVA 变化',
     cst: 'CST 变化',
+    treated: '治疗臂',
+    synthetic: '合成臂',
+    alignment: '分布对齐',
+    histogram: '直方图叠加',
+    qq: 'Q-Q 图',
+    downloadCsv: '下载分布 CSV',
+    downloadSyntheticCsv: '下载合成患者 CSV',
+    metric: '指标',
     loss: '去噪收敛曲线',
     method: 'Mock 方法说明',
     methodText: '当前为产品原型：患者数据通过可复现的伪随机去噪过程生成，再按场景对照组统计量进行校准。'
@@ -130,6 +156,14 @@ const labels: Record<Locale, any> = {
     reduction: 'Geschaetzte Kontrollarm-Reduktion',
     bcva: 'BCVA-Aenderung',
     cst: 'CST-Aenderung',
+    treated: 'Behandlungsarm',
+    synthetic: 'Synthetischer Arm',
+    alignment: 'Verteilungsabgleich',
+    histogram: 'Histogramm-Overlay',
+    qq: 'Q-Q-Plot',
+    downloadCsv: 'CSV herunterladen',
+    downloadSyntheticCsv: 'Synthetic-Patienten CSV',
+    metric: 'Metrik',
     loss: 'Denoising-Konvergenzkurve',
     method: 'Mock-Methodenhinweis',
     methodText:
@@ -167,6 +201,60 @@ function numberColor(delta: number) {
   return 'text-rose-500';
 }
 
+function getTreatmentShift(indication: string) {
+  if (indication.toLowerCase().includes('namd')) {
+    return { bcva: 5.2, cst: -58 };
+  }
+  if (indication.toLowerCase().includes('dme')) {
+    return { bcva: 4.1, cst: -52 };
+  }
+  return { bcva: 2.4, cst: -21 };
+}
+
+function percentile(sorted: number[], p: number) {
+  if (sorted.length === 0) return 0;
+  const idx = p * (sorted.length - 1);
+  const lo = Math.floor(idx);
+  const hi = Math.min(sorted.length - 1, lo + 1);
+  const t = idx - lo;
+  return sorted[lo] * (1 - t) + sorted[hi] * t;
+}
+
+function histogram(values: number[], bins: number, minV: number, maxV: number) {
+  const counts = Array.from({ length: bins }, () => 0);
+  const width = Math.max(1e-6, (maxV - minV) / bins);
+  values.forEach((v) => {
+    const idx = Math.max(0, Math.min(bins - 1, Math.floor((v - minV) / width)));
+    counts[idx] += 1;
+  });
+  return counts;
+}
+
+function toCsv(rows: string[][]) {
+  return rows
+    .map((row) =>
+      row
+        .map((cell) => {
+          const escaped = cell.replace(/"/g, '""');
+          return /[",\n]/.test(escaped) ? `"${escaped}"` : escaped;
+        })
+        .join(',')
+    )
+    .join('\n');
+}
+
+function downloadTextFile(filename: string, content: string, mime: string) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
 export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { locale: Locale; scenarios: OphScenario[] }) {
   const t = labels[locale];
   const [scenarioId, setScenarioId] = useState(scenarios[0]?.id ?? '');
@@ -175,6 +263,7 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
   const [noiseScale, setNoiseScale] = useState(0.95);
   const [calibration, setCalibration] = useState(0.72);
   const [runIdx, setRunIdx] = useState(0);
+  const [metric, setMetric] = useState<'bcva' | 'cst'>('bcva');
 
   const scenario = useMemo(() => scenarios.find((s) => s.id === scenarioId) ?? scenarios[0], [scenarioId, scenarios]);
 
@@ -184,8 +273,11 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
     const profile = scenario.defaultProfile;
 
     const patients: SyntheticPatient[] = [];
+    const treatedBcvaValues: number[] = [];
+    const treatedCstValues: number[] = [];
     const lossCurve: number[] = [];
     let loss = 1.25 + noiseScale * 0.8;
+    const shift = getTreatmentShift(scenario.indication);
 
     for (let s = 0; s < steps; s += 1) {
       const decay = 0.86 - calibration * 0.14 + rand() * 0.02;
@@ -200,6 +292,8 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
       let duration = profile.durationMean + gaussian(rand) * profile.durationSd;
       let bcvaChange = scenario.observedControl.meanBcvaChange + gaussian(rand) * scenario.observedControl.sdBcvaChange;
       let cstChange = scenario.observedControl.meanCstChange + gaussian(rand) * scenario.observedControl.sdCstChange;
+      let treatedBcva = scenario.observedControl.meanBcvaChange + shift.bcva + gaussian(rand) * scenario.observedControl.sdBcvaChange * 0.9;
+      let treatedCst = scenario.observedControl.meanCstChange + shift.cst + gaussian(rand) * scenario.observedControl.sdCstChange * 0.9;
 
       for (let s = 0; s < steps; s += 1) {
         const stepWeight = (s + 1) / steps;
@@ -211,6 +305,8 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
         duration = duration + (profile.durationMean - duration) * denoiseGain + gaussian(rand) * jitter * 0.3;
         bcvaChange = bcvaChange + (scenario.observedControl.meanBcvaChange - bcvaChange) * denoiseGain + gaussian(rand) * jitter * 1.6;
         cstChange = cstChange + (scenario.observedControl.meanCstChange - cstChange) * denoiseGain + gaussian(rand) * jitter * 18;
+        treatedBcva = treatedBcva + (scenario.observedControl.meanBcvaChange + shift.bcva - treatedBcva) * denoiseGain + gaussian(rand) * jitter * 1.3;
+        treatedCst = treatedCst + (scenario.observedControl.meanCstChange + shift.cst - treatedCst) * denoiseGain + gaussian(rand) * jitter * 15;
       }
 
       patients.push({
@@ -223,26 +319,48 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
         cstChangeW24: Number(cstChange.toFixed(0)),
         sourceWeight: Number((0.45 + calibration * 0.45 + rand() * 0.1).toFixed(2))
       });
+
+      treatedBcvaValues.push(Number(treatedBcva.toFixed(1)));
+      treatedCstValues.push(Number(treatedCst.toFixed(0)));
     }
 
     const bcvaValues = patients.map((p) => p.bcvaChangeW24);
     const cstValues = patients.map((p) => p.cstChangeW24);
     const syntheticBcvaMean = mean(bcvaValues);
     const syntheticCstMean = mean(cstValues);
+    const treatedBcvaMean = mean(treatedBcvaValues);
+    const treatedCstMean = mean(treatedCstValues);
     const ess = Math.round(sampleSize * (0.55 + calibration * 0.3) * (0.7 + (1 - noiseScale) * 0.25));
     const controlReductionPct = Number(
       Math.max(0, ((scenario.observedControl.n - Math.max(40, scenario.observedControl.n - ess * 0.55)) / scenario.observedControl.n) * 100).toFixed(1)
     );
 
+    const bcvaMeanGap = Math.abs(treatedBcvaMean - syntheticBcvaMean);
+    const cstMeanGap = Math.abs(treatedCstMean - syntheticCstMean);
+    const bcvaSdGap = Math.abs(sd(treatedBcvaValues) - sd(bcvaValues));
+    const cstSdGap = Math.abs(sd(treatedCstValues) - sd(cstValues));
+    const bcvaAlignmentScore = Number(Math.max(0, 100 - (bcvaMeanGap * 8 + bcvaSdGap * 6)).toFixed(1));
+    const cstAlignmentScore = Number(Math.max(0, 100 - (cstMeanGap * 0.55 + cstSdGap * 0.45)).toFixed(1));
+
     return {
       seed,
       patients,
+      treatedArmValues: {
+        bcva: treatedBcvaValues,
+        cst: treatedCstValues
+      },
       lossCurve,
       metrics: {
         syntheticBcvaMean: Number(syntheticBcvaMean.toFixed(2)),
         syntheticBcvaSd: Number(sd(bcvaValues).toFixed(2)),
         syntheticCstMean: Number(syntheticCstMean.toFixed(1)),
         syntheticCstSd: Number(sd(cstValues).toFixed(1)),
+        treatedBcvaMean: Number(treatedBcvaMean.toFixed(2)),
+        treatedBcvaSd: Number(sd(treatedBcvaValues).toFixed(2)),
+        treatedCstMean: Number(treatedCstMean.toFixed(1)),
+        treatedCstSd: Number(sd(treatedCstValues).toFixed(1)),
+        bcvaAlignmentScore,
+        cstAlignmentScore,
         ess,
         controlReductionPct
       }
@@ -263,6 +381,63 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
 
   const bcvaDelta = Number((run.metrics.syntheticBcvaMean - scenario.observedControl.meanBcvaChange).toFixed(2));
   const cstDelta = Number((run.metrics.syntheticCstMean - scenario.observedControl.meanCstChange).toFixed(1));
+
+  const metricSeries = useMemo(() => {
+    const syntheticValues = metric === 'bcva' ? run.patients.map((p) => p.bcvaChangeW24) : run.patients.map((p) => p.cstChangeW24);
+    const treatedValues = metric === 'bcva' ? run.treatedArmValues.bcva : run.treatedArmValues.cst;
+    const minV = Math.min(...syntheticValues, ...treatedValues);
+    const maxV = Math.max(...syntheticValues, ...treatedValues);
+    const bins = 14;
+    const histSyn = histogram(syntheticValues, bins, minV, maxV);
+    const histTreat = histogram(treatedValues, bins, minV, maxV);
+    const maxCount = Math.max(...histSyn, ...histTreat, 1);
+
+    const synSorted = [...syntheticValues].sort((a, b) => a - b);
+    const treatSorted = [...treatedValues].sort((a, b) => a - b);
+    const n = Math.min(36, synSorted.length, treatSorted.length);
+    const qq = Array.from({ length: n }, (_, i) => {
+      const q = (i + 0.5) / n;
+      return { x: percentile(treatSorted, q), y: percentile(synSorted, q) };
+    });
+
+    return {
+      minV,
+      maxV,
+      bins,
+      histSyn,
+      histTreat,
+      maxCount,
+      qq
+    };
+  }, [metric, run.patients, run.treatedArmValues]);
+
+  const downloadAlignmentCsv = () => {
+    const rows: string[][] = [['arm', 'metric', 'value']];
+    run.treatedArmValues.bcva.forEach((v) => rows.push([t.treated, 'BCVA_change', String(v)]));
+    run.patients.forEach((p) => rows.push([t.synthetic, 'BCVA_change', String(p.bcvaChangeW24)]));
+    run.treatedArmValues.cst.forEach((v) => rows.push([t.treated, 'CST_change', String(v)]));
+    run.patients.forEach((p) => rows.push([t.synthetic, 'CST_change', String(p.cstChangeW24)]));
+    downloadTextFile(`${scenario.trialCode}-alignment.csv`, toCsv(rows), 'text/csv;charset=utf-8');
+  };
+
+  const downloadSyntheticCsv = () => {
+    const rows: string[][] = [
+      ['id', 'age', 'baseline_bcva', 'baseline_cst', 'disease_duration_years', 'bcva_change_w24', 'cst_change_w24', 'source_weight']
+    ];
+    run.patients.forEach((p) => {
+      rows.push([
+        p.id,
+        String(p.age),
+        String(p.baselineBcva),
+        String(p.baselineCst),
+        String(p.diseaseDurationYears),
+        String(p.bcvaChangeW24),
+        String(p.cstChangeW24),
+        String(p.sourceWeight)
+      ]);
+    });
+    downloadTextFile(`${scenario.trialCode}-synthetic-patients.csv`, toCsv(rows), 'text/csv;charset=utf-8');
+  };
 
   return (
     <div className="space-y-8">
@@ -350,14 +525,18 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
           </h2>
           <div className="space-y-2 text-sm">
             <div className="rounded border border-ink/15 p-2">
-              {t.bcva}: observed {scenario.observedControl.meanBcvaChange.toFixed(2)} ± {scenario.observedControl.sdBcvaChange.toFixed(2)} | synthetic{' '}
+              {t.bcva}: observed {scenario.observedControl.meanBcvaChange.toFixed(2)} ± {scenario.observedControl.sdBcvaChange.toFixed(2)} | {t.synthetic}{' '}
               {run.metrics.syntheticBcvaMean.toFixed(2)} ± {run.metrics.syntheticBcvaSd.toFixed(2)} ·
               <span className={`ml-1 font-semibold ${numberColor(bcvaDelta)}`}>Δ {bcvaDelta >= 0 ? '+' : ''}{bcvaDelta.toFixed(2)}</span>
             </div>
             <div className="rounded border border-ink/15 p-2">
-              {t.cst}: observed {scenario.observedControl.meanCstChange.toFixed(1)} ± {scenario.observedControl.sdCstChange.toFixed(1)} | synthetic{' '}
+              {t.cst}: observed {scenario.observedControl.meanCstChange.toFixed(1)} ± {scenario.observedControl.sdCstChange.toFixed(1)} | {t.synthetic}{' '}
               {run.metrics.syntheticCstMean.toFixed(1)} ± {run.metrics.syntheticCstSd.toFixed(1)} ·
               <span className={`ml-1 font-semibold ${numberColor(cstDelta)}`}>Δ {cstDelta >= 0 ? '+' : ''}{cstDelta.toFixed(1)}</span>
+            </div>
+            <div className="rounded border border-ink/15 p-2">
+              {t.treated} vs {t.synthetic} {t.alignment}: BCVA <span className="font-semibold">{run.metrics.bcvaAlignmentScore}</span> / 100 · CST{' '}
+              <span className="font-semibold">{run.metrics.cstAlignmentScore}</span> / 100
             </div>
           </div>
           <div className="mt-4 rounded border border-ink/15 bg-ink/5 px-3 py-2 text-xs text-ink/80">
@@ -368,7 +547,71 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
       </section>
 
       <section className="noise-border rounded-lg p-4">
-        <h2 className="mb-3 text-lg font-semibold">{t.section4}</h2>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-lg font-semibold">
+            {t.treated} vs {t.synthetic} · {t.alignment}
+          </h2>
+          <div className="flex items-center gap-2">
+            <label className="text-xs uppercase tracking-[0.12em] text-ink/70">{t.metric}</label>
+            <select value={metric} onChange={(e) => setMetric(e.target.value as 'bcva' | 'cst')} className="rounded border border-ink/20 bg-transparent px-2 py-1 text-sm">
+              <option value="bcva">BCVA</option>
+              <option value="cst">CST</option>
+            </select>
+            <button type="button" onClick={downloadAlignmentCsv} className="rounded border border-ink/25 px-2 py-1 text-sm hover:bg-ink/10">
+              {t.downloadCsv}
+            </button>
+          </div>
+        </div>
+
+        <div className="grid gap-4 xl:grid-cols-2">
+          <article className="rounded border border-ink/15 p-3">
+            <p className="text-sm font-semibold">{t.histogram}</p>
+            <svg viewBox="0 0 820 260" className="mt-2 h-auto w-full rounded border border-ink/10 bg-white/40">
+              <line x1="30" y1="230" x2="790" y2="230" stroke="currentColor" strokeOpacity="0.3" />
+              <line x1="30" y1="20" x2="30" y2="230" stroke="currentColor" strokeOpacity="0.3" />
+              {metricSeries.histTreat.map((count, i) => {
+                const x = 38 + i * (740 / metricSeries.bins);
+                const w = (740 / metricSeries.bins) * 0.42;
+                const h = (count / metricSeries.maxCount) * 180;
+                return <rect key={`t-${i}`} x={x} y={230 - h} width={w} height={h} fill="#0B0F14" fillOpacity="0.4" />;
+              })}
+              {metricSeries.histSyn.map((count, i) => {
+                const x = 38 + i * (740 / metricSeries.bins) + (740 / metricSeries.bins) * 0.46;
+                const w = (740 / metricSeries.bins) * 0.42;
+                const h = (count / metricSeries.maxCount) * 180;
+                return <rect key={`s-${i}`} x={x} y={230 - h} width={w} height={h} fill="#00E47C" fillOpacity="0.6" />;
+              })}
+            </svg>
+            <div className="mt-2 flex items-center gap-3 text-xs text-ink/70">
+              <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-3 bg-ink/50" />{t.treated}</span>
+              <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-3 bg-accent1/80" />{t.synthetic}</span>
+            </div>
+          </article>
+
+          <article className="rounded border border-ink/15 p-3">
+            <p className="text-sm font-semibold">{t.qq}</p>
+            <svg viewBox="0 0 820 260" className="mt-2 h-auto w-full rounded border border-ink/10 bg-white/40">
+              <line x1="30" y1="230" x2="790" y2="230" stroke="currentColor" strokeOpacity="0.3" />
+              <line x1="30" y1="20" x2="30" y2="230" stroke="currentColor" strokeOpacity="0.3" />
+              <line x1="30" y1="230" x2="790" y2="20" stroke="#6AD2E2" strokeOpacity="0.8" strokeDasharray="5 4" />
+              {metricSeries.qq.map((p, i) => {
+                const x = 30 + ((p.x - metricSeries.minV) / Math.max(1e-6, metricSeries.maxV - metricSeries.minV)) * 760;
+                const y = 230 - ((p.y - metricSeries.minV) / Math.max(1e-6, metricSeries.maxV - metricSeries.minV)) * 210;
+                return <circle key={i} cx={x} cy={y} r="3.2" fill="#00E47C" fillOpacity="0.85" />;
+              })}
+            </svg>
+            <p className="mt-2 text-xs text-ink/70">x-axis: {t.treated} quantiles · y-axis: {t.synthetic} quantiles</p>
+          </article>
+        </div>
+      </section>
+
+      <section className="noise-border rounded-lg p-4">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <h2 className="text-lg font-semibold">{t.section4}</h2>
+          <button type="button" onClick={downloadSyntheticCsv} className="rounded border border-ink/25 px-2 py-1 text-sm hover:bg-ink/10">
+            {t.downloadSyntheticCsv}
+          </button>
+        </div>
         <div className="overflow-auto">
           <table className="min-w-full text-sm">
             <thead>
@@ -403,4 +646,3 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
     </div>
   );
 }
-

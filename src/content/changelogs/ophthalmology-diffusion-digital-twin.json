@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-05",
+    "version": "v0.2.0",
+    "title": {
+      "en": "Distribution Alignment + CSV Export",
+      "zh": "分布对齐可视化 + CSV 导出",
+      "de": "Verteilungsabgleich + CSV Export"
+    },
+    "changes": {
+      "en": [
+        "Added treated-arm vs synthetic-arm distribution alignment panel.",
+        "Added histogram overlay and Q-Q plot for BCVA/CST metric toggles.",
+        "Added CSV export buttons for alignment dataset and synthetic patient-level table."
+      ],
+      "zh": [
+        "新增治疗臂 vs 合成臂分布对齐面板。",
+        "新增 BCVA/CST 指标切换的直方图叠加与 Q-Q 图。",
+        "新增 CSV 导出：分布数据与合成患者明细。"
+      ],
+      "de": [
+        "Panel fuer Verteilungsabgleich zwischen Behandlungsarm und synthetischem Arm hinzugefuegt.",
+        "Histogramm-Overlay und Q-Q-Plot mit BCVA/CST-Umschaltung hinzugefuegt.",
+        "CSV-Export fuer Verteilungsdaten und synthetische Patientenliste hinzugefuegt."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-05",
     "version": "v0.1.0",
     "title": {
       "en": "Ophthalmology Diffusion Twin (Mock) Launch",
@@ -26,4 +52,3 @@
     }
   }
 ]
-
