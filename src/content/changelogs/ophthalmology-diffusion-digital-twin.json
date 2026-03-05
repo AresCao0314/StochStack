@@ -1,6 +1,32 @@
 [
   {
     "date": "2026-03-05",
+    "version": "v0.3.0",
+    "title": {
+      "en": "External Control Methodology Pipeline",
+      "zh": "外部对照方法学管线",
+      "de": "Methodik-Pipeline fuer externe Kontrolle"
+    },
+    "changes": {
+      "en": [
+        "Added end-to-end methodology pipeline: data cleaning -> cohort definition -> PS weighting/matching -> primary endpoint estimation -> sensitivity analysis.",
+        "Added configurable analysis controls for IPTW vs PS matching, caliper, and propensity trimming.",
+        "Added balance diagnostics (mean |SMD| before/after), treatment effect with 95% CI, and sensitivity scenario table."
+      ],
+      "zh": [
+        "新增端到端方法学管线：数据清洗 -> cohort 定义 -> PS 加权/匹配 -> 主要终点估计 -> 敏感性分析。",
+        "新增分析参数控制：IPTW/PS 匹配、caliper、倾向评分截尾。",
+        "新增平衡性诊断（平均 |SMD| 前后）、主要效应+95%CI 与敏感性情景表。"
+      ],
+      "de": [
+        "End-to-End-Methodikpipeline hinzugefuegt: Datenbereinigung -> Cohort-Definition -> PS-Gewichtung/Matching -> primaerer Endpunkt -> Sensitivitaetsanalyse.",
+        "Konfigurierbare Analyseparameter fuer IPTW vs PS-Matching, Caliper und PS-Trimming hinzugefuegt.",
+        "Balance-Diagnostik (mittl. |SMD| vorher/nachher), Behandlungseffekt mit 95%-KI und Sensitivitaetsszenarien hinzugefuegt."
+      ]
+    }
+  },
+  {
+    "date": "2026-03-05",
     "version": "v0.2.0",
     "title": {
       "en": "Distribution Alignment + CSV Export",

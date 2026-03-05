@@ -42,11 +42,24 @@ type SyntheticPatient = {
   bcvaChangeW24: number;
   cstChangeW24: number;
   sourceWeight: number;
+  qcFlag: 'ok' | 'missing' | 'outlier';
+};
+
+type TreatedPatient = {
+  id: string;
+  age: number;
+  baselineBcva: number;
+  baselineCst: number;
+  diseaseDurationYears: number;
+  bcvaChangeW24: number;
+  cstChangeW24: number;
+  qcFlag: 'ok' | 'missing' | 'outlier';
 };
 
 type RunResult = {
   seed: number;
   patients: SyntheticPatient[];
+  treatedPatients: TreatedPatient[];
   treatedArmValues: {
     bcva: number[];
     cst: number[];
@@ -98,6 +111,26 @@ const labels: Record<Locale, any> = {
     downloadCsv: 'Download CSV',
     downloadSyntheticCsv: 'Synthetic patients CSV',
     metric: 'Metric',
+    section5: 'External Control Methodology Pipeline',
+    step1: 'Step 1: Data cleaning',
+    step2: 'Step 2: Cohort definition',
+    step3: 'Step 3: Propensity score / weighting / matching',
+    step4: 'Step 4: Primary endpoint estimation',
+    step5: 'Step 5: Sensitivity analysis',
+    methodType: 'Method',
+    caliper: 'Matching caliper',
+    trim: 'PS trimming',
+    rawN: 'Raw N',
+    cleanedN: 'After cleaning',
+    eligibleN: 'Cohort eligible',
+    balanceBefore: 'Balance before (mean |SMD|)',
+    balanceAfter: 'Balance after (mean |SMD|)',
+    primaryEffect: 'Primary effect (treated - external control)',
+    ci95: '95% CI',
+    sensScenario: 'Scenario',
+    sensEffect: 'Effect',
+    sensDelta: 'Delta vs primary',
+    sensNote: 'Interpretation',
     loss: 'Denoising convergence curve',
     method: 'Mock method note',
     methodText:
@@ -131,6 +164,26 @@ const labels: Record<Locale, any> = {
     downloadCsv: '下载分布 CSV',
     downloadSyntheticCsv: '下载合成患者 CSV',
     metric: '指标',
+    section5: '外部对照方法学管线',
+    step1: '步骤1：数据清洗',
+    step2: '步骤2：Cohort 定义',
+    step3: '步骤3：倾向评分 / 加权 / 匹配',
+    step4: '步骤4：主要终点估计',
+    step5: '步骤5：敏感性分析',
+    methodType: '方法',
+    caliper: '匹配卡尺',
+    trim: 'PS 截尾',
+    rawN: '原始 N',
+    cleanedN: '清洗后 N',
+    eligibleN: '入组可比 N',
+    balanceBefore: '平衡性前（平均 |SMD|）',
+    balanceAfter: '平衡性后（平均 |SMD|）',
+    primaryEffect: '主要效应（治疗臂 - 外部对照）',
+    ci95: '95% 置信区间',
+    sensScenario: '情景',
+    sensEffect: '效应值',
+    sensDelta: '相对主分析变化',
+    sensNote: '解释',
     loss: '去噪收敛曲线',
     method: 'Mock 方法说明',
     methodText: '当前为产品原型：患者数据通过可复现的伪随机去噪过程生成，再按场景对照组统计量进行校准。'
@@ -164,6 +217,26 @@ const labels: Record<Locale, any> = {
     downloadCsv: 'CSV herunterladen',
     downloadSyntheticCsv: 'Synthetic-Patienten CSV',
     metric: 'Metrik',
+    section5: 'Methodik-Pipeline fuer externe Kontrolle',
+    step1: 'Schritt 1: Datenbereinigung',
+    step2: 'Schritt 2: Cohort-Definition',
+    step3: 'Schritt 3: Propensity Score / Gewichtung / Matching',
+    step4: 'Schritt 4: Primaerer Endpunkt',
+    step5: 'Schritt 5: Sensitivitaetsanalyse',
+    methodType: 'Methode',
+    caliper: 'Matching-Caliper',
+    trim: 'PS-Trimming',
+    rawN: 'Raw N',
+    cleanedN: 'Nach Bereinigung',
+    eligibleN: 'Cohort geeignet',
+    balanceBefore: 'Balance vorher (mittl. |SMD|)',
+    balanceAfter: 'Balance nachher (mittl. |SMD|)',
+    primaryEffect: 'Primaerer Effekt (Behandlung - externe Kontrolle)',
+    ci95: '95%-KI',
+    sensScenario: 'Szenario',
+    sensEffect: 'Effekt',
+    sensDelta: 'Delta vs primaer',
+    sensNote: 'Interpretation',
     loss: 'Denoising-Konvergenzkurve',
     method: 'Mock-Methodenhinweis',
     methodText:
@@ -199,6 +272,32 @@ function numberColor(delta: number) {
   if (Math.abs(delta) <= 0.5) return 'text-accent2';
   if (Math.abs(delta) <= 1.5) return 'text-accent1';
   return 'text-rose-500';
+}
+
+function sigmoid(x: number) {
+  return 1 / (1 + Math.exp(-x));
+}
+
+function weightedMean(values: number[], weights: number[]) {
+  const sw = weights.reduce((a, b) => a + b, 0);
+  if (sw <= 0) return 0;
+  return values.reduce((acc, v, i) => acc + v * weights[i], 0) / sw;
+}
+
+function weightedVar(values: number[], weights: number[]) {
+  const m = weightedMean(values, weights);
+  const sw = weights.reduce((a, b) => a + b, 0);
+  if (sw <= 0) return 0;
+  return values.reduce((acc, v, i) => acc + weights[i] * (v - m) ** 2, 0) / sw;
+}
+
+function smd(a: number[], b: number[]) {
+  const ma = mean(a);
+  const mb = mean(b);
+  const sda = sd(a);
+  const sdb = sd(b);
+  const sp = Math.sqrt((sda ** 2 + sdb ** 2) / 2);
+  return sp <= 1e-9 ? 0 : (ma - mb) / sp;
 }
 
 function getTreatmentShift(indication: string) {
@@ -264,6 +363,9 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
   const [calibration, setCalibration] = useState(0.72);
   const [runIdx, setRunIdx] = useState(0);
   const [metric, setMetric] = useState<'bcva' | 'cst'>('bcva');
+  const [methodType, setMethodType] = useState<'iptw' | 'matching'>('iptw');
+  const [caliper, setCaliper] = useState(0.12);
+  const [trimPs, setTrimPs] = useState(0.03);
 
   const scenario = useMemo(() => scenarios.find((s) => s.id === scenarioId) ?? scenarios[0], [scenarioId, scenarios]);
 
@@ -273,6 +375,7 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
     const profile = scenario.defaultProfile;
 
     const patients: SyntheticPatient[] = [];
+    const treatedPatients: TreatedPatient[] = [];
     const treatedBcvaValues: number[] = [];
     const treatedCstValues: number[] = [];
     const lossCurve: number[] = [];
@@ -294,6 +397,8 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
       let cstChange = scenario.observedControl.meanCstChange + gaussian(rand) * scenario.observedControl.sdCstChange;
       let treatedBcva = scenario.observedControl.meanBcvaChange + shift.bcva + gaussian(rand) * scenario.observedControl.sdBcvaChange * 0.9;
       let treatedCst = scenario.observedControl.meanCstChange + shift.cst + gaussian(rand) * scenario.observedControl.sdCstChange * 0.9;
+      const qcRoll = rand();
+      const qcFlag: 'ok' | 'missing' | 'outlier' = qcRoll < 0.05 ? 'missing' : qcRoll < 0.09 ? 'outlier' : 'ok';
 
       for (let s = 0; s < steps; s += 1) {
         const stepWeight = (s + 1) / steps;
@@ -317,7 +422,19 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
         diseaseDurationYears: Number(Math.max(0.3, duration).toFixed(1)),
         bcvaChangeW24: Number(bcvaChange.toFixed(1)),
         cstChangeW24: Number(cstChange.toFixed(0)),
-        sourceWeight: Number((0.45 + calibration * 0.45 + rand() * 0.1).toFixed(2))
+        sourceWeight: Number((0.45 + calibration * 0.45 + rand() * 0.1).toFixed(2)),
+        qcFlag
+      });
+
+      treatedPatients.push({
+        id: `TRT-${String(i + 1).padStart(3, '0')}`,
+        age: Number((age - 0.8 + gaussian(rand) * 1.3).toFixed(1)),
+        baselineBcva: Number((baselineBcva - 1.2 + gaussian(rand) * 1.2).toFixed(1)),
+        baselineCst: Number((baselineCst + 14 + gaussian(rand) * 8).toFixed(0)),
+        diseaseDurationYears: Number(Math.max(0.3, duration + 0.4 + gaussian(rand) * 0.5).toFixed(1)),
+        bcvaChangeW24: Number(treatedBcva.toFixed(1)),
+        cstChangeW24: Number(treatedCst.toFixed(0)),
+        qcFlag
       });
 
       treatedBcvaValues.push(Number(treatedBcva.toFixed(1)));
@@ -345,6 +462,7 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
     return {
       seed,
       patients,
+      treatedPatients,
       treatedArmValues: {
         bcva: treatedBcvaValues,
         cst: treatedCstValues
@@ -410,6 +528,163 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
       qq
     };
   }, [metric, run.patients, run.treatedArmValues]);
+
+  const methodology = useMemo(() => {
+    const isClean = (p: { qcFlag: string; age: number; baselineBcva: number; baselineCst: number; diseaseDurationYears: number }) =>
+      p.qcFlag === 'ok' && p.age >= 45 && p.age <= 90 && p.baselineBcva >= 20 && p.baselineBcva <= 90 && p.baselineCst >= 180 && p.baselineCst <= 780 && p.diseaseDurationYears <= 12;
+    const isEligible = (p: { age: number; baselineBcva: number; baselineCst: number; diseaseDurationYears: number }) =>
+      p.age <= 86 && p.baselineBcva >= 35 && p.baselineBcva <= 78 && p.baselineCst >= 250 && p.baselineCst <= 650 && p.diseaseDurationYears <= 8;
+
+    const cleanedTreated = run.treatedPatients.filter(isClean);
+    const cleanedExternal = run.patients.filter(isClean);
+    const eligibleTreated = cleanedTreated.filter(isEligible);
+    const eligibleExternal = cleanedExternal.filter(isEligible);
+
+    const withPsTreated = eligibleTreated.map((p) => {
+      const x = -8.6 + 0.07 * p.age - 0.045 * p.baselineBcva + 0.0042 * p.baselineCst + 0.2 * p.diseaseDurationYears;
+      return { ...p, ps: sigmoid(x) };
+    });
+    const withPsExternal = eligibleExternal.map((p) => {
+      const x = -8.6 + 0.07 * p.age - 0.045 * p.baselineBcva + 0.0042 * p.baselineCst + 0.2 * p.diseaseDurationYears;
+      return { ...p, ps: sigmoid(x) };
+    });
+
+    const covariates: Array<'age' | 'baselineBcva' | 'baselineCst' | 'diseaseDurationYears'> = ['age', 'baselineBcva', 'baselineCst', 'diseaseDurationYears'];
+    const beforeBalance = mean(
+      covariates.map((k) =>
+        Math.abs(
+          smd(
+            withPsTreated.map((p) => p[k] as number),
+            withPsExternal.map((p) => p[k] as number)
+          )
+        )
+      )
+    );
+
+    let analysisTreated = withPsTreated.map((p) => ({ ...p, w: 1 }));
+    let analysisExternal = withPsExternal.map((p) => ({ ...p, w: 1 }));
+
+    if (methodType === 'iptw') {
+      analysisTreated = withPsTreated
+        .filter((p) => p.ps >= trimPs && p.ps <= 1 - trimPs)
+        .map((p) => ({ ...p, w: 1 / Math.max(0.05, p.ps) }));
+      analysisExternal = withPsExternal
+        .filter((p) => p.ps >= trimPs && p.ps <= 1 - trimPs)
+        .map((p) => ({ ...p, w: 1 / Math.max(0.05, 1 - p.ps) }));
+    } else {
+      const used = new Set<string>();
+      const matchedT: typeof analysisTreated = [];
+      const matchedE: typeof analysisExternal = [];
+      type ExternalWithPs = (typeof withPsExternal)[number];
+      withPsTreated.forEach((tp) => {
+        let best: ExternalWithPs | null = null;
+        let bestDist = Infinity;
+        withPsExternal.forEach((cp: ExternalWithPs) => {
+          if (used.has(cp.id)) return;
+          const d = Math.abs(tp.ps - cp.ps);
+          if (d <= caliper && d < bestDist) {
+            bestDist = d;
+            best = cp;
+          }
+        });
+        if (best) {
+          const bestItem = best as { id: string; ps: number; age: number; baselineBcva: number; baselineCst: number; diseaseDurationYears: number; bcvaChangeW24: number; cstChangeW24: number; sourceWeight: number; qcFlag: 'ok' | 'missing' | 'outlier' };
+          used.add(bestItem.id);
+          matchedT.push({ ...tp, w: 1 });
+          matchedE.push({ ...bestItem, w: 1 });
+        }
+      });
+      analysisTreated = matchedT;
+      analysisExternal = matchedE;
+    }
+
+    const afterBalance = mean(
+      covariates.map((k) =>
+        Math.abs(
+          smd(
+            analysisTreated.map((p) => p[k] as number),
+            analysisExternal.map((p) => p[k] as number)
+          )
+        )
+      )
+    );
+
+    const trtY = analysisTreated.map((p) => p.bcvaChangeW24);
+    const ctlY = analysisExternal.map((p) => p.bcvaChangeW24);
+    const wtT = analysisTreated.map((p) => p.w);
+    const wtC = analysisExternal.map((p) => p.w);
+    const muT = weightedMean(trtY, wtT);
+    const muC = weightedMean(ctlY, wtC);
+    const effect = muT - muC;
+    const varT = weightedVar(trtY, wtT);
+    const varC = weightedVar(ctlY, wtC);
+    const neffT = Math.max(1, (wtT.reduce((a, b) => a + b, 0) ** 2) / Math.max(1e-6, wtT.reduce((a, b) => a + b * b, 0)));
+    const neffC = Math.max(1, (wtC.reduce((a, b) => a + b, 0) ** 2) / Math.max(1e-6, wtC.reduce((a, b) => a + b * b, 0)));
+    const se = Math.sqrt(varT / neffT + varC / neffC);
+    const ciLo = effect - 1.96 * se;
+    const ciHi = effect + 1.96 * se;
+
+    const strictT = analysisTreated.filter((p) => p.baselineBcva >= 40 && p.baselineBcva <= 75 && p.diseaseDurationYears <= 6);
+    const strictC = analysisExternal.filter((p) => p.baselineBcva >= 40 && p.baselineBcva <= 75 && p.diseaseDurationYears <= 6);
+    const strictEffect =
+      weightedMean(
+        strictT.map((p) => p.bcvaChangeW24),
+        strictT.map((p) => p.w)
+      ) -
+      weightedMean(
+        strictC.map((p) => p.bcvaChangeW24),
+        strictC.map((p) => p.w)
+      );
+
+    const trimmedT = withPsTreated.filter((p) => p.ps >= trimPs + 0.03 && p.ps <= 1 - (trimPs + 0.03));
+    const trimmedC = withPsExternal.filter((p) => p.ps >= trimPs + 0.03 && p.ps <= 1 - (trimPs + 0.03));
+    const trimmedEffect = mean(trimmedT.map((p) => p.bcvaChangeW24)) - mean(trimmedC.map((p) => p.bcvaChangeW24));
+    const hiddenBiasEffect = effect - 0.8;
+
+    return {
+      raw: {
+        treated: run.treatedPatients.length,
+        external: run.patients.length
+      },
+      cleaned: {
+        treated: cleanedTreated.length,
+        external: cleanedExternal.length
+      },
+      eligible: {
+        treated: withPsTreated.length,
+        external: withPsExternal.length
+      },
+      beforeBalance: Number(beforeBalance.toFixed(3)),
+      afterBalance: Number(afterBalance.toFixed(3)),
+      analysisN: {
+        treated: analysisTreated.length,
+        external: analysisExternal.length
+      },
+      effect: Number(effect.toFixed(2)),
+      ciLo: Number(ciLo.toFixed(2)),
+      ciHi: Number(ciHi.toFixed(2)),
+      sensitivity: [
+        {
+          name: 'Strict cohort window',
+          effect: Number(strictEffect.toFixed(2)),
+          delta: Number((strictEffect - effect).toFixed(2)),
+          note: Math.abs(strictEffect - effect) <= 0.6 ? 'Stable' : 'Moderate shift'
+        },
+        {
+          name: 'More aggressive PS trim',
+          effect: Number(trimmedEffect.toFixed(2)),
+          delta: Number((trimmedEffect - effect).toFixed(2)),
+          note: Math.abs(trimmedEffect - effect) <= 0.6 ? 'Stable' : 'Moderate shift'
+        },
+        {
+          name: 'Hidden bias stress (Gamma-like)',
+          effect: Number(hiddenBiasEffect.toFixed(2)),
+          delta: Number((hiddenBiasEffect - effect).toFixed(2)),
+          note: Math.abs(hiddenBiasEffect - effect) <= 0.8 ? 'Robust' : 'Potentially sensitive'
+        }
+      ]
+    };
+  }, [run.treatedPatients, run.patients, methodType, trimPs, caliper]);
 
   const downloadAlignmentCsv = () => {
     const rows: string[][] = [['arm', 'metric', 'value']];
@@ -602,6 +877,76 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
             </svg>
             <p className="mt-2 text-xs text-ink/70">x-axis: {t.treated} quantiles · y-axis: {t.synthetic} quantiles</p>
           </article>
+        </div>
+      </section>
+
+      <section className="noise-border rounded-lg p-4 space-y-4">
+        <h2 className="text-lg font-semibold">{t.section5}</h2>
+        <div className="grid gap-3 md:grid-cols-3">
+          <label className="text-sm">
+            {t.methodType}
+            <select value={methodType} onChange={(e) => setMethodType(e.target.value as 'iptw' | 'matching')} className="mt-1 w-full rounded border border-ink/20 bg-transparent px-2 py-2">
+              <option value="iptw">IPTW</option>
+              <option value="matching">PS Matching</option>
+            </select>
+          </label>
+          <label className="text-sm">
+            {t.caliper}: {caliper.toFixed(2)}
+            <input type="range" min={0.04} max={0.3} step={0.01} value={caliper} onChange={(e) => setCaliper(Number(e.target.value))} className="mt-1 w-full" />
+          </label>
+          <label className="text-sm">
+            {t.trim}: {trimPs.toFixed(2)}
+            <input type="range" min={0.01} max={0.1} step={0.01} value={trimPs} onChange={(e) => setTrimPs(Number(e.target.value))} className="mt-1 w-full" />
+          </label>
+        </div>
+
+        <div className="grid gap-3 lg:grid-cols-5">
+          <article className="rounded border border-ink/15 p-3">
+            <p className="text-xs uppercase tracking-[0.1em] text-ink/65">{t.step1}</p>
+            <p className="mt-2 text-sm">{t.rawN}: T {methodology.raw.treated} / C {methodology.raw.external}</p>
+            <p className="text-sm">{t.cleanedN}: T {methodology.cleaned.treated} / C {methodology.cleaned.external}</p>
+          </article>
+          <article className="rounded border border-ink/15 p-3">
+            <p className="text-xs uppercase tracking-[0.1em] text-ink/65">{t.step2}</p>
+            <p className="mt-2 text-sm">{t.eligibleN}: T {methodology.eligible.treated} / C {methodology.eligible.external}</p>
+          </article>
+          <article className="rounded border border-ink/15 p-3">
+            <p className="text-xs uppercase tracking-[0.1em] text-ink/65">{t.step3}</p>
+            <p className="mt-2 text-sm">{t.balanceBefore}: <span className="font-semibold">{methodology.beforeBalance}</span></p>
+            <p className="text-sm">{t.balanceAfter}: <span className="font-semibold">{methodology.afterBalance}</span></p>
+          </article>
+          <article className="rounded border border-ink/15 p-3">
+            <p className="text-xs uppercase tracking-[0.1em] text-ink/65">{t.step4}</p>
+            <p className="mt-2 text-sm">{t.primaryEffect}: <span className="font-semibold">{methodology.effect}</span></p>
+            <p className="text-sm">{t.ci95}: [{methodology.ciLo}, {methodology.ciHi}]</p>
+          </article>
+          <article className="rounded border border-ink/15 p-3">
+            <p className="text-xs uppercase tracking-[0.1em] text-ink/65">{t.step5}</p>
+            <p className="mt-2 text-sm">n(T/C): {methodology.analysisN.treated} / {methodology.analysisN.external}</p>
+          </article>
+        </div>
+
+        <div className="overflow-auto rounded border border-ink/15">
+          <table className="min-w-full text-sm">
+            <thead>
+              <tr className="border-b border-ink/15 bg-ink/5 text-left text-xs uppercase tracking-[0.1em] text-ink/70">
+                <th className="px-3 py-2">{t.sensScenario}</th>
+                <th className="px-3 py-2">{t.sensEffect}</th>
+                <th className="px-3 py-2">{t.sensDelta}</th>
+                <th className="px-3 py-2">{t.sensNote}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {methodology.sensitivity.map((row) => (
+                <tr key={row.name} className="border-b border-ink/10">
+                  <td className="px-3 py-2">{row.name}</td>
+                  <td className="px-3 py-2 font-semibold">{row.effect}</td>
+                  <td className={`px-3 py-2 ${numberColor(row.delta)}`}>{row.delta >= 0 ? '+' : ''}{row.delta}</td>
+                  <td className="px-3 py-2">{row.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 

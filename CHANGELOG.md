@@ -16,6 +16,12 @@ All notable repository-level changes are tracked here for review.
   - `src/content/digital-twin/ophthalmology-diffusion-scenarios.json`
   - `src/content/changelogs/ophthalmology-diffusion-digital-twin.json`
 - Added prototype card metadata in `src/content/ports.json`.
+- v0.3.0 upgraded with external-control methodology pipeline:
+  - data cleaning
+  - cohort definition
+  - propensity score weighting/matching
+  - primary endpoint estimation (effect + 95% CI)
+  - sensitivity analysis scenarios with drift summary
 
 ## 2026-03-02
 
