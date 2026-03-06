@@ -1,5 +1,31 @@
 [
   {
+    "date": "2026-03-06",
+    "version": "v0.4.0",
+    "title": {
+      "en": "Conditional Twin Generation (X→Y(t))",
+      "zh": "条件化 Twin 生成（X→Y(t)）",
+      "de": "Konditionale Twin-Generierung (X→Y(t))"
+    },
+    "changes": {
+      "en": [
+        "Added patient-level baseline conditioning fields: age, sex, baseline BCVA/CST, lesion type, prior injections.",
+        "Added patient picker and K-counterfactual generation flow (default 50 twins) for selected treated patient.",
+        "Added trajectory output with mean and 95% prediction interval confidence band."
+      ],
+      "zh": [
+        "新增患者级基线条件：age、sex、baseline BCVA/CST、lesion type、prior injections。",
+        "新增患者选择器与 K 条反事实生成流程（默认 50 条 twin）。",
+        "新增轨迹输出：均值曲线 + 95% 预测区间置信带。"
+      ],
+      "de": [
+        "Patientenbezogene Baseline-Konditionen hinzugefuegt: Age, Sex, baseline BCVA/CST, Laesionstyp, vorherige Injektionen.",
+        "Patient Picker und K-kontrafaktische Generierung (Standard: 50 Twins) fuer ausgewaehlten Behandlungsarm-Patienten hinzugefuegt.",
+        "Trajektorienausgabe mit Mittelwert und 95%-Vorhersageintervall hinzugefuegt."
+      ]
+    }
+  },
+  {
     "date": "2026-03-05",
     "version": "v0.3.0",
     "title": {

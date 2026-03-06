@@ -22,6 +22,10 @@ All notable repository-level changes are tracked here for review.
   - propensity score weighting/matching
   - primary endpoint estimation (effect + 95% CI)
   - sensitivity analysis scenarios with drift summary
+- v0.4.0 upgraded with conditional twin generation (`X -> Y(t)`):
+  - baseline conditioning fields (age/sex/baseline BCVA/CST/lesion type/prior injections)
+  - patient picker + configurable K counterfactual trajectory generation (default 50)
+  - trajectory confidence visualization (mean + 95% prediction interval)
 
 ## 2026-03-02
 

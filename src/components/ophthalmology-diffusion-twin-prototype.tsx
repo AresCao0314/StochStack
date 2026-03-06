@@ -36,8 +36,11 @@ type OphScenario = {
 type SyntheticPatient = {
   id: string;
   age: number;
+  sex: 'M' | 'F';
   baselineBcva: number;
   baselineCst: number;
+  lesionType: 'classic' | 'occult' | 'mixed';
+  priorInjections: number;
   diseaseDurationYears: number;
   bcvaChangeW24: number;
   cstChangeW24: number;
@@ -48,12 +51,28 @@ type SyntheticPatient = {
 type TreatedPatient = {
   id: string;
   age: number;
+  sex: 'M' | 'F';
   baselineBcva: number;
   baselineCst: number;
+  lesionType: 'classic' | 'occult' | 'mixed';
+  priorInjections: number;
   diseaseDurationYears: number;
   bcvaChangeW24: number;
   cstChangeW24: number;
   qcFlag: 'ok' | 'missing' | 'outlier';
+};
+
+type TwinBandPoint = {
+  week: number;
+  mean: number;
+  lower: number;
+  upper: number;
+};
+
+type CounterfactualTwinResult = {
+  patientId: string;
+  k: number;
+  bands: TwinBandPoint[];
 };
 
 type RunResult = {
@@ -131,6 +150,16 @@ const labels: Record<Locale, any> = {
     sensEffect: 'Effect',
     sensDelta: 'Delta vs primary',
     sensNote: 'Interpretation',
+    section6: 'Conditional Twin Generator (X→Y(t))',
+    patientPicker: 'Patient picker',
+    generateTwins: 'Generate 50 twins',
+    twinCount: 'Twin count (K)',
+    baselineX: 'Baseline condition X',
+    sex: 'Sex',
+    lesionType: 'Lesion type',
+    priorInjections: 'Prior injections',
+    trajectory: 'Counterfactual control trajectory',
+    bandLegend: 'Mean with 95% prediction interval',
     loss: 'Denoising convergence curve',
     method: 'Mock method note',
     methodText:
@@ -184,6 +213,16 @@ const labels: Record<Locale, any> = {
     sensEffect: '效应值',
     sensDelta: '相对主分析变化',
     sensNote: '解释',
+    section6: '条件化 Twin 生成（X→Y(t)）',
+    patientPicker: '患者选择',
+    generateTwins: '生成 50 条 twin',
+    twinCount: 'Twin 数量 (K)',
+    baselineX: '基线条件 X',
+    sex: '性别',
+    lesionType: '病灶类型',
+    priorInjections: '既往注射次数',
+    trajectory: '反事实对照轨迹',
+    bandLegend: '均值与 95% 预测区间',
     loss: '去噪收敛曲线',
     method: 'Mock 方法说明',
     methodText: '当前为产品原型：患者数据通过可复现的伪随机去噪过程生成，再按场景对照组统计量进行校准。'
@@ -237,6 +276,16 @@ const labels: Record<Locale, any> = {
     sensEffect: 'Effekt',
     sensDelta: 'Delta vs primaer',
     sensNote: 'Interpretation',
+    section6: 'Konditionale Twin-Generierung (X→Y(t))',
+    patientPicker: 'Patientenauswahl',
+    generateTwins: '50 Twins generieren',
+    twinCount: 'Twin-Anzahl (K)',
+    baselineX: 'Baseline-Bedingung X',
+    sex: 'Geschlecht',
+    lesionType: 'Laesionstyp',
+    priorInjections: 'Vorherige Injektionen',
+    trajectory: 'Kontrafaktische Kontrolltrajektorie',
+    bandLegend: 'Mittelwert mit 95%-Vorhersageintervall',
     loss: 'Denoising-Konvergenzkurve',
     method: 'Mock-Methodenhinweis',
     methodText:
@@ -298,6 +347,22 @@ function smd(a: number[], b: number[]) {
   const sdb = sd(b);
   const sp = Math.sqrt((sda ** 2 + sdb ** 2) / 2);
   return sp <= 1e-9 ? 0 : (ma - mb) / sp;
+}
+
+function quantile(values: number[], q: number) {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const idx = Math.max(0, Math.min(sorted.length - 1, q * (sorted.length - 1)));
+  const lo = Math.floor(idx);
+  const hi = Math.min(sorted.length - 1, lo + 1);
+  const t = idx - lo;
+  return sorted[lo] * (1 - t) + sorted[hi] * t;
+}
+
+function lesionEffect(lesionType: 'classic' | 'occult' | 'mixed') {
+  if (lesionType === 'classic') return -0.8;
+  if (lesionType === 'occult') return 0.4;
+  return -0.2;
 }
 
 function getTreatmentShift(indication: string) {
@@ -366,6 +431,9 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
   const [methodType, setMethodType] = useState<'iptw' | 'matching'>('iptw');
   const [caliper, setCaliper] = useState(0.12);
   const [trimPs, setTrimPs] = useState(0.03);
+  const [selectedPatientId, setSelectedPatientId] = useState<string>('');
+  const [twinCount, setTwinCount] = useState(50);
+  const [twinRunIdx, setTwinRunIdx] = useState(0);
 
   const scenario = useMemo(() => scenarios.find((s) => s.id === scenarioId) ?? scenarios[0], [scenarioId, scenarios]);
 
@@ -389,6 +457,10 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
     }
 
     for (let i = 0; i < sampleSize; i += 1) {
+      const sex: 'M' | 'F' = rand() < 0.48 ? 'M' : 'F';
+      const lesionRoll = rand();
+      const lesionType: 'classic' | 'occult' | 'mixed' = lesionRoll < 0.3 ? 'classic' : lesionRoll < 0.72 ? 'occult' : 'mixed';
+      const priorInjections = Math.max(0, Math.round(2 + gaussian(rand) * 1.7 + (scenario.indication.toLowerCase().includes('dme') ? 1 : 0)));
       let age = profile.ageMean + gaussian(rand) * profile.ageSd * (0.8 + noiseScale * 0.25);
       let baselineBcva = profile.baselineBcvaMean + gaussian(rand) * profile.baselineBcvaSd * (0.85 + noiseScale * 0.2);
       let baselineCst = profile.baselineCstMean + gaussian(rand) * profile.baselineCstSd * (0.85 + noiseScale * 0.2);
@@ -417,8 +489,11 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
       patients.push({
         id: `SYN-${String(i + 1).padStart(3, '0')}`,
         age: Number(age.toFixed(1)),
+        sex,
         baselineBcva: Number(baselineBcva.toFixed(1)),
         baselineCst: Number(baselineCst.toFixed(0)),
+        lesionType,
+        priorInjections,
         diseaseDurationYears: Number(Math.max(0.3, duration).toFixed(1)),
         bcvaChangeW24: Number(bcvaChange.toFixed(1)),
         cstChangeW24: Number(cstChange.toFixed(0)),
@@ -429,8 +504,11 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
       treatedPatients.push({
         id: `TRT-${String(i + 1).padStart(3, '0')}`,
         age: Number((age - 0.8 + gaussian(rand) * 1.3).toFixed(1)),
+        sex,
         baselineBcva: Number((baselineBcva - 1.2 + gaussian(rand) * 1.2).toFixed(1)),
         baselineCst: Number((baselineCst + 14 + gaussian(rand) * 8).toFixed(0)),
+        lesionType,
+        priorInjections: Math.max(0, priorInjections + (rand() < 0.4 ? 1 : 0)),
         diseaseDurationYears: Number(Math.max(0.3, duration + 0.4 + gaussian(rand) * 0.5).toFixed(1)),
         bcvaChangeW24: Number(treatedBcva.toFixed(1)),
         cstChangeW24: Number(treatedCst.toFixed(0)),
@@ -588,7 +666,21 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
           }
         });
         if (best) {
-          const bestItem = best as { id: string; ps: number; age: number; baselineBcva: number; baselineCst: number; diseaseDurationYears: number; bcvaChangeW24: number; cstChangeW24: number; sourceWeight: number; qcFlag: 'ok' | 'missing' | 'outlier' };
+          const bestItem = best as {
+            id: string;
+            ps: number;
+            age: number;
+            sex: 'M' | 'F';
+            baselineBcva: number;
+            baselineCst: number;
+            lesionType: 'classic' | 'occult' | 'mixed';
+            priorInjections: number;
+            diseaseDurationYears: number;
+            bcvaChangeW24: number;
+            cstChangeW24: number;
+            sourceWeight: number;
+            qcFlag: 'ok' | 'missing' | 'outlier';
+          };
           used.add(bestItem.id);
           matchedT.push({ ...tp, w: 1 });
           matchedE.push({ ...bestItem, w: 1 });
@@ -686,6 +778,86 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
     };
   }, [run.treatedPatients, run.patients, methodType, trimPs, caliper]);
 
+  const selectedPatient = useMemo(() => {
+    if (run.treatedPatients.length === 0) return null;
+    return run.treatedPatients.find((p) => p.id === selectedPatientId) ?? run.treatedPatients[0];
+  }, [run.treatedPatients, selectedPatientId]);
+
+  const counterfactualTwin = useMemo<CounterfactualTwinResult | null>(() => {
+    if (!selectedPatient) return null;
+    const seed = run.seed + twinRunIdx * 137 + selectedPatient.id.length * 17 + twinCount * 11;
+    const rand = lcg(seed);
+    const visits = [0, 4, 8, 12, 16, 20, 24];
+    const series: number[][] = [];
+
+    const baselinePenalty =
+      (selectedPatient.age - 65) * 0.015 -
+      (selectedPatient.baselineBcva - 55) * 0.08 +
+      (selectedPatient.baselineCst - 400) * 0.0025 +
+      selectedPatient.priorInjections * 0.11 +
+      lesionEffect(selectedPatient.lesionType);
+    const sexEffect = selectedPatient.sex === 'F' ? 0.15 : 0;
+
+    for (let i = 0; i < twinCount; i += 1) {
+      let y = selectedPatient.baselineBcva;
+      const path: number[] = [Number(y.toFixed(2))];
+      const randomSlope = -0.06 + gaussian(rand) * 0.07;
+      for (let v = 1; v < visits.length; v += 1) {
+        const w = visits[v];
+        const drift = randomSlope * (w / 4) + baselinePenalty * 0.24 + sexEffect;
+        const noise = gaussian(rand) * (0.9 + (24 - w) * 0.02);
+        y = y + drift + noise;
+        path.push(Number(y.toFixed(2)));
+      }
+      series.push(path);
+    }
+
+    const bands = visits.map((week, idx) => {
+      const vals = series.map((s) => s[idx]);
+      return {
+        week,
+        mean: Number(mean(vals).toFixed(2)),
+        lower: Number(quantile(vals, 0.025).toFixed(2)),
+        upper: Number(quantile(vals, 0.975).toFixed(2))
+      };
+    });
+
+    return {
+      patientId: selectedPatient.id,
+      k: twinCount,
+      bands
+    };
+  }, [selectedPatient, run.seed, twinRunIdx, twinCount]);
+
+  const twinSvg = useMemo(() => {
+    if (!counterfactualTwin) return null;
+    const width = 860;
+    const height = 260;
+    const pad = 30;
+    const vals = counterfactualTwin.bands.flatMap((p) => [p.lower, p.upper, p.mean]);
+    const minV = Math.min(...vals);
+    const maxV = Math.max(...vals);
+    const toX = (week: number) => pad + (week / 24) * (width - pad * 2);
+    const toY = (v: number) => height - pad - ((v - minV) / Math.max(1e-6, maxV - minV)) * (height - pad * 2);
+
+    const meanPts = counterfactualTwin.bands.map((p) => `${toX(p.week)},${toY(p.mean)}`).join(' ');
+    const upperPts = counterfactualTwin.bands.map((p) => `${toX(p.week)},${toY(p.upper)}`).join(' ');
+    const lowerPts = [...counterfactualTwin.bands]
+      .reverse()
+      .map((p) => `${toX(p.week)},${toY(p.lower)}`)
+      .join(' ');
+
+    return {
+      width,
+      height,
+      pad,
+      minV,
+      maxV,
+      meanPts,
+      bandPolygon: `${upperPts} ${lowerPts}`
+    };
+  }, [counterfactualTwin]);
+
   const downloadAlignmentCsv = () => {
     const rows: string[][] = [['arm', 'metric', 'value']];
     run.treatedArmValues.bcva.forEach((v) => rows.push([t.treated, 'BCVA_change', String(v)]));
@@ -697,14 +869,17 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
 
   const downloadSyntheticCsv = () => {
     const rows: string[][] = [
-      ['id', 'age', 'baseline_bcva', 'baseline_cst', 'disease_duration_years', 'bcva_change_w24', 'cst_change_w24', 'source_weight']
+      ['id', 'age', 'sex', 'baseline_bcva', 'baseline_cst', 'lesion_type', 'prior_injections', 'disease_duration_years', 'bcva_change_w24', 'cst_change_w24', 'source_weight']
     ];
     run.patients.forEach((p) => {
       rows.push([
         p.id,
         String(p.age),
+        p.sex,
         String(p.baselineBcva),
         String(p.baselineCst),
+        p.lesionType,
+        String(p.priorInjections),
         String(p.diseaseDurationYears),
         String(p.bcvaChangeW24),
         String(p.cstChangeW24),
@@ -948,6 +1123,65 @@ export function OphthalmologyDiffusionTwinPrototype({ locale, scenarios }: { loc
             </tbody>
           </table>
         </div>
+      </section>
+
+      <section className="noise-border rounded-lg p-4 space-y-4">
+        <h2 className="text-lg font-semibold">{t.section6}</h2>
+        <div className="grid gap-3 md:grid-cols-3">
+          <label className="text-sm md:col-span-2">
+            {t.patientPicker}
+            <select
+              value={selectedPatient?.id ?? ''}
+              onChange={(e) => setSelectedPatientId(e.target.value)}
+              className="mt-1 w-full rounded border border-ink/20 bg-transparent px-2 py-2"
+            >
+              {run.treatedPatients.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.id} · {p.age}y · BCVA {p.baselineBcva} · CST {p.baselineCst}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-sm">
+            {t.twinCount}: {twinCount}
+            <input type="range" min={20} max={120} step={5} value={twinCount} onChange={(e) => setTwinCount(Number(e.target.value))} className="mt-1 w-full" />
+          </label>
+        </div>
+
+        {selectedPatient ? (
+          <div className="rounded border border-ink/15 bg-ink/5 p-3 text-sm">
+            <p className="font-semibold">{t.baselineX}</p>
+            <p className="mt-1 text-ink/80">
+              age {selectedPatient.age} · {t.sex} {selectedPatient.sex} · baseline BCVA {selectedPatient.baselineBcva} · baseline CST {selectedPatient.baselineCst} · {t.lesionType}{' '}
+              {selectedPatient.lesionType} · {t.priorInjections} {selectedPatient.priorInjections}
+            </p>
+          </div>
+        ) : null}
+
+        <div className="flex items-center justify-end">
+          <button
+            type="button"
+            onClick={() => setTwinRunIdx((v) => v + 1)}
+            className="rounded border border-ink/25 px-3 py-1.5 text-sm font-medium hover:bg-ink/10"
+          >
+            {t.generateTwins}
+          </button>
+        </div>
+
+        {counterfactualTwin && twinSvg ? (
+          <article className="rounded border border-ink/15 p-3">
+            <p className="text-sm font-semibold">{t.trajectory}</p>
+            <svg viewBox={`0 0 ${twinSvg.width} ${twinSvg.height}`} className="mt-2 h-auto w-full rounded border border-ink/10 bg-white/40">
+              <line x1={twinSvg.pad} y1={twinSvg.height - twinSvg.pad} x2={twinSvg.width - twinSvg.pad} y2={twinSvg.height - twinSvg.pad} stroke="currentColor" strokeOpacity="0.3" />
+              <line x1={twinSvg.pad} y1={twinSvg.pad} x2={twinSvg.pad} y2={twinSvg.height - twinSvg.pad} stroke="currentColor" strokeOpacity="0.3" />
+              <polygon points={twinSvg.bandPolygon} fill="#6AD2E2" fillOpacity="0.28" />
+              <polyline points={twinSvg.meanPts} fill="none" stroke="#00E47C" strokeWidth="2.6" />
+            </svg>
+            <p className="mt-2 text-xs text-ink/70">
+              {t.bandLegend} · K={counterfactualTwin.k}
+            </p>
+          </article>
+        ) : null}
       </section>
 
       <section className="noise-border rounded-lg p-4">
