@@ -32,6 +32,12 @@ const en = {
     subtitle: 'Heavyweight, decision-centric systems deployed in an isolated runtime.',
     cards: [
       {
+        title: 'Next-Gen Site Feasibility Platform',
+        summary: 'Modern SaaS-style feasibility and site selection workspace for RESP-204 with dashboard, explorer, scenarios, recommendations, and catalog.',
+        href: '/ventures/next-gen-site-feasibility',
+        cta: 'Open feasibility platform'
+      },
+      {
         title: 'Protocol OS Lite (One-Page)',
         summary: 'Single-page, full-flow mock demo with fake A/B, fake policy scoring, and fake exports.',
         href: '/ventures/protocol-os-lite',

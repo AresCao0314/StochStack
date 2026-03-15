@@ -32,6 +32,12 @@ const zh = {
     subtitle: '面向复杂业务的大型系统，部署在隔离运行环境中。',
     cards: [
       {
+        title: 'Next-Gen Site Feasibility Platform',
+        summary: '面向 RESP-204 的现代化 feasibility / site selection SaaS 工作台，包含 dashboard、explorer、scenario、recommendation 与 data catalog。',
+        href: '/ventures/next-gen-site-feasibility',
+        cta: '打开 feasibility 平台'
+      },
+      {
         title: 'Protocol OS Lite（单页版）',
         summary: '单页全流程 mock 演示：A/B 方案、policy 评分、导出均为可控 fake 结果。',
         href: '/ventures/protocol-os-lite',

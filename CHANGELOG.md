@@ -2,6 +2,28 @@
 
 All notable repository-level changes are tracked here for review.
 
+## 2026-03-15
+
+### Ventures: Next-Gen Site Feasibility Platform
+- Added a new Ventures prototype at `/{locale}/ventures/next-gen-site-feasibility`.
+- Built a front-end-only SaaS-style site feasibility workspace around mock study `RESP-204` (`Phase II`, `ILD`, target enrollment `180`).
+- Added full module structure with shared shell and independently accessible pages:
+  - Dashboard
+  - Study Workspace
+  - Site Explorer
+  - Scenario Lab
+  - Recommendation Center
+  - Data Catalog
+  - Settings
+- Added clean layering for future backend swap:
+  - `src/lib/site-feasibility-platform/types.ts`
+  - `src/lib/site-feasibility-platform/mock-data.ts`
+  - `src/lib/site-feasibility-platform/selectors.ts`
+  - `src/components/site-feasibility-platform/*`
+- Added 18 mock sites across Germany, Spain, Poland, United Kingdom, Italy, and Czech Republic with realistic tradeoffs across startup speed, patient access, diversity fit, and competition risk.
+- Added `recharts` dependency and leadership-style chart modules for country readiness, enrollment forecast, scenario comparison, and score distribution.
+- Updated Ventures navigation cards in EN/ZH/DE and added all new routes to sitemap.
+
 ## 2026-03-05
 
 ### Prototype: Ophthalmology Diffusion Control Twin (Mock)

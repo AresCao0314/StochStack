@@ -32,6 +32,12 @@ const de = {
     subtitle: 'Komplexe, schwere Systeme in isolierter Laufzeitumgebung.',
     cards: [
       {
+        title: 'Next-Gen Site Feasibility Platform',
+        summary: 'Moderner SaaS-Workspace fuer RESP-204 mit Dashboard, Explorer, Szenarien, Empfehlungen und Datenkatalog.',
+        href: '/ventures/next-gen-site-feasibility',
+        cta: 'Feasibility-Plattform öffnen'
+      },
+      {
         title: 'Protocol OS Lite (Ein-Seiten-Version)',
         summary: 'Kompletter One-Page-Mock-Flow mit Fake A/B, Fake Policy Scoring und Fake Exporten.',
         href: '/ventures/protocol-os-lite',
